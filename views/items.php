@@ -1,4 +1,5 @@
 <?php
+displayErroros(); // error output
 $msg = "<p>"; // development output
 $msge = "<p>";// app normal output
 $pr = 'i_'; // database prefix
@@ -14,25 +15,25 @@ $txtField = array(0,0,1,1,1,1,1,0,0,1);
 
 $form = makeForm(array($pr, $dbwhere, $formFields, $formButtons, $txtField)); // form, not yet translated
 
-// connection with database 
+// connection with database
 $db = new myDB();
 
 // Check with what button the form has been submited
 if(isset($_POST['edit'])){
-	
+
 	$out = formEdit($to_clean, $required, $dbwhere, $id, $txtField);
 	if($out[2] != '')$msg = $db->myQuery($out[2]);
-	
+
 }elseif(isset($_POST['add'])){
-	
+
 	$out = formAdd($to_clean, $required, $dbwhere, $id, $txtField);
 	if($out[2] != '')$msg = $db->myQuery($out[2]);
-	
+
 }elseif(isset($_POST['delete'])){
-	
+
 	$out = formDelete($to_clean, $required, $dbwhere, $id);
 	if($out[2] != '')$msg = $db->myQuery($out[2]);
-	
+
 }elseif(isset($_POST['fetch'])){
 	if($_POST[$to_clean[1]]!=''){
 		$out = formFetch($to_clean, $required, $dbwhere, $id);
@@ -45,7 +46,7 @@ if(isset($_POST['edit'])){
 
 $msg .= $out[0];
 $msge .= $out[1];
-	
+
 $arr_lang = arr_lang(array_merge($formFields, $formButtons, array($pr.'legend','msg')));
 $content .= tpl(3, $form, $arr_lang);
 

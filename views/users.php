@@ -1,4 +1,5 @@
 <?php
+displayErroros();
 $dir = dirname(dirname(__FILE__));
 $msg = "<p>"; // development output
 $msge = "<p>"; // app normal output

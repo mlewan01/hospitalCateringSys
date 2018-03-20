@@ -1,10 +1,6 @@
 <?php
-// error_reporting(E_ALL | E_STRICT);
-error_reporting(0);
-ini_set('display_errors', 0);
- $l = new myLogin();
-// $logged = $l->checkLogin();
-// if($logged == 'not') $l->redirect("index.php?page=login");
+displayErroros(); // error output
+$l = new myLogin();
 $l->loginEnforce(RED);
 
 $b = '<br/>';

@@ -53,7 +53,7 @@ define('TIME_SUPPER', 18);
 // logging, to enable set it of 'true' to disable set to 'false'
 $config['log'] = true; // enables logging of important database changes
 define('LOG_',true);
-define('DEV', true); // enables development aid output
+define('DEV', false); // enables development aid output
 define('RED', true); // for login redirection enforcement
 //SALT Information
 

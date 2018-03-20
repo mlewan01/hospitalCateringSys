@@ -1,11 +1,5 @@
 <?php
-	// all error output activated
-	// ini_set('display_errors', 1);
-	// ini_set('display_startup_errors', 1);
-	// error_reporting(E_ALL);
-	error_reporting(0);
-	ini_set('display_errors', 0);
-
+	displayErroros(); // error output
 	$b = '<br/>';
 	$tmp = array('','');
 	$l = new myLogin();

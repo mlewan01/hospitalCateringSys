@@ -14,7 +14,7 @@
 section, article, header, footer, nav, aside, main {
 	display: block;
 }
-html, body, h1, h2, h3, h4, h5, h6, p, blockquote, ol, ul, li, 
+html, body, h1, h2, h3, h4, h5, h6, p, blockquote, ol, ul, li,
 form, fieldset, label, legend, dl, dt, dd, table, td, th, caption{
     margin: 0;
     padding: 0;
@@ -38,9 +38,9 @@ ul, ol {
 /* Setting our own defaults */
 
 body {
-    font-family: Arial, Verdana, Geneva, sans-serif;
-    color: #04080b; 
-    background-color: #ffffff;
+  font-family: Arial, Verdana, Geneva, sans-serif;
+  color: #04080b;
+  background-color: #ffffff;
 	position: relative;
 	width: 90%;
 	margin: 0 auto;
@@ -247,7 +247,7 @@ legend {
 	margin-top: -0.6em;
 }
 article:first-of-type {
-	
+
 	padding-top: 1em;
 	margin-top: -1em;
 	border-top: 1px solid #cad2db;
@@ -324,7 +324,7 @@ article ul {
 #pagefooter ul {
 	padding-top: 2px;
 	float: right;
-	
+
 }
 #pagefooter li {
 	float: left;
@@ -351,7 +351,7 @@ article ul {
 	float: right;
 }
  /* delivery page styling  */
- 
+
 #delivery_content {
 	width: 100%;
 }
@@ -448,7 +448,7 @@ nav#pagesidebar ul li:last-child {
 }
 nav#pagesidebar ul li a {
 	text-decoration: none;
-	padding: 0.375em 0;	
+	padding: 0.375em 0;
 	display: block;
 }
 #pagesidebar p {
@@ -478,7 +478,7 @@ nav#pagesidebar ul li a {
 	}
 }
 @media screen and (max-width: 763px){
-	
+
 	#pageheader nav#primary {
 		float: left;
 	}
@@ -491,7 +491,7 @@ nav#pagesidebar ul li a {
 	}
 }
 @media screen and (max-width: 700px) {
-	
+
 	#pageheader  h1 {
 		margin-top: 0em;
 	}

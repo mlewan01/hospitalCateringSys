@@ -1,8 +1,5 @@
 <?php
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
-
+displayErroros(); // error output
 $b = '<br/>';
 $msg = "<p>";
 $msge = "<p>";
@@ -42,14 +39,20 @@ if(isset($_POST['edit'])){
 }elseif(isset($_POST['fetch'])){
 	if($_POST[$to_clean[1]]!=''){
 		$out = formFetch($to_clean, $required, $dbwhere, $id);
-		$result = $db->myQuery($out[2])->fetch_assoc();
-		if($result == null){ // TODO marys idea notification
-			$msg = " Provided \"ID\" does not exist... ".$b;
+		$result = $db->myQuery($out[2]);
+		if($result != false){
+			$result = $result->fetch_assoc();
+			if($result == null){ // TODO marys idea notification
+				$msg = " Provided \"ID\" does not exist... Pls try again !".$b;
+				$result = array();
+			}
+		}else{
+			$result = array();
+			$msg = " Prowided \"ID\" probaly was not a number... Pls try again !".$b;
 		}
-
 		$form = tpl(2, $form, $result, $txtField);
 	}else {
-		$msg = " Fetch, id not provided...";
+		$msg = " Fetch, id not provided... Pls try again !";
 	}
 }
 

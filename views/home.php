@@ -1,9 +1,6 @@
 <?php
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
-
-$b = '<br/>';
+displayErroros(); // error output
+$b = '<br/>'; $dev = '';
 $mt = new myTime();
 $patient_id = 0;
 $pat_name = '';
@@ -19,16 +16,16 @@ $alrgDisabled = '';
 // checking if cookie representing location has been set, redirecting otherwise
 if(!isset($_COOKIE['catering'])){
 	$disabled = 'disabled';
-	echo 'test: cookie catering does not exists'.$b;
+	$dev .= 'test: cookie catering does not exists'.$b;
 }else {
-	echo 'test: cookie catering exists '.$b;
+	$dev .= 'test: cookie catering exists '.$b;
 	$cookie = $_COOKIE['catering'];
 	if(isset($cookie['bed'])){
 		$bed_id = explode(' ',$cookie['bed'])[0];
-		echo ' bed is set !!! '.$b;
+		$dev .= ' bed is set !!! '.$b;
 	}else {
 		$disabled = 'disabled';
-		echo ' bed id is not set.... '.$b;
+		$dev .= ' bed id is not set.... '.$b;
 	}
 }
 
@@ -57,15 +54,15 @@ if($bed_id != 0){
 		where pb_id_bed=$bed_id and pb_date_to=0";
 	$result = $db->myQuery($sql);
 	$row = $result->fetch_assoc();
-	// echo 'the bed id: '.$bed_id.$b.'the patient id: ';print_r($row);echo $b;
+	// $dev .=  'the bed id: '.$bed_id.$b.'the patient id: ';print_r($row);$dev .=  $b;
 	$patient_id = $row['pb_id_patient'];
 	$pat_name = $row['p_name'];
 	$p_allergies = $row['p_allergies'];
-	echo " id bed: $bed_id -- id pat: $patient_id -- pat name: $pat_name allergens: $p_allergies".$b;
+	$dev .=  " id bed: $bed_id -- id pat: $patient_id -- pat name: $pat_name allergens: $p_allergies".$b;
+	$dev .= $p_allergies.$b;
 	$p_allergies = explode(',', $p_allergies);
-	print_r($p_allergies);echo $b;
 	if($patient_id == ""){
-		echo "patient not assigned the the bed id: $bed_id".$b;
+		$dev .=  "patient not assigned the the bed id: $bed_id".$b;
 		$patient_id == 0;
 		$disabled = "disabled";
 	}
@@ -75,18 +72,18 @@ $content .= " welcome <b> $pat_name </b> to the Catering Menu System in <b>$bed_
 //$t = getMyTime(3, '2017-03-07 17:50:10');
 $t =  $mt->getMyTime();
 $t1 = $t%$d/$h; // current houres of the time of the day where 60min = 100
-echo 'current time, t1: '.$t1.$b;
+$dev .=  'current time, t1: '.$t1.$b;
 if($t1 < TIME_BREAKFAST){
-	echo "next meal : ".$meal ='breakfast'; echo $b;
+	$dev .=  "next meal : ".$meal ='breakfast'; $dev .=  $b;
 	$sql = 'select * from menu_sets where ms_name = "Breakfast"';
 }elseif($t1 < TIME_LUNCH){
-	echo "next meal : ".$meal = 'lunch'; echo $b;
+	$dev .=  "next meal : ".$meal = 'lunch'; $dev .=  $b;
 	$sql = 'select * from menu_sets where ms_name = "Lunch"';
 }elseif($t1 < TIME_SUPPER){
-	echo "next meal : ".$meal = 'supper'; echo $b;
+	$dev .=  "next meal : ".$meal = 'supper'; $dev .=  $b;
 	$sql = 'select * from menu_sets where ms_name = "Supper"';
 }else {
-	echo "next meal : ".'next day breakfast'; echo $b;
+	$dev .=  "next meal : ".'next day breakfast'; $dev .=  $b;
 	$meal = 'breakfast';
 	$sql = 'select * from menu_sets where ms_name = "Breakfast"';
 	$t += $d;
@@ -115,7 +112,7 @@ if($bed_id != 0 && $patient_id != 0){
 			$con=false;
 			for($j=0;$j<count($itemsOrdered); $j++){
 				if($value == $itemsOrdered[$j]){
-					echo ' it '.$itemsOrdered[$j].' val '.$value.$b;
+					$dev .=  ' it '.$itemsOrdered[$j].' val '.$value.$b;
 					$con = true;
 					array_splice($itemsOrdered, $j, 1);
 					continue;
@@ -133,11 +130,11 @@ if($bed_id != 0 && $patient_id != 0){
 			 $db->myQuery($sql8);
 
 			 $msg = 'id: '.$patient_id.' '.$lang['msg_mealordered'].$value;
-			 echo ' msg order '.$msg.$b;
+			 $dev .=  ' msg order '.$msg.$b;
 
 			 if(LOG_)$db->logDB($msg, $patient_id, 4, $sql8); // logging the event
 		}
-		echo 'items TO BE DELETED '; print_r($itemsOrdered); echo $b;
+		$dev .=  'items TO BE DELETED '; print_r($itemsOrdered); $dev .=  $b;
 		//DELETE FROM `orders` WHERE `orders`.`o_id` = 1
 		foreach($itemsOrdered as $itm){
 
@@ -146,10 +143,10 @@ if($bed_id != 0 && $patient_id != 0){
 			$db->myQuery($sql7);
 
 			$msg ='id '.$itm.' '.$lang['msg_itemcancelled'].$patient_id;
-			echo ' msg cancel '.$msg.$b;
+			$dev .=  ' msg cancel '.$msg.$b;
 
 			if(LOG_)$db->logDB($msg, $patient_id, 5, $sql7); // logging the event
-			echo $sql7.$b;
+			$dev .=  $sql7.$b;
 		}
 	}
 }
@@ -157,13 +154,13 @@ if($bed_id != 0 && $patient_id != 0){
 $result = $db->myQuery($sql);
 $res = $result->fetch_assoc();
 $msid = $res['ms_id'];
-echo 'menue set id: ms_id: '.$msid.$b;
+$dev .=  'menue set id: ms_id: '.$msid.$b;
 
-echo ' menue lenght in days: '. $len = $res['ms_length'];
+$dev .=  ' menue lenght in days: '. $len = $res['ms_length'];
 $from = $res['ms_date_from'];
 $seq = (($t - $from )%($len*$d))/$d;
 $seq = ($seq - ($seq - $seq%$d))+1;
-echo $b.'sequence day: '.$seq.'<br/>';
+$dev .=  $b.'sequence day: '.$seq.'<br/>';
 
 $sql2 = "SELECT i_id, i_name, i_allergens FROM
 		menu_sets JOIN menus ON
@@ -191,18 +188,18 @@ $checked = '';
 while($row = $result2->fetch_assoc()) {
 	foreach($itemsOrdered as $item){
 		if($row['i_id'] == $item) {
-			// echo 'dupa '.$row['i_name'].' i_id '.$row['i_id'].' item '.$item.$b;
+			// $dev .=  'dupa '.$row['i_name'].' i_id '.$row['i_id'].' item '.$item.$b;
 			$checked = 'checked';
 		}
 	}
 	// checking if the allergen confilct exists !
 	$msg = 'allergy conflict: ';
 	if(!empty($p_allergies[0])){// || ($patient_id != 0)){
-		
+
 		foreach($p_allergies as $pall){
 
 			if(in_array($pall, explode(',',$row['i_allergens']))){
-				echo $b.' >>>>>- allergens conflict !! '.$pall.$b;
+				$dev .=  $b.' >>>>>- allergens conflict !! '.$pall.$b;
 				$msg .= '<b>'.$pall.'</b> ';
 				$alrgDisabled = 'disabled';
 			}else{
@@ -212,10 +209,10 @@ while($row = $result2->fetch_assoc()) {
 		}
 	}
 	if($msg == 'allergy conflict: '){
-		echo $b.">> no allergens conflict at all".$b;
+		$dev .=  $b.">> no allergens conflict at all".$b;
 		$msg = '';
 	}else {
-		echo $b.">>  allergens conflict detected....".$b;
+		$dev .=  $b.">>  allergens conflict detected....".$b;
 	}
 	$msg .= $b;
 
@@ -228,10 +225,8 @@ while($row = $result2->fetch_assoc()) {
 	$alrgDisabled = '';
 }
 $content .= '<input type="submit" value="Confirm !" name="order" '.$disabled.'></form>';
-
-
+if(DEV)$content .= '<div class="devout"><h4>Dev out:</h4>'.$dev.'</div>';
 //print_r($order);
-
  $result->free();
  $result2->free();
 ?>

@@ -1,4 +1,5 @@
 <?php
+  displayErroros();
   $b = '<br/>';
   $l = new myLogin();
   $db = new myDB();

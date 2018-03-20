@@ -1,4 +1,5 @@
 <?php
+displayErroros(); // error output
 $msg = "<p>"; // development output
 $msge = "<p>";// app normal output
 $pr = 'b_'; // database prefix
@@ -19,20 +20,20 @@ $db = new myDB();
 
 // Check with what button the form has been submited
 if(isset($_POST['edit'])){
-	
+
 	$out = formEdit($to_clean, $required, $dbwhere, $id, $txtField);
 	if($out[2] != '')$msg = $db->myQuery($out[2]);
-	
+
 }elseif(isset($_POST['add'])){
-	
+
 	$out = formAdd($to_clean, $required, $dbwhere, $id, $txtField);
 	if($out[2] != '')$msg = $db->myQuery($out[2]);
-	
+
 }elseif(isset($_POST['delete'])){
-	
+
 	$out = formDelete($to_clean, $required, $dbwhere, $id);
 	if($out[2] != '')$msg = $db->myQuery($out[2]);
-	
+
 }elseif(isset($_POST['fetch'])){
 	if($_POST[$to_clean[1]]!=''){
 		$out = formFetch($to_clean, $required, $dbwhere, $id);

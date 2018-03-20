@@ -1,8 +1,6 @@
 <?php
-	ini_set('display_errors', 1);
-	ini_set('display_startup_errors', 1);
-	error_reporting(E_ALL);
-
+	displayErroros(); // error output
+	$dev = ''; // for development output
 	$b = '<br/>';
 	$sql = '';
 	$sel_b = '';
@@ -25,23 +23,23 @@
 	$db = new myDB();
 
 	if($curHur < TIME_BREAKFAST){
-		echo $currentMeal ='breakfast'.$b;
+		$dev .=  $currentMeal ='breakfast'.$b;
 		$currentMeal = "breakfast";
 	}elseif($curHur < TIME_LUNCH){
-		echo $currentMeal = 'lunch'.$b;
+		$dev .=  $currentMeal = 'lunch'.$b;
 		$currentMeal = "lunch";
 	}elseif($curHur < TIME_SUPPER){
-		echo $currentMeal = 'supper'.$b;
+		$dev .=  $currentMeal = 'supper'.$b;
 		$currentMeal = "supper";
 	}else {
-		echo 'next day breakfast';
+		$dev .=  'next day breakfast';
 		$currentMeal = 'breakfast';
 		$curDay += $d;
 	}
 
 
 	if(isset($_POST['show_orders'])){
-		echo " show orders !!".$b;
+		$dev .=  " show orders !!".$b;
 		if(isset($_POST['breakfast'])){
 			$sql_b = ' o_meal = \''.$_POST['breakfast'].'\' ';
 			$sel_b = 'checked';
@@ -65,7 +63,7 @@
 			$sel_s = 'checked';
 		}
 
-		// echo " breakfast checkbox:".$sql_b.':end';
+		// $dev .=  " breakfast checkbox:".$sql_b.':end';
 
 		$date_from = $_POST['vo_date_from'];
 		$date_to = $_POST['vo_date_to'];
@@ -78,13 +76,13 @@
 				GROUP BY o_id_item";
 		//
 		// $result = $db->myQuery($sql);
-		// echo $b.$sql.$b;
+		// $dev .=  $b.$sql.$b;
 		// while($row = $result->fetch_assoc()) {
 		// 	$content .= $row['i_name'].' - '.$row['COUNT(*)'].$b;
 		// }
 
 	}else{
-		echo " no show orders !".$b;
+		$dev .=  " no show orders !".$b;
 
 		$sql = "SELECT o_id_item, i_name, COUNT(*)
 				FROM orders JOIN items ON (o_id_item = i_id)
@@ -92,15 +90,15 @@
 				GROUP BY o_id_item";
 
 		// $result = $db->myQuery($sql);
-		// echo $b.$sql.$b;
+		// $dev .=  $b.$sql.$b;
 		// $total = 0;
 		// while($row = $result->fetch_assoc()) {
 		// 	$content .= $row['i_name'].' - '.$row['COUNT(*)'].$b;
 		// }
 	}
 	$result = $db->myQuery($sql);
-	echo $b.$sql.$b;
-	echo "SELECT o_id_item, i_name, COUNT(*) FROM orders JOIN items ON (o_id_item = i_id) JOIN beds ON (o_id_bed = b_id) WHERE o_date_meal LIKE '%' AND b_id_ward = 4 GROUP BY o_id_item";
+	$dev .=  $b.$sql.$b;
+	$dev .=  "SELECT o_id_item, i_name, COUNT(*) FROM orders JOIN items ON (o_id_item = i_id) JOIN beds ON (o_id_bed = b_id) WHERE o_date_meal LIKE '%' AND b_id_ward = 4 GROUP BY o_id_item";
 	// $total = 0;
 	// while($row = $result->fetch_assoc()) {
 	// 	$content .= $row['i_name'].' - '.$row['COUNT(*)'].$b;
@@ -128,15 +126,15 @@
 		$content .= $row['i_name'].' - '.$row['COUNT(*)'].$b;
 		$total = $total + $row['COUNT(*)'];
 	}
-	$content .= ' total orders: '.$total;
-	$content .= $_SERVER['SERVER_NAME'];
+	$content .= ' total orders: '.$total.$b;
+	$content .= $_SERVER['SERVER_NAME'].$b;
 
-	echo $mt->getMyTime().$b;
-	echo $mt->getMyTime(1).$b;
-	echo $mt->getCurDay().$b;
-	echo $mt->getMyTime(2, $mt->getCurDay() );
+	$dev .=  $mt->getMyTime().$b;
+	$dev .=  $mt->getMyTime(1).$b;
+	$dev .=  $mt->getCurDay().$b;
+	$dev .=  $mt->getMyTime(2, $mt->getCurDay() );
 
 	$loc = getLocation();
-	echo $b.'loc msg: '.$loc['msg'];
-	print_r($loc);
+	$dev .=  $b.'loc msg: '.$loc['msg'].$b.print_r($loc, true).$b;
+	$content .= $dev.implode(" ",$loc);
 ?>
