@@ -1,0 +1,52 @@
+<form action="index.php?page=login" method="post" role="form">
+	<fieldset>
+		<legend> Register user </legend>
+		<div class="controlgroup">
+			<label for="title" id="l_title">Title:</label>
+			<select name="title" id="title" aria-labelledby="l_title">
+				<option value="1" selected>Mr</option>
+				<option value="2">Mrs</option>
+				<option value="3">Miss</option>
+				<option value="4">Ms</option>
+			</select>
+		</div>
+		<div class="controlgroup">
+			<label for="name" id="l_name">Name:</label>
+			<input type="text" name="name" id="name" placeholder="name and surrname" aria-labelledby="l_name"/>
+		</div>
+		<div class="controlgroup">
+			<label for="username" id="l_username">Username:</label>
+			<input type="text" name="username" id="username" placeholder="username" aria-labbelledby="l_username"/>
+		</div>
+		<div class="controlgroup">
+			<label for="email" id="l_email">E-mail:</label>
+			<input type="email" name="email" id="email" placeholder="email" required aria-required="true" aria-labbelledby="l_email"/>
+		</div>
+		<div class="controlgroup">
+			<label for="password" id="l_password">Password:</label>
+			<input type="password" name="password" id="password" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" placeholder="password min8 dig/lett" required aria-required="true" aria-labbelledby="l_password"/>
+		</div>
+		<div class="controlgroup">
+			<label for="info" id="l_info">User information:</label>
+			<textarea name="info" id="info" placeholder="Type information about the user if required" aria-labbelledby="l_info"/></textarea>
+		</div>
+
+		<div class="controlgroup">
+			<label for="privileges" id="l_privileges">User type, privileges:</label>
+			<select name="privileges" id="privileges" aria-labelledby="l_privileges">
+				<option value="1" selected>Ward Host</option>
+				<option value="2">HCA</option>
+				<option value="3">Supervisor</option>
+				<option value="4">Chef</option>
+				<option value="5">Nurse</option>
+				<option value="6">Dietitian</option>
+				<option value="7">Doctor</option>
+				<option value="8">Manager</option>
+			</select>
+		</div>
+
+		<input type="hidden" name="date" id="date" value="<?php echo time(); ?>" />
+		<input type="submit" name="l_registered" id="l_registered" value="Register" />
+
+	</fieldset>
+</form>

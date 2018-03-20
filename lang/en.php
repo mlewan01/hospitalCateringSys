@@ -1,0 +1,134 @@
+<?php
+$lang['err_asgn'] = "sorry, all the beds in the ward already ocuppied !!";
+$lang['err_fetch'] = "sorry no patient was selected, assign patient to a bed first !!";
+$lang['err_input'] = "please only use alpha numeric charracters and separate other allergens with coma !!";
+$lang['err_refresh'] = "error due to refresing page... nothing was changed !!";
+
+$lang['msg_patbedremoved'] = " has been removed from bed: ";
+$lang['msg_dietreqsaved'] = "new dietary req was saved for patient: ";
+$lang['msg_mealordered'] = "patient ordered item id: ";
+$lang['msg_itemcancelled'] = "item has been canncelled by patient id: ";
+
+$lang['f_b_legend'] = "Edit bed information:<br/>";
+$lang['f_h_legend'] = "Edit hospital information:<br/>";
+$lang['f_i_legend'] = "Edit item information:<br/>";
+$lang['f_m_legend'] = "Edit menu information:<br/>";
+$lang['f_mi_legend'] = "Edit menu items information:<br/>";
+$lang['f_ms_legend'] = "Edit menu sets information:<br/>";
+$lang['f_o_legend'] = "Edit order information:<br/>";
+$lang['f_p_legend'] = "Edit patient information:<br/>";
+$lang['f_pb_legend'] = 'Edit patient bed assignment history <br/>';
+$lang['f_pd_legend'] = 'Edit patient diet assignment history <br/>';
+$lang['f_u_legend'] = "Edit user information:<br/>";
+$lang['f_w_legend'] = "Edit ward information:<br/>";
+$lang['f_msg'] = 'Provide "id" in order to edit or delete item. When adding new item "id" is not required';
+//$lang[' '] = '';
+
+$lang['f_active'] = "Active <br/>";
+$lang['f_address'] = "Address <br/>";
+$lang['f_allergies'] = "Allergies <br/>";
+$lang['f_email'] = "Email <br/>";
+$lang['f_colour'] = 'Colour <br/>';
+$lang['f_date'] = 'Date <br/>';
+$lang['f_date_from'] = 'Date from<br/>';
+$lang['f_date_to'] = 'Date to<br/>';
+$lang['f_desc'] = "Description <br/>";
+$lang['f_department'] = "Department <br/>";
+$lang['f_description'] = "Description <br/>";
+$lang['f_diet'] = 'Diet <br/>';
+$lang['f_flavour'] = 'Flavour <br/>';
+$lang['f_fixed'] = 'Menue fixed ? <br/>';
+$lang['f_id'] = "Id <br/>";
+$lang['f_id_bed'] = 'Bed Id <br/>';
+$lang['f_id_hospital'] = 'Hospital Id <br/>';
+$lang['f_id_item'] = 'Item Id <br/>';
+$lang['f_id_menuset'] = 'Menu set Id <br/>';
+$lang['f_id_patient'] = 'Patient Id <br/>';
+$lang['f_id_product'] = 'Product Id <br/>';
+$lang['f_id_menu'] = 'Menu Id <br/>';
+$lang['f_id_ward'] = 'Ward Id <br/>';
+$lang['f_items'] = 'Items <br/>';
+$lang['f_image'] = 'Image <br/>';
+$lang['f_ingredients'] = 'Ingredients <br/>';
+$lang['f_length'] = 'Length in days <br/>';
+$lang['f_method'] = 'Methods !! <br/>';
+$lang['f_nutrition'] = 'Nutrition <br/>';
+$lang['f_name'] = "Name <br/>";
+$lang['f_number'] = "Patient number <br/>";
+$lang['f_occupied'] = "Is occupied <br/>";
+$lang['f_password'] = "Password <br/>";
+$lang['f_phone'] = "Phone <br/>";
+$lang['f_privileges'] = "Privileges <br/>";
+$lang['f_regdate'] = "Registration date ? <br/>";
+$lang['f_reference'] = 'Reference <br/>';
+$lang['f_role'] = "Role <br/>";
+$lang['f_sequence'] = "Sequence <br/>";
+$lang['f_title'] = "Title <br/>";
+$lang['f_type'] = 'Type <br/>';
+$lang['f_texture'] = 'Texture <br/>';
+$lang['f_username'] = "Username <br/>";
+$lang['f_info'] = "Information <br/>";
+
+$lang['f_edit'] = "Edit";
+$lang['f_add'] = "Add";
+$lang['f_changePassword'] = "changePassword";
+$lang['f_delete'] = "Delete";
+$lang['f_fetch'] = "Fetch";
+$lang['f_reset'] = "Reset";
+
+$lang['form_Desc'] = "Description: * <br/>";
+$lang['form_Browse'] = "Browse: * <br/>";
+$lang['form_Message'] = "* indicates a required field. <br/>";
+$lang['fu_notAllProvided'] = 'Not all fields are provided or illegal characters used. Please make sure you submit all the required data and try again. Please use only alfanumeric and @ ,.?!" characters'.'<br/>';
+
+$lang['db_error'] = 'Sorry, there has been an error. Please try again later.'.'<br/>';
+
+$lang['home'] = 'menue of the day';
+$lang['menue'] = 'menue';
+$lang['login'] = 'login';
+$lang['c_login'] = 'LOGIN';
+$lang['logs'] = 'logs';
+$lang['items'] = 'items';
+$lang['menus'] = 'menus';
+$lang['menu_items'] = 'menu_items';
+$lang['menu_sets'] = 'menu_sets';
+$lang['orders'] = 'orders';
+$lang['hospitals'] = 'hospitals';
+$lang['wards'] = 'wards';
+$lang['beds'] = 'beds';
+$lang['patients'] = 'patients';
+$lang['users'] = 'users';
+$lang['hospitals'] = 'hospitals';
+$lang['pat_bed'] = 'patient-bed';
+$lang['pat_diet'] = 'patient-diet';
+$lang['passrec'] = 'password recovery';
+$lang['set_location'] = 'set-location';
+$lang['bed_pat_diet'] = 'bed-patient-diet';
+$lang['view_order'] = 'view orders';
+$lang['404'] = 'error 404';
+
+$lang['h_home'] = 'Welcome to the hospital menue';
+$lang['h_menus'] = 'Manage menues';
+$lang['h_menu_items'] = 'Manage menu items';
+$lang['h_login'] = "User account";
+$lang['h_menu_sets'] = 'Mangage menu sets <br/>';
+$lang['h_logs'] = 'catering system logs';
+$lang['h_items'] = 'Manage items';
+$lang['h_orders'] = "Manage history of patients orders";
+$lang['h_hospitals'] = "Manage hospitals";
+$lang['h_wards'] = "Manage wards";
+$lang['h_beds'] = "Manage beds";
+$lang['h_patients'] = "Manage patients";
+$lang['h_users'] = "Manage users";
+$lang['h_pat_bed'] = "Manage patients beds change log";
+$lang['h_pat_diet'] = "Manage patient diet change log";
+$lang['h_passrec'] = "Password recovery";
+$lang['h_set_location'] = "Set your location";
+$lang['h_bed_pat_diet'] = "Asign patient to a bed in the ward. Modify patient's menu, dietary requirements and allergies.";
+$lang['h_view_order'] = "Currnet orders";
+$lang['h_404'] = 'Sorry, page can not be found';
+
+$lang['f_message'] = 'Mariusz Lewandowski: Catering System, BSc Computing @ Birkbeck, London 2018.';
+
+$lang['logo_title'] = 'CATERING SYSTEM';
+?>

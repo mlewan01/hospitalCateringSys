@@ -1,0 +1,40 @@
+<form enctype="multipart/form-data" action="index.php?page=hospitals" method="post">
+
+<fieldset>
+
+<legend>[+f_h_legend+]</legend>
+
+<label for="h_id">[+f_id+]</label>
+<input type="text" id="h_id" name="h_id" />
+<br/>
+
+<label for="h_name">[+f_name+]</label>
+<input type="text" id="h_name" name="h_name" />
+<br/>
+
+<label for="h_address">[+f_address+]</label>
+<textarea type="text" placeholder="hospital address... " id="h_address" name="h_address"></textarea>
+<br/>
+
+<label for="h_email">[+f_email+]</label>
+<input type="email" id="h_email" name="h_email" />
+<br/>
+
+<label for="h_phone">[+f_phone+]</label>
+<input type="text" id="h_phone" name="h_phone" />
+<br/>
+
+<label for="h_description">[+f_description+]</label>
+<textarea type="text" placeholder="hospital description... " id="h_description" name="h_description"></textarea>
+<br/>
+
+<input type="submit" value="[+f_edit+]" name="edit" />
+<input type="submit" value="[+f_add+]" name="add" />
+<input type="submit" value="[+f_delete+]" name="delete" />
+<input type="submit" value="[+f_fetch+]" name="fetch" />
+<br/>
+
+<small>[+f_msg+]</small>
+
+</fieldset>
+</form>

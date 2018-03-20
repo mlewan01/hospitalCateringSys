@@ -1,0 +1,49 @@
+<form enctype="multipart/form-data" action="index.php?page=patients" method="post">
+
+<fieldset>
+
+<legend>[+f_p_legend+]</legend>
+
+<label for="p_id">[+f_id+]</label>
+<input type="text" id="p_id" name="p_id" />
+<br/>
+
+<label for="p_number">[+f_number+]</label>
+<input type="text" id="p_number" name="p_number" />
+<br/>
+
+<label for="p_name">[+f_name+]</label>
+<input type="text" id="p_name" name="p_name" />
+<br/>
+
+<label for="p_title">[+f_title+]</label>
+<input type="text" id="p_title" name="p_title" />
+<br/>
+
+<label for="p_phone">[+f_phone+]</label>
+<input type="text" id="p_phone" name="p_phone" />
+<br/>
+
+<label for="p_email">[+f_email+]</label>
+<input type="email" id="p_email" name="p_email" />
+<br/>
+
+<label for="p_info">[+f_info+]</label>
+<textarea type="text" placeholder="patient info... " id="p_info" name="p_info"></textarea>
+<br/>
+
+<label for="p_regdate">[+f_regdate+]</label>
+<input type="text" id="p_regdate" name="p_regdate" />
+<br/>
+
+<input type="submit" value="[+f_edit+]" name="edit" />
+<input type="submit" value="[+f_add+]" name="add" />
+<input type="submit" value="[+f_delete+]" name="delete" />
+<input type="submit" value="[+f_fetch+]" name="fetch" />
+<input type="reset"/>
+<br/>
+
+<small>[+f_msg+]</small>
+
+</fieldset>
+</form>
