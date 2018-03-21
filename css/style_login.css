@@ -42,12 +42,12 @@ body {
   color: #04080b;
   background-color: #ffffff;
 	position: relative;
-	width: 90%;
+	width: 100%;
 	margin: 0 auto;
 }
 h1, h2, h3, h4, h5, h6 {
 	font-family: 'parisian', Georgia, serif;
-    font-weight: normal;
+  font-weight: normal;
 	color: #5c2368;
 }
 h2 {
@@ -114,9 +114,12 @@ legend {
 
 #primary {
 	float: right;
+	/* width: 95%; */
+	margin: 0 1%;
 }
 #primary ul li {
 	float: left;
+	margin-bottom: 0.5em;
 }
 /* page header styling */
 
@@ -130,6 +133,7 @@ legend {
 	width: 192px;
 	height: 148px;
 	background-repeat: no-repeat;
+	padding: 0px 20px;
 }
 #pageheader h1 {
 	float: left;
@@ -242,6 +246,7 @@ legend {
 	padding-bottom: 2em;
 	width: 68%;
 	float: left;
+	padding-left: 1%;
 }
 #content_h2 {
 	margin-top: -0.6em;
@@ -471,7 +476,7 @@ nav#pagesidebar ul li a {
 }
 @media screen and (max-width: 894px) {
 	#pageheader h1 {
-		margin-top: -0.5em;
+		/* margin-top: -0.5em; */
 	}
 	form {
 		width: 100%;
@@ -493,7 +498,7 @@ nav#pagesidebar ul li a {
 @media screen and (max-width: 700px) {
 
 	#pageheader  h1 {
-		margin-top: 0em;
+		/*margin-top: 0em;*/
 	}
 }
 @media screen and (max-width: 780px){
@@ -544,7 +549,17 @@ nav#pagesidebar ul li a {
 		margin-bottom: 1em;
 	}
 }
-@media screen and (max-width: 630px){
+@media screen and (max-width: 650px){
+	#pageheader h1 {
+		width: 200px;
+	}
+}
+@media screen and (max-width: 600px){
+	#logo {
+		padding: 0px 5px;
+		width: 150px;
+		height: 105px;
+	}
 	#delivery_content section {
 		clear: both;
 		float: left;

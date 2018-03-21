@@ -4,13 +4,13 @@ $config['app_name'] = 'Catering system for hospital';
 define('APP_NAME', 'Ctering system for hospital');
 
 //  database settings + php error reporting
-if($_SERVER['SERVER_NAME'] == 'localhost'){
+if($_SERVER['SERVER_NAME'] != 'artemlux.com'){
   define('ERR', true); // true for displaing errors output
   define('DB_USER', 'root'); $config['db_user'] = 'root';
   define('DB_PASS', ''); $config['db_pass'] = '';
   define('DB_HOST', 'localhost'); $config['db_host'] = 'localhost';
   define('DB_NAME', 'catering'); $config['db_name'] = 'catering';
-}elseif($_SERVER['SERVER_NAME'] == 'artemlux.com'){
+}else{ // if($_SERVER['SERVER_NAME'] == 'artemlux.com'){
   define('ERR', false); // false for hiding all errors output
   define('DB_USER', 'nelhae01_nhs');
   define('DB_PASS', 'nhsnhs');
