@@ -105,15 +105,13 @@
 	// 	$total = $total + $row['COUNT(*)'];
 	// }
 	// $content .= ' total orders: '.$total;
-	$content .= '<form enctype="multipart/form-data" action="index.php?page=view_order" method="post">';
+	$content .= '<form enctype="multipart/form-data" action="index.php?page=view_order" method="post" role="form">';
 	$content .= '<fieldset>';
 	$content .= '<legend>Orders time range</legend>';
-	$content .= '<label for="vo_date_from">Date from</label>';
-	$content .= '<input type="text" id="vo_date_from" name="vo_date_from" value="'.$mt->getMyTime(2, $date_from).'" />';
-	$content .= '<br />';
-	$content .= '<label for="vo_date_to">Date to</label>';
-	$content .= '<input type="text" id="vo_date_to" name="vo_date_to" value="'.$mt->getMyTime(2, $date_to).'" />';
-	$content .= '<br />';
+	$content .= '<div class="controlgroup"><label for="vo_date_from">Date from</label>';
+	$content .= '<input type="text" id="vo_date_from" name="vo_date_from" value="'.$mt->getMyTime(2, $date_from).'" /></div>';
+	$content .= '<div class="controlgroup"><label for="vo_date_to">Date to</label>';
+	$content .= '<input type="text" id="vo_date_to" name="vo_date_to" value="'.$mt->getMyTime(2, $date_to).'" /></div>';
 	$content .= '<input type="checkbox" name="breakfast" value="breakfast" '.$sel_b.'>breakfast <br/>';
 	$content .= '<input type="checkbox" name="lunch" value="lunch" '.$sel_l.'>lunch<br/>';
 	$content .= '<input type="checkbox" name="supper" value="supper" '.$sel_s.'>supper<br/>';
@@ -136,5 +134,5 @@
 
 	$loc = getLocation();
 	$dev .=  $b.'loc msg: '.$loc['msg'].$b.print_r($loc, true).$b;
-	$content .= $dev.implode(" ",$loc);
+	if(DEV) $content .= $dev.implode(" ",$loc);
 ?>

@@ -199,25 +199,25 @@ function makeForm($data){
 	$flen2 = count($buttons);
 	$content = '';
 
-	$content .= '<form enctype="multipart/form-data" action="index.php?page='.$page.'" method="post">';
+	$content .= '<form enctype="multipart/form-data" action="index.php?page='.$page.'" method="post" role="form">';
 	$content .= '<fieldset>';
 	$content .= '<legend>[+'.$prefix1.$prefix2.'legend+]</legend>';
 
 	for($i=0; $i<$flen1; $i++){
+		$content .= '<div class="controlgroup">';
 		if($fieldType[$i]==0){
-			$content .= '<label for='.$prefix2.$fields[$i].'">[+'.$prefix1.$fields[$i].'+]</label>';
+			$content .= '<label for="'.$prefix2.$fields[$i].'">[+'.$prefix1.$fields[$i].'+]</label>';
 			$content .= '<input type="text" id="'.$prefix2.$fields[$i].'" name="'.$prefix2.$fields[$i].'" />';
-			$content .= '<br />';
 		}elseif($fieldType[$i] == 1){
-			$content .= '<label for='.$prefix2.$fields[$i].'">[+'.$prefix1.$fields[$i].'+]</label>';
+			$content .= '<label for="'.$prefix2.$fields[$i].'">[+'.$prefix1.$fields[$i].'+]</label>';
 			$content .= '<textarea type="text" placeholder="'.$fields[$i].'" id="'.$prefix2.$fields[$i].'" name="'.$prefix2.$fields[$i].'"></textarea>';
-			$content .= '<br />';
 		}elseif($fieldType[$i]==2){
-			$content .= '<label for='.$prefix2.$fields[$i].'">[+'.$prefix1.$fields[$i].'+]</label>';
+			$content .= '<label for="'.$prefix2.$fields[$i].'">[+'.$prefix1.$fields[$i].'+]</label>';
 			$content .= '<input type="text" id="'.$prefix2.$fields[$i].'" name="'.$prefix2.$fields[$i].'" value="'.getMyTime(1).'" />';
-			$content .= '<br />';
 		}
+		$content .= '</div>';
 	}
+
 	for($i=0; $i<$flen2; $i++){
 		if($buttons[$i] == 'reset'){
 			$content .= '<input type="reset" value="[+'.$prefix1.$buttons[$i].'+]"/>';

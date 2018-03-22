@@ -1,7 +1,7 @@
 <?php
 displayErroros(); // error output
+$dev = "<p>";
 $msg = "<p>";
-$msge = "<p>";
 $pr = 'h_';
 $id = $pr.'id';
 $dbwhere = 'hospitals';
@@ -40,17 +40,15 @@ if(isset($_POST['edit'])){
 		$result = $db->myQuery($out[2])->fetch_assoc();
 		$form = tpl(2, $form, $result, $txtField);
 	}else {
-		$msg = " Fetch, id not provided...";
+		$dev = " Fetch, id not provided...";
 	}
 }
-
-$msg .= $out[0];
-$msge .= $out[1];
+$dev .= $out[0];
 
 $arr_lang = arr_lang(array_merge($formFields, $formButtons, array($pr.'legend','msg')));
 $content .= tpl(3, $form, $arr_lang);
 
-$content .= $msg.'<p>';
+if(DEV)$content .= '<div class="devout"><h4>Dev out:</h4>'.$dev.'</div>';
 
 // retriving data from database
 $sql = "select $id, ".$pr."name from $dbwhere";

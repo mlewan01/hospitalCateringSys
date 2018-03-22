@@ -18,7 +18,7 @@ $dietRe['type'] = '';$dietRe['diet'] = '';$dietRe['nutrition'] = '';$dietRe['all
 $err = '';
 $msg = '';
 $log = '';
-
+$dev = '';
 $allergens = array();
 $type = array();
 $diet = array();
@@ -78,7 +78,7 @@ if(isset($_POST['freebed'])){
 	$res2 = ($db->myQuery($sql2))->fetch_assoc();
 
 	if($res1['count(pb_id)'] < $res2['count(b_id)'] ) {
-		//echo 'it is smaller !!';
+		//$dev .= 'it is smaller !!';
 		if(isset($_POST['bed']) && isset($_POST['pat']) ){
 			$temp = explode(',' , $_POST['bed']);
 			$bed_id = $temp[0];
@@ -100,8 +100,8 @@ if(isset($_POST['freebed'])){
 		$err = $lang['err_asgn'];
 	}
 }elseif(isset($_POST['save'])){
-	print_r($_POST);
-	echo '<br/> saving new dietary requirements...<br/>';
+	$dev .= print_r($_POST, true);
+	$dev .= '<br/> saving new dietary requirements...<br/>';
 	if(isset($_POST['pat2'])){
 
 		$otherall['other_allergies'] = $_POST['other_allergies'];
@@ -113,7 +113,7 @@ if(isset($_POST['freebed'])){
 			$pat2id = $_POST['pat2'];
 			unset($_POST['pat2']);
 			unset($_POST['save']);
-			echo 'POST '; print_r($_POST);
+			$dev .= 'POST: '.print_r($_POST, true).$b;
 			$dietRe = $_POST;
 			$dietRe['allergies'] = '';
 			foreach($allergens as $item){
@@ -131,7 +131,7 @@ if(isset($_POST['freebed'])){
 			$dietRe['allergies'] = rtrim($dietRe['allergies'], ',');
 			$sql = "update patients set p_type=\"$dietRe[type]\", p_diet=\"$dietRe[diet]\", p_nutrition=\"$dietRe[nutrition]\",
 					p_allergies=\"$dietRe[allergies]\" where p_id=$pat2id";
-			echo 'allergies: '.$dietRe['allergies'];
+			$dev .= 'allergies: '.$dietRe['allergies'];
 			$resutl = $db->myQuery($sql);
 			$dietTemp = $dietRe['allergies'];
 			$dietRe['allergies'] = explode(',' , $dietRe['allergies']);
@@ -145,20 +145,20 @@ if(isset($_POST['freebed'])){
 	}
 
 }elseif(isset($_POST['fetch'])){
-	print_r($_POST);
-	echo 'fetching data ...<br/>';
+	$dev .= print_r($_POST, true);
+	$dev .= 'fetching data ...<br/>';
 	if(isset($_POST['pat2'])){
-		echo 'pat id: '.$pat2id = $_POST['pat2'];
-		echo '<br/>';
+		$dev .= 'pat id: '.$pat2id = $_POST['pat2'];
+		$dev .= '<br/>';
 		$sql = "select p_type, p_diet, p_nutrition, p_allergies from patients where p_id = $pat2id";
 		$result = $db->myQuery($sql);
 		$row=$result->fetch_assoc();
-		// echo "data: "; print_r($row); echo '<br/>'
+		// $dev .= "data: "; print_r($row); $dev .= '<br/>'
 		$dietRe["type"] = $row['p_type'];
 		$dietRe['diet'] = $row['p_diet'];
 		$dietRe['nutrition'] = $row['p_nutrition'];
 		$dietRe['allergies'] = explode(',' , $row['p_allergies']);
-		print_r($dietRe);
+		$dev .= print_r($dietRe, true);
 	}else{
 		$err = $lang['err_fetch'];
 	}
@@ -175,25 +175,31 @@ if($ward_id != ''){
 
 	while($row=$result1->fetch_assoc()){
 
-		$content .= $row['b_name'].' : ';
+		$bname = $row['b_name'].' : ';
 
 		$sql3 = "select pb_id_patient from pat_bed where pb_date_to=0 AND pb_id_bed='$row[b_id]'";
 		$result3 = $db->myQuery($sql3);
 
 		while($row3 = $result3->fetch_assoc()){
-			//$content .= "dupa<br/>";
+
 			$sql_ = "select * from patients where p_id = '$row3[pb_id_patient]'";
 			$res_ = $db->myQuery($sql_);
 			$row_ = $res_->fetch_assoc();
-			$content .= "$row_[p_name], <b>type:</b> $row_[p_type], <b>diet</b>: $row_[p_diet], <b>nutrition:</b> $row_[p_nutrition], <b>allergies:</b> $row_[p_allergies]";
+			$con1 = "$row_[p_name], <b>type:</b> $row_[p_type], <b>diet</b>: $row_[p_diet], <b>nutrition:</b> $row_[p_nutrition], <b>allergies:</b> $row_[p_allergies]";
 
-			$content .= '<form action="index.php?page=bed_pat_diet" method="post">
+			$content .= '<form action="index.php?page=bed_pat_diet" method="post" role="form">
+			<fieldset><legend>'.$row['b_name'].'</legend>'.$con1.'
 			<input type="hidden" name="bed_id" value="'.$row['b_id'].'">
 			<input type="hidden" name="bed_name" value="'.$row['b_name'].'">
 			<input type="hidden" name="pat_name" value="'.$row_['p_name'].'">
-			<input type="submit" value="Free" name="freebed"></form>';
+			<input type="submit" value="Free" name="freebed">
+			</fieldset></form>'; $bname = '';
 		}
-		$content .= '<br/>';
+		if($bname != ''){
+			$content .= '<form action="index.php?page=bed_pat_diet" method="post" role="form">
+			<fieldset><legend>'.$row['b_name'].'</legend>empty
+			</fieldset></form>';
+		}
 	}
 	//$content .= '<br/>';
 //--------------------------------patient bed assignment form-----------------------------------------
@@ -203,7 +209,7 @@ if($ward_id != ''){
 	$idbed = array();
 	$i = 0;
 	while($row = $result9->fetch_assoc()){
-		// echo "<br/> $row[pb_id_bed] $row[pb_id_patient]";
+		// $dev .= "<br/> $row[pb_id_bed] $row[pb_id_patient]";
 		$idpat[$i] = $row['pb_id_patient'];
 		$idbed[$i] = $row['pb_id_bed'];
 		$i++;
@@ -216,8 +222,8 @@ if($ward_id != ''){
 	$sql5 = "select b_id, b_name from beds where b_id_ward = $ward_id";
 	$result5 = $db->myQuery($sql5);
 
-	$content .= '<form enctype="multipart/form-data" action="index.php?page=bed_pat_diet" method="post">
-		<label for="bed">'.'patient bed assgnment'.'</label>
+	$content .= '<form enctype="multipart/form-data" action="index.php?page=bed_pat_diet" method="post" role="form">
+		<fieldset><legend>'.'patient bed assgnment'.'</legend>
 		<select id="bed" name="bed">';
 	while($row = $result5->fetch_assoc()) {
 		if(in_array($row['b_id'], $idbed) ) continue ;
@@ -232,11 +238,12 @@ if($ward_id != ''){
 		$selected = '';
 	}
 	$content .= "</select>";
-	$content .= '<input type="submit" value="Assign" name="assign"></form>';
+	$content .= '<input type="submit" value="Assign" name="assign"></fieldset></form>';
 	$content .= '<br/>';
 // ----------------------------save/fetch patient dietary requirements form------------------------------
 	$sel = ''; // to preselect an item in the form after fetching data about patient
-	$content .= '<form enctype="multipart/form-data" action="index.php?page=bed_pat_diet" method="post">';
+	$content .= '<form enctype="multipart/form-data" action="index.php?page=bed_pat_diet" method="post" role="form">
+							<fieldset>';
 
 	$sql7 = "select p_id, p_number, p_name from
 			patients join pat_bed ON
@@ -245,14 +252,15 @@ if($ward_id != ''){
 			WHERE p_active = 1 and pb_date_to = 0 and b_id_ward = $ward_id";
 
 	$res7 = $db->myQuery($sql7);
-	$content .= '<label for="bed">'.'dietary requirements for '.'</label>';
+	$content .= '<legend>dietary requirements</legend>';
+	$content .= '<label for="bed">'.'for patient:'.'</label>';
 	$content .= '</select><select id="pat2" name="pat2">';
 	while($row = $res7->fetch_assoc()) {
 		if($row['p_id'] == $pat2id) $sel = ' selected';
 		$content .= "<option value=\"$row[p_id]\"$sel>$row[p_number] - $row[p_name]</option>";
 		$sel = '';
 	}
-	$content .= "</select><br/>";
+	$content .= "</select>";
 
 	$content .= '<label for="p_type">nhs or private </label><select id="type" name="type">';
 
@@ -263,7 +271,7 @@ if($ward_id != ''){
 		$content .= '<option value="'.$item.'" '.$sel.'>'.$item.'</option>';
 		$sel = '';
 	}
-	$content .= '</select><br/>';
+	$content .= '</select>';
 
 	$content .= '<label for="p_diet">diet type </label><select id="diet" name="diet">';
 	foreach($diet as $item){
@@ -271,7 +279,7 @@ if($ward_id != ''){
 		$content .= '<option value="'.$item.'"'.$sel.'>'.$item.'</option>';
 		$sel = '';
 	}
-	$content .= '</select><br/>';
+	$content .= '</select>';
 
 	$content .= '<label for="p_nutrition">nutrition </label><select id="nutrition" name="nutrition">';
 	foreach($nutrition as $item){
@@ -291,7 +299,7 @@ if($ward_id != ''){
 				$cus_id++;
 			}
 		}
-		$content .= '<input type="checkbox" name="'.$item.'" value="'.$item.'"'.$sel.'>'.$item.'<br/>';
+		$content .= '<input type="checkbox" name="'.$item.'" value="'.$item.'"'.$sel.'>'.$item;
 		$sel = '';
 	}
 
@@ -304,7 +312,7 @@ if($ward_id != ''){
 				<input type=\"text\" name=\"other_allergies\" value=\"$customAllergen\"/><br/>";
 
 	$content .= '<input type="submit" value="Fetch" name="fetch">';
-	$content .= '<input type="submit" value="Save" name="save"></form>';
+	$content .= '<input type="submit" value="Save" name="save"></fieldset></form>';
 
 }
 //------------------------------------forms end------------------------------------------------------------
@@ -320,8 +328,9 @@ if(!empty($cookie)){
 	$content .= "Your location is not set.
 	Please set your location <a href=\"index.php?page=set_location\">here</a>.";
 }
+if(DEV) $content .= $dev;
 //$w = ctype_alnum("");
 //$w = 'apple';
-//echo $w.($w ? 'true' : 'false');
-//echo 'strlen'.(strlen($w));
+//$dev .= $w.($w ? 'true' : 'false');
+//$dev .= 'strlen'.(strlen($w));
 ?>

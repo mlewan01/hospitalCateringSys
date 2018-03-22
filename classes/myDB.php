@@ -24,9 +24,10 @@ class myDB extends mysqli {
 		// using the query method of parent object
 		$result = $this->query($sql);
 		if($result === false){
-			// Get error string from object property
-			echo "blad query<br/>";
-			echo $this->error;
+			if(DEV){// Get error string from object property
+				echo "blad query<br/>";
+				echo $this->error;
+			}
 			return false;
 		} else {
 			// if successful returns $result

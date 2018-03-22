@@ -57,8 +57,8 @@ class myTime {
 		}elseif($v == 2){
 			return date("Y-m-d H:i:s",$time);// returns formated date from provided Unix timestamp
 		}elseif($v == 3){
-			echo " temp time 3  $time ".strtotime($time)."!! <br/>";
-			echo "S_time: ".$time." getMyTime 3: ".strtotime($time);
+			// echo " temp time 3  $time ".strtotime($time)."!! <br/>";
+			// echo "S_time: ".$time." getMyTime 3: ".strtotime($time);
 			return strtotime($time);// returns Unix timestamp from provided string containing time
 		}
 	}

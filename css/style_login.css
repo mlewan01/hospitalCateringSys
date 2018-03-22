@@ -1,13 +1,19 @@
 /* font declaration */
 
 @font-face {
-	font-family: 'parisian';
-	src: url('../fonts/parisr.woff') format('woff'),
-		 url('../fonts/parisr?#ie') format('embedded-opentype'),
-		 url('../fonts/parisr.ttf') format('truetype'),
-		 url('../fonts/parisr.svg#ParisianNormal') format('svg');
-	font-weight: normal;
-	font-style: normal;
+	/* https://fonts.google.com/specimen/Julius+Sans+One
+	http://scripts.sil.org/cms/scripts/page.php?site_id=nrsi&id=OFL_web
+	*/
+  font-family: 'Julius Sans One';
+  font-style: bold;
+  font-weight: 800;
+  src: url('fonts/julius-sans-one-v6-latin-ext-regular.eot'); /* IE9 Compat Modes */
+  src: local('Julius Sans One'), local('JuliusSansOne-Regular'),
+       url('fonts/julius-sans-one-v6-latin-ext-regular.eot?#iefix') format('embedded-opentype'), /* IE6-IE8 */
+       url('fonts/julius-sans-one-v6-latin-ext-regular.woff2') format('woff2'), /* Super Modern Browsers */
+       url('fonts/julius-sans-one-v6-latin-ext-regular.woff') format('woff'), /* Modern Browsers */
+       url('fonts/julius-sans-one-v6-latin-ext-regular.ttf') format('truetype'), /* Safari, Android, iOS */
+       url('fonts/julius-sans-one-v6-latin-ext-regular.svg#JuliusSansOne') format('svg'); /* Legacy iOS */
 }
 /* CSS Reset */
 
@@ -46,7 +52,7 @@ body {
 	margin: 0 auto;
 }
 h1, h2, h3, h4, h5, h6 {
-	font-family: 'parisian', Georgia, serif;
+	font-family: 'Julius Sans One', Georgia, serif;
   font-weight: normal;
 	color: #5c2368;
 }
@@ -62,7 +68,7 @@ a:link, a:visited {
     color: #576823;
 }
 a:hover, a:focus {
-	color: #E3F020;
+	color: #095D22;
 }
 
 /* form style declaration */
@@ -95,17 +101,22 @@ fieldset {
 .controlgroup:last-of-type{
 	border-bottom-width: 0px;
 }
-input[type=text], input[type=email], textarea , select {
+input[type=text], input[type=email], input[type=password], textarea , select {
 	width: 55%;
 }
-
+input[type=submit], input[type=reset] {
+border-radius: 0.375em;
+padding-top: 0.25em;
+padding-bottom: 0.375em;
+margin: 0 5px;
+}
 textarea {
-	height: 10em;
+	height: 3em;
 }
 legend {
 	color:#5c2368;
 	font-size: 1.5em;
-	font-family: 'parisian', Georgia, serif;
+	font-family: 'Julius Sans One', Georgia, serif;
 }
 /* ----- global elements styling ----- */
 
@@ -145,7 +156,7 @@ legend {
 }
 #pageheader h1 span {
 	margin-bottom: 0px;
-	color: #236841;
+	color: #3b5998;
 	font-size: 2em;
 }
 /* page header quick links navigation styling */
@@ -168,8 +179,8 @@ legend {
 }
 #pageheader nav#quick li a:hover, #pageheader nav#quick li a:focus {
 	padding: 3px;
-	color: #E3F020;
-	background-color: #4c712b;
+	color: #095D22;
+	background-color: #d8d632;
 }
 #pageheader nav#primary {
 	clear: both;
@@ -185,7 +196,7 @@ legend {
 }
 #pageheader nav#primary li a {
 	float: left;
-	background-color: #236841;
+	background-color: #3b5998;
 	color: #ffffff;
 	display: block;
 	border-radius: 0.375em;
@@ -196,8 +207,8 @@ legend {
 	text-decoration: none;
 }
 #pageheader nav#primary li a:focus, #pageheader nav#primary li a:hover{
-	color: #E3F020;
-	background-color: #4c712b;
+	color: #095D22;
+	background-color: #d8d632;
 }
 #pageheader nav#primary li a.current-page {
 	background-color: #576823;
@@ -209,7 +220,7 @@ legend {
 }
 
 #introduction > p {
-	font-family: 'parisian', Georgia, serif;
+	font-family: 'Julius Sans One', Georgia, serif;
 	font-size: 1.5em;
 	line-height: 2em;
 }
@@ -217,7 +228,7 @@ legend {
 	margin-bottom: 0.68em;
 }
 #v_JLvideo {
-	font-family: 'parisian', Georgia, serif;
+	font-family: 'Julius Sans One', Georgia, serif;
 	font-size: 1.5em;
 	padding-top: 0.5em;
 }
@@ -314,16 +325,16 @@ article ul {
 }
 #pagefooter {
 	font-size: 0.875em;
-	background-color: #236841;
+	background-color: #3b5998;
 	color: white;
 	clear: both;
 	overflow: hidden;
 	border-radius: 0.375em;
 	padding: 1em;
-	margin-bottom: 1em;
+	margin: 0 0.5em 1em 0.5em;
 }
 #pagefooter p{
-	font-family: 'parisian', Georgia, serif;
+	font-family: 'Julius Sans One', Georgia, serif;
 	font-size: 1.5em;
 }
 #pagefooter ul {
@@ -346,7 +357,7 @@ article ul {
 	color: white;
 }
 #pagefooter li a:focus, #pagefooter li a:hover {
-	color: #E3F020;
+	color: #095D22;
 }
 #pagefooter p {
 	float: left;
@@ -380,8 +391,8 @@ article ul {
 	border-radius: 0.375em;
 }
 .content dt {
-	font-family: 'parisian', Georgia, serif;
-    color: #236841;
+	font-family: 'Julius Sans One', Georgia, serif;
+    color: #3b5998;
 	font-size: 1.25em;
 }
 .content dd  {
@@ -409,8 +420,8 @@ article ul {
 .content caption {
 	border-bottom-width:0;
 	text-align: left;
-	font-family: 'parisian', Georgia, serif;
-    color: #236841;
+	font-family: 'Julius Sans One', Georgia, serif;
+    color: #3b5998;
 	font-size: 1.25em;
 }
 .content caption, .content th, .content td {
@@ -471,7 +482,7 @@ nav#pagesidebar ul li a {
 .skiplink:focus {
 	padding: 3px;
 	left: 0;
-	background-color: #4c712b;
+	background-color: #d8d632;
 	color: #ffff00;
 }
 @media screen and (max-width: 894px) {
@@ -530,9 +541,12 @@ nav#pagesidebar ul li a {
 	}
 }
 @media screen and (max-width: 400px){
+	.controlgroup:last-of-type {
+    padding-bottom: 0em;
+	}
 	.controlgroup {
 		clear: both;
-		padding-bottom: 3em;
+		padding-bottom: 0em;
 		border-bottom: none;
 	}
 	.controlgroup label {
@@ -540,13 +554,13 @@ nav#pagesidebar ul li a {
 		float: left;
 		width: 100%;
 	}
-	input[type=text], input[type=email], textarea , select  {
+	input[type=text], input[type=email], input[type=password], textarea , select  {
 		clear: both;
 		float: left;
 		width: 100%;
 	}
 	textarea {
-		margin-bottom: 1em;
+		margin-bottom: 0em;
 	}
 }
 @media screen and (max-width: 650px){
@@ -568,5 +582,13 @@ nav#pagesidebar ul li a {
 	#delivery_content section:last-child {
 		width: 100%;
 		float: left;
+	}
+}
+@media screen and (max-width: 486px){
+	input[type=submit], input[type=reset] {
+		border-radius: 0.375em;
+		padding-top: 0.25em;
+		padding-bottom: 0.375em;
+		margin-bottom: 5px;
 	}
 }

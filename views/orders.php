@@ -1,6 +1,6 @@
 <?php
 displayErroros(); // error output
-$msg = "<p>"; // development output
+$msg = "<p>"; $dev = '';// development output
 $msge = "<p>";// app normal output
 $pr = 'o_';
 $id = $pr.'id';
@@ -40,17 +40,15 @@ if(isset($_POST['edit'])){
 		$result = $db->myQuery($out[2])->fetch_assoc();
 		$form = tpl(2, $form, $result, $txtField);
 	}else {
-		$msg = " Fetch, id not provided...";
+		$dev = " Fetch, id not provided...";
 	}
 }
-
-$msg .= $out[0];
-$msge .= $out[1];
+$dev .= $out[0];
 
 $arr_lang = arr_lang(array_merge($formFields, $formButtons, array($pr.'legend','msg')));
 $content .= tpl(3, $form, $arr_lang);
 
-$content .= $msg.'<p>';
+if(DEV)$content .= '<div class="devout"><h4>Dev out:</h4>'.$dev.'</div>';
 
 // retriving data from database
 $sql = "select o.o_id, p.p_name, i.i_name, b.b_name, h.h_name, w.w_name from

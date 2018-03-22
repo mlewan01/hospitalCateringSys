@@ -5,20 +5,20 @@
 	$l = new myLogin();
 	$user='';
 	$cookie='';
-	$msg = '';
+	$dev = '';
 	$checkLoginOut = array();
 	$db = new myDB();
 	// $logged = $l->checkLogin();
 	$checkLoginOut = $l->checkLogin();
 	// print_r($checkLoginOut);
 	$logged = $checkLoginOut[0];
-	$msg .= $checkLoginOut[1];
+	$dev .= $checkLoginOut[1];
 	if(isset($_POST['l_login'])){
 		if($_POST['l_username']==''){
 			$content .= 'Username not provided, pls try again !';
 			$logged = 'not';
 		}else{
-			$msg .=' trying to Login '.$b;
+			$dev .=' trying to Login '.$b;
 			$tmp = $l->login();
 
 			if($tmp[0] == 'loggedin'){
@@ -31,7 +31,7 @@
 
 	}elseif(isset($_POST['l_logout'])){
 
-		$msg .= ' loging out '.$b;
+		$dev .= ' loging out '.$b;
 		$l->logout();
 		$logged = 'not';
 
@@ -46,7 +46,7 @@
 			$content .= "username already exists, try different one";
 			$logged = 'reg';
 		}
-		$msg .= ' registered '.$tmp[0].' '.$tmp[1].$b;
+		$dev .= ' registered '.$tmp[0].' '.$tmp[1].$b;
 	}elseif(isset($_POST['l_passRecovery'])){
 		$l->redirect('index.php?page=passrec');
 
@@ -54,14 +54,13 @@
 
 	if($logged == 'not'){
 
-		$content .= '<form enctype="multipart/form-data" action="index.php?page=login" method="post">';
+		$content .= '<form enctype="multipart/form-data" action="index.php?page=login" method="post" role="form">';
 		$content .= '<fieldset>';
 		$content .= '<legend>Log in</legend>';
-		$content .= '<label for="l_username">Username:</label>';
-		$content .= '<input type="text" id="l_username" name="l_username" />';
-		$content .= '<br />';
-		$content .= '<label for="vo_date_to">Password:</label>';
-		$content .= '<input type="password" id="l_password" name="l_password"  />';
+		$content .= '<div class="controlgroup"><label for="l_username">Username:</label>';
+		$content .= '<input type="text" id="l_username" name="l_username" /></div>';
+		$content .= '<div class="controlgroup"><label for="l_password">Password:</label>';
+		$content .= '<input type="password" id="l_password" name="l_password" /></div>';
 		$content .= '<input type="submit" value="Login" name="l_login">';
 		$content .= '<input type="submit" value="Register" name="l_register">';
 		$content .= '<input type="submit" value="password Recovery" name="l_passRecovery">';
@@ -75,14 +74,14 @@
 
 			if(isset($cookie['user'])){
 				//Set our user and authID variables
-				$msg .= 'cookie not empty'.$b;
+				$dev .= 'cookie not empty'.$b;
 				$user = $cookie['user'];
 			}
 		}
 
 		if($user == ''){
 			//Set our user and variable
-			$msg .= 'cookie empty'.$b;
+			$dev .= 'cookie empty'.$b;
 			$user = $tmp[2];
 		}
 
@@ -93,8 +92,7 @@
 
 		//Kill the script if the submitted username doesn't exit
 		if (!$re) {
-			$msg .= 'user does not exist...'.$b;
-			die("$user,  Sorry, that username does not exist!");
+			die("$user,  that username does not exist, sorry!");
 		}
 
 		//Fetch our results into an associative array
@@ -127,5 +125,5 @@
 		$content .= $out;
 
 	}
-	$content .= '<div class="devout"><h4>Dev out:</h4>'.$msg.'</div>';
+	if(DEV)$content .= '<div class="devout"><h4>Dev out:</h4>'.$dev.'</div>';
 ?>

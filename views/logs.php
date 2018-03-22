@@ -23,15 +23,13 @@ if(isset($_POST['get_logs'])){
 	$dev .=  ' not get_logs '.$b;
 }
 
-$content .= '<form enctype="multipart/form-data" action="index.php?page=logs" method="post">';
+$content .= '<form enctype="multipart/form-data" action="index.php?page=logs" method="post" role="form">';
 $content .= '<fieldset>';
 $content .= '<legend>Logs time range</legend>';
-$content .= '<label for="l_date_from">Date from</label>';
-$content .= '<input type="text" id="l_date_from" name="l_date_from" value="'.$mt->getMyTime(2, $date_from).'" />';
-$content .= '<br />';
-$content .= '<label for="l_date_from">Date to</label>';
-$content .= '<input type="text" id="l_date_to" name="l_date_to" value="'.$mt->getMyTime(2, $date_to).'" />';
-$content .= '<br />';
+$content .= '<div class="controlgroup"><label for="l_date_from">Date from</label>';
+$content .= '<input type="text" id="l_date_from" name="l_date_from" value="'.$mt->getMyTime(2, $date_from).'" /></div>';
+$content .= '<div class="controlgroup"><label for="l_date_to">Date to</label>';
+$content .= '<input type="text" id="l_date_to" name="l_date_to" value="'.$mt->getMyTime(2, $date_to).'" /></div>';
 $content .= '<input type="submit" value="Get Logs" name="get_logs">';
 $content .= '</fieldset></form>';
 
@@ -43,6 +41,6 @@ while($row = $result->fetch_assoc()){
 	$content .= "<li> $row[l_id] - $row[l_msg] </li>";
 }
 $content .= '</ul>';
-$content .= 'current day: '.$curDay.$b;
+$dev .= 'current day: '.$curDay.$b;
 if(DEV)$content .= '<div class="devout"><h4>Dev out:</h4>'.$dev.'</div>';
 ?>
