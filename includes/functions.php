@@ -1,4 +1,54 @@
 <?php
+/* generates navigations based no users rights
+*/
+function navigation($access){
+	$nav = '';
+	$nava = array(
+		'menu' => '<li><a href="index.php">[+m1+]</a></li>',
+		'items' => '<li><a href="index.php?page=items">[+m2+]</a></li>',
+		'menus' => '<li><a href="index.php?page=menus">[+m3+]</a></li>',
+		'menu_items' => '<li><a href="index.php?page=menu_items">[+m13+]</a></li>',
+		'menu_sets' => '<li><a href="index.php?page=menu_sets">[+m14+]</a></li>',
+		'orders' => '<li><a href="index.php?page=orders">[+m4+]</a></li>',
+		'hospitals' => '<li><a href="index.php?page=hospitals">[+m5+]</a></li>',
+		'wards' => '<li><a href="index.php?page=wards">[+m6+]</a></li>',
+		'beds' => '<li><a href="index.php?page=beds">[+m7+]</a></li>',
+		'patients' => '<li><a href="index.php?page=patients">[+m8+]</a></li>',
+		'users' => '<li><a href="index.php?page=users">[+m9+]</a></li>',
+		'pat_bed' => '<li><a href="index.php?page=pat_bed">[+m10+]</a></li>',
+		'pat_diet' => '<li><a href="index.php?page=pat_diet">[+m11+]</a></li>',
+		'set_location' => '<li><a href="index.php?page=set_location">[+m15+]</a></li>',
+		'bed_pat_diet' => '<li><a href="index.php?page=bed_pat_diet">[+m16+]</a></li>',
+		'view_order' => '<li><a href="index.php?page=view_order">[+m17+]</a></li>',
+		'logs' => '<li><a href="index.php?page=logs">[+m18+]</a></li>',
+		'login' => '<li><a href="index.php?page=login">[+m19+]</a></li>'
+	);
+	if($access >= 1){
+		$nav = $nava['menu'];
+		$nav .= $nava['set_location']; // $nav .= $nava['bed_pat_diet'];
+		$nav .= $nava['view_order'];
+	}
+	if($access >=5){
+		$nav .= $nava['bed_pat_diet']; // $nav .= $nava['users'];
+	}if($access >= 7){
+		$nav .= $nava['items'];
+		$nav .= $nava['menus'];
+		$nav .= $nava['menu_sets'];
+		$nav .= $nava['menu_items'];
+		$nav .= $nava['orders'];
+		$nav .= $nava['hospitals'];
+		$nav .= $nava['wards'];
+		$nav .= $nava['beds'];
+		$nav .= $nava['patients'];
+		$nav .= $nava['logs'];
+	} if($access >=10){
+		$nav .= $nava['pat_bed'];
+		$nav .= $nava['pat_diet'];
+		$nav .= $nava['users'];
+	}
+	$nav .= $nava['login'];
+	return $nav;
+}
 // displays php errors and wornings
 function displayErroros(){
 	if(ERR){

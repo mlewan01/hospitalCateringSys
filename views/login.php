@@ -13,6 +13,7 @@
 	// print_r($checkLoginOut);
 	$logged = $checkLoginOut[0];
 	$dev .= $checkLoginOut[1];
+
 	if(isset($_POST['l_login'])){
 		if($_POST['l_username']==''){
 			$content .= 'Username not provided, pls try again !';
@@ -20,9 +21,10 @@
 		}else{
 			$dev .=' trying to Login '.$b;
 			$tmp = $l->login();
-
 			if($tmp[0] == 'loggedin'){
 				$logged = 'logged';
+				$loginCheck = 'loggedIn';
+				$authLevel = $checkLoginOut[2];
 			}else{
 				$logged = 'not';
 				$content .= 'Username or password incorrect';
@@ -34,6 +36,7 @@
 		$dev .= ' loging out '.$b;
 		$l->logout();
 		$logged = 'not';
+		$loginCheck = 'loggedOut';
 
 	}elseif(isset($_POST['l_register'])){
 
@@ -102,7 +105,8 @@
 		$content .= ' name: '.$re['u_name'].$b;
 		$content .= ' user: '.$re['u_username'].$b;
 		$content .= ' email: '.$re['u_email'].$b;
-		$content .= ' psw: '.$re['u_password'].$b;
+		$content .= ' authLevel: '.$re['u_privileges'].$b;
+		$authLevel = $re['u_privileges'];
 		if(isset($_POST['l_chngpass'])){
 			changePassword($re['u_id'],$re['u_username'],$_POST['l_newpass'],$re['u_regdate'],'l_newpass');
 		}
