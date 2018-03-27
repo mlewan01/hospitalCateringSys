@@ -224,22 +224,22 @@ if($ward_id != ''){
 
 	$content .= '<form enctype="multipart/form-data" action="index.php?page=bed_pat_diet" method="post" role="form">
 		<fieldset><legend>'.'patient bed assgnment'.'</legend>
-		<select id="bed" name="bed">';
+		<div class="controlgroup"><label for="bed">Bed</label><select id="bed" name="bed">';
 	while($row = $result5->fetch_assoc()) {
 		if(in_array($row['b_id'], $idbed) ) continue ;
 		$content .= "<option value=\"$row[b_id],$row[b_name]\">$row[b_name]</option>";
 		$selected = '';
 	}
 
-	$content .= '</select><select id="pat" name="pat">';
+	$content .= '</select></div><div class="controlgroup"><label for="pat">Patient</label><select id="pat" name="pat">';
 	while($row = $result4->fetch_assoc()) {
 		if(in_array($row['p_id'], $idpat) ) continue ;
 		$content .= "<option value=\"$row[p_id],$row[p_number],$row[p_name]\">$row[p_number] - $row[p_name]</option>";
 		$selected = '';
 	}
-	$content .= "</select>";
+	$content .= "</select></div>";
 	$content .= '<input type="submit" value="Assign" name="assign"></fieldset></form>';
-	$content .= '<br/>';
+	
 // ----------------------------save/fetch patient dietary requirements form------------------------------
 	$sel = ''; // to preselect an item in the form after fetching data about patient
 	$content .= '<form enctype="multipart/form-data" action="index.php?page=bed_pat_diet" method="post" role="form">
@@ -253,15 +253,15 @@ if($ward_id != ''){
 
 	$res7 = $db->myQuery($sql7);
 	$content .= '<legend>dietary requirements</legend>';
-	$content .= '<label for="bed">'.'for patient:'.'</label>';
-	$content .= '</select><select id="pat2" name="pat2">';
+	$content .= '<div class="controlgroup"><label for="pat2">'.'for patient:'.'</label>';
+	$content .= '<select id="pat2" name="pat2">';
 	while($row = $res7->fetch_assoc()) {
 		if($row['p_id'] == $pat2id) $sel = ' selected';
 		$content .= "<option value=\"$row[p_id]\"$sel>$row[p_number] - $row[p_name]</option>";
 		$sel = '';
 	}
-	$content .= "</select>";
-
+	$content .= "</select></div>";
+	$content .= '<div class="controlgroup">';
 	$content .= '<label for="p_type">nhs or private </label><select id="type" name="type">';
 
 	foreach($type as $item){
@@ -271,27 +271,28 @@ if($ward_id != ''){
 		$content .= '<option value="'.$item.'" '.$sel.'>'.$item.'</option>';
 		$sel = '';
 	}
-	$content .= '</select>';
-
+	$content .= '</select></div>';
+	$content .= '<div class="controlgroup">';
 	$content .= '<label for="p_diet">diet type </label><select id="diet" name="diet">';
 	foreach($diet as $item){
 		if($item === $dietRe['diet']) { $sel = " selected"; }
 		$content .= '<option value="'.$item.'"'.$sel.'>'.$item.'</option>';
 		$sel = '';
 	}
-	$content .= '</select>';
-
+	$content .= '</select></div>';
+	$content .= '<div class="controlgroup">';
 	$content .= '<label for="p_nutrition">nutrition </label><select id="nutrition" name="nutrition">';
 	foreach($nutrition as $item){
 		if($item === $dietRe['nutrition']) { $sel = " selected"; }
 		$content .= '<option value="'.$item.'"'.$sel.'>'.$item.'</option>';
 		$sel = '';
 	}
-	$content .= '</select><br/>';
-
-	$content .= '<label for="p_allergies">Allergies:</label><br/>'; // <textarea type="text" id="p_allergies" name="p_allergies" placeholder=""></textarea><br/>';
+	$content .= '</select></div>';
+	$content .= '<div class="controlgroup">';
+	$content .= '<label for="p_allergies">Allergies:</label>'; // <textarea type="text" id="p_allergies" name="p_allergies" placeholder=""></textarea><br/>';
 	$customAllergen = '';
 	$cus_id = 0;
+	$content .= '<div class="checkgroup">';
 	foreach($allergens as $item){
 		foreach($dietRe['allergies'] as $alerg){
 			if($item == $alerg) {
@@ -299,18 +300,20 @@ if($ward_id != ''){
 				$cus_id++;
 			}
 		}
+		$content .= '<div class="checkarea">';
 		$content .= '<input type="checkbox" name="'.$item.'" value="'.$item.'"'.$sel.'>'.$item;
+		$content .= '</div>';
 		$sel = '';
 	}
-
+	$content .= '</div></div>';
 	for( ;$cus_id<count($dietRe['allergies']);$cus_id++){
 		$customAllergen .= $dietRe['allergies'][$cus_id].',';
 	}
 
 	$customAllergen = rtrim($customAllergen, ', ');
-	$content .= "<label for=\"other_allergies\">other allergies: </label>
+	$content .= "<div class=\"controlgroup\"><label for=\"other_allergies\">other allergies: </label>
 				<input type=\"text\" name=\"other_allergies\" value=\"$customAllergen\"/><br/>";
-
+	$content .= '</div>';
 	$content .= '<input type="submit" value="Fetch" name="fetch">';
 	$content .= '<input type="submit" value="Save" name="save"></fieldset></form>';
 

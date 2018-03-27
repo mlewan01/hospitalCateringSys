@@ -1,5 +1,6 @@
 <?php
 	displayErroros(); // error output
+	
 	$b = '<br/>';
 	$tmp = array('','');
 	$l = new myLogin();

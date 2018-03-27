@@ -182,7 +182,8 @@ if($bed_id != 0 && $patient_id != 0){
 	}
 }
 
-$content .= '<form action="index.php" method="post"> ';
+$content .= '<form action="index.php" method="post"><fieldset>
+						<legend>MENU</legend>';
 $i = 1;
 $checked = '';
 while($row = $result2->fetch_assoc()) {
@@ -215,16 +216,16 @@ while($row = $result2->fetch_assoc()) {
 		$dev .=  $b.">>  allergens conflict detected....".$b;
 	}
 	$msg .= $b;
-
+	$content .= '<div class="controlgroup">';
 	$content .= '<input type="checkbox" name="item'.$i.'" value="'.
 	$row['i_id'].'" '.$checked.' '.$alrgDisabled.'>'.$row['i_name'].'<br/>';
 
-	$content .= $msg;
+	$content .= $msg.'</div>';
 	$i++;
 	$checked = '';
 	$alrgDisabled = '';
 }
-$content .= '<input type="submit" value="Confirm !" name="order" '.$disabled.'></form>';
+$content .= '<input type="submit" value="Confirm !" name="order" '.$disabled.'></fieldset></form>';
 if(DEV)$content .= '<div class="devout"><h4>Dev out:</h4>'.$dev.'</div>';
 //print_r($order);
  $result->free();

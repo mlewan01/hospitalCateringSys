@@ -79,12 +79,16 @@ form {
 }
 textarea, input, select, option {
 	font-family: Arial, Verdana, Geneva, sans-serif;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
 	color: #04080b;
-	font-size: 0.875em;
+	font-size: 1em;
 }
 label {
+  padding: 12px 12px 12px 0;
 	font-weight: bold;
-	width: 40%;
+	width: 35%;
 	float: left;
 }
 fieldset {
@@ -106,9 +110,15 @@ input[type=text], input[type=email], input[type=password], textarea , select {
 }
 input[type=submit], input[type=reset] {
 border-radius: 0.375em;
-padding-top: 0.25em;
+padding-top: 0.375em;
 padding-bottom: 0.375em;
 margin: 0 5px;
+font-weight: bold;
+font-size: 1em;
+cursor: pointer;
+}
+input[type=submit]:hover, input[type=reset]:hover {
+    background-color: #e5e5e5;
 }
 textarea {
 	height: 3em;
@@ -117,6 +127,17 @@ legend {
 	color:#5c2368;
 	font-size: 1.5em;
 	font-family: 'Julius Sans One', Georgia, serif;
+}
+.checkarea {
+  padding: 5px;
+  display: inline-block;
+  border: 1px solid lightblue;
+  border-radius: 4px;
+  margin: 3px;
+  background-color: #f3f3f3;
+}
+.checkgroup {
+  margin-left: 37%;
 }
 /* ----- global elements styling ----- */
 
@@ -135,14 +156,16 @@ legend {
 /* page header styling */
 
 #pageheader {
-	padding: 1em 0;
+	padding-top: 1em;
 	overflow: hidden;
 }
 /* page header logo styling */
 #logo {
 	float: left;
-	width: 192px;
-	height: 148px;
+	/* width: 192px;
+	height: 148px; */
+  width: 145px;
+  height: 105px;
 	background-repeat: no-repeat;
 	padding: 0px 20px;
 }
@@ -492,6 +515,37 @@ nav#pagesidebar ul li a {
 	form {
 		width: 100%;
 	}
+  .content {
+    width: 98%;
+  }
+}
+@media screen and (max-width: 780px){
+	#pageheader, #pagesidebar, .content #features {
+		float: none;
+	}
+	#pageheader nav#primary {
+		clear: both;
+	}
+	#pagesidebar {
+		width: auto;
+	}
+	#contactus_content.content {
+		/* width: auto; */
+	}
+	#nine_content.content {
+		width: auto;
+	}
+	#home_content.content {
+		width: auto;
+	}
+	#features {
+		width: auto;
+		margin-bottom: 2em;
+	}
+	#book_content.content {
+		float: none;
+		width: auto;
+	}
 }
 @media screen and (max-width: 763px){
 
@@ -511,59 +565,7 @@ nav#pagesidebar ul li a {
 	#pageheader  h1 {
 		/*margin-top: 0em;*/
 	}
-}
-@media screen and (max-width: 780px){
-	#pageheader, #pagesidebar, .content #features {
-		float: none;
-	}
-	#pageheader nav#primary {
-		clear: both;
-	}
-	#pagesidebar {
-		width: auto;
-	}
-	#contactus_content.content {
-		width: auto;
-	}
-	#nine_content.content {
-		width: auto;
-	}
-	#home_content.content {
-		width: auto;
-	}
-	#features {
-		width: auto;
-		margin-bottom: 2em;
-	}
-	#book_content.content {
-		float: none;
-		width: auto;
-	}
-}
-@media screen and (max-width: 400px){
-	.controlgroup:last-of-type {
-    padding-bottom: 0em;
-	}
-	.controlgroup {
-		clear: both;
-		padding-bottom: 0em;
-		border-bottom: none;
-	}
-	.controlgroup label {
-		clear: both;
-		float: left;
-		width: 100%;
-	}
-	input[type=text], input[type=email], input[type=password], textarea , select  {
-		clear: both;
-		float: left;
-		width: 100%;
-	}
-	textarea {
-		margin-bottom: 0em;
-	}
-}
-@media screen and (max-width: 650px){
+}@media screen and (max-width: 650px){
 	#pageheader h1 {
 		width: 200px;
 	}
@@ -571,9 +573,15 @@ nav#pagesidebar ul li a {
 @media screen and (max-width: 600px){
 	#logo {
 		padding: 0px 5px;
-		width: 150px;
+		width: 145px;
 		height: 105px;
 	}
+  header h1 {
+    margin-top: 8px;
+  }
+  #pageheader {
+    padding-top: 0.5em;
+  }
 	#delivery_content section {
 		clear: both;
 		float: left;
@@ -586,9 +594,39 @@ nav#pagesidebar ul li a {
 }
 @media screen and (max-width: 486px){
 	input[type=submit], input[type=reset] {
-		border-radius: 0.375em;
-		padding-top: 0.25em;
-		padding-bottom: 0.375em;
 		margin-bottom: 5px;
 	}
+}
+@media screen and (max-width: 485px){
+	.controlgroup:last-of-type {
+    padding-bottom: 0em;
+	}
+
+	.controlgroup {
+		clear: both;
+		padding-bottom: 0em;
+		border-bottom: none;
+	}
+	.controlgroup label {
+		clear: both;
+		/* float: left; */
+		width: 100%;
+	}
+	input[type=text], input[type=email], input[type=password], textarea , select  {
+		clear: both;
+		/* float: left; */
+		width: 96%;
+	}
+	textarea {
+		margin-bottom: 0em;
+	}
+  .checkgroup {
+    margin-left: -10px;
+  }
+  /* textarea:last-of-type {
+    margin-bottom: 1em;
+  }
+  input[type=text]:last-of-type, input[type=email]:last-of-type, input[type=password]:last-of-type   {
+    margin-bottom: 1em;
+  } */
 }

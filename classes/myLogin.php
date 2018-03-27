@@ -147,7 +147,7 @@ class myLogin {
 			$msg .= ' subpass: '.$subpass.$b;
 			$msg .=  ' stopass: '.$stopass.$b;
 			if($subpass == $stopass){
-				$_SESSION['auth'] = true;
+				// $_SESSION['auth'] = true;
 				$msg .=  'you are logged in !! ';
 				//If there's a match, we rehash password to store in a cookie
 				$authnonce = md5('cookie-' . $subname . $storeg . AUTH_SALT);
@@ -170,7 +170,7 @@ class myLogin {
 		//Expire our auth coookie to log the user out
 		$idout = setcookie('catering[authID]', '', -3600, '', '', '', true);
 		$userout = setcookie('catering[user]', '', -3600, '', '', '', true);
-		$_SESSION['auth'] = false;
+		// $_SESSION['auth'] = false;
 		if ( $idout == true && $userout == true ) {
 			return true;
 		} else {
@@ -194,14 +194,14 @@ class myLogin {
 				$user = $cookie['user'];
 				$authID = $cookie['authID'];
 			}else {
-				$_SESSION['auth'] = false;
+				// $_SESSION['auth'] = false;
 				$msg .= 'user not set in catering cookie';
 				$out[0] = 'not';
 				$out[1] = $msg;
 				return $out;
 			}
 		}else {
-			$_SESSION['auth'] = false;
+			// $_SESSION['auth'] = false;
 			$msg .= 'no catering cookie detected';
 			$out[0] = 'not';
 			$out[1] = $msg;
@@ -240,17 +240,17 @@ class myLogin {
 			$stopass = $db->hash_password($stopass, $authnonce);
 
 			if ( $stopass == $authID ) {
-				$_SESSION['auth'] = true;
+				// $_SESSION['auth'] = true;
 				$out[2] = $u_privileges;
 				$out[1] = 'logged';
 				$out[0] = 'logged';
 			} else {
-				$_SESSION['auth'] = false;
+				// $_SESSION['auth'] = false;
 				$results = 'not';
 				$out[0] = 'not';
 			}
 		} else {
-			$_SESSION['auth'] = false;
+			// $_SESSION['auth'] = false;
 			$results = 'not';
 			$out[0] = 'not';
 		}

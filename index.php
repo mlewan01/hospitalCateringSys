@@ -1,10 +1,14 @@
 <?php
-session_start();
+// displayErroros();
+// error_reporting(0);
+// ini_set('display_errors', 0);
+// session_start();
 // connecting to required/included files
 $ds = DIRECTORY_SEPARATOR;
 require_once 'includes/config.php';
 require 'lang/'.LANGUAGE.'.php';
 require_once 'includes/functions.php';
+displayErroros();
 autoloader();
 $content = '';
 $b = '</b>';
@@ -21,8 +25,11 @@ if (!isset($_GET['page'])) { // TODO sanitise the input finally !!
 	// $l = new myLogin();
 	// $logged = $l->checkLogin();
 	if($logged[0] == 'not') {
-		// $l->redirect("index.php?page=login");
-		$pageid = 'login';
+		if($_GET['page'] == 'passrec'){
+			$pageid = 'passrec';
+		}else {
+			$pageid = 'login';
+		}// $l->redirect("index.php?page=login");
 	}else {
 		$pageid = $_GET['page']; // else requested page,
 		// $navMain = navigation($logged[2]);

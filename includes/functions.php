@@ -28,9 +28,10 @@ function navigation($access){
 		$nav .= $nava['set_location']; // $nav .= $nava['bed_pat_diet'];
 		$nav .= $nava['view_order'];
 	}
-	if($access >=5){
+	if($access >= 5){
 		$nav .= $nava['bed_pat_diet']; // $nav .= $nava['users'];
-	}if($access >= 7){
+	}
+	if($access >= 7){
 		$nav .= $nava['items'];
 		$nav .= $nava['menus'];
 		$nav .= $nava['menu_sets'];
@@ -41,7 +42,8 @@ function navigation($access){
 		$nav .= $nava['beds'];
 		$nav .= $nava['patients'];
 		$nav .= $nava['logs'];
-	} if($access >=10){
+	}
+	if($access >= 10){
 		$nav .= $nava['pat_bed'];
 		$nav .= $nava['pat_diet'];
 		$nav .= $nava['users'];
