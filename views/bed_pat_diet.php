@@ -239,7 +239,7 @@ if($ward_id != ''){
 	}
 	$content .= "</select></div>";
 	$content .= '<input type="submit" value="Assign" name="assign"></fieldset></form>';
-	
+
 // ----------------------------save/fetch patient dietary requirements form------------------------------
 	$sel = ''; // to preselect an item in the form after fetching data about patient
 	$content .= '<form enctype="multipart/form-data" action="index.php?page=bed_pat_diet" method="post" role="form">
@@ -300,9 +300,9 @@ if($ward_id != ''){
 				$cus_id++;
 			}
 		}
-		$content .= '<div class="checkarea">';
+		$content .= '<div class="checkarea"><label>';
 		$content .= '<input type="checkbox" name="'.$item.'" value="'.$item.'"'.$sel.'>'.$item;
-		$content .= '</div>';
+		$content .= '</label></div>';
 		$sel = '';
 	}
 	$content .= '</div></div>';

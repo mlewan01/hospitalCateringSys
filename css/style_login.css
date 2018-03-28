@@ -109,16 +109,16 @@ input[type=text], input[type=email], input[type=password], textarea , select {
 	width: 55%;
 }
 input[type=submit], input[type=reset] {
-border-radius: 0.375em;
-padding-top: 0.375em;
-padding-bottom: 0.375em;
-margin: 0 5px;
-font-weight: bold;
-font-size: 1em;
-cursor: pointer;
+  border-radius: 0.375em;
+  padding-top: 0.375em;
+  padding-bottom: 0.375em;
+  margin: 0 5px;
+  font-weight: bold;
+  font-size: 1em;
+  cursor: pointer;
 }
 input[type=submit]:hover, input[type=reset]:hover {
-    background-color: #e5e5e5;
+  background-color: #e5e5e5;
 }
 textarea {
 	height: 3em;
@@ -133,11 +133,32 @@ legend {
   display: inline-block;
   border: 1px solid lightblue;
   border-radius: 4px;
-  margin: 3px;
+  margin: 4px;
   background-color: #f3f3f3;
+}
+.checkarea label {
+  cursor: pointer;
+  float: none;
+}
+.checkarea:hover {
+  background-color: lightgreen;
 }
 .checkgroup {
   margin-left: 37%;
+}
+.allert {
+  background-color: #ff1b00;
+  display: inline-block;
+  color: white;
+  padding: 5px;
+  border-radius: 4px;
+  margin-left: 3px;
+}
+.info {
+  padding: 0 5px 10px 7px;
+  line-height: 1.5;
+  font-size: 1.1em;
+  width: 80%;
 }
 /* ----- global elements styling ----- */
 
@@ -223,7 +244,7 @@ legend {
 	color: #ffffff;
 	display: block;
 	border-radius: 0.375em;
-	padding-top: 0.25em;
+	padding-top: 0.375em;
 	padding-right: 1.25em;
 	padding-bottom: 0.375em;
 	padding-left: 1.25em;
@@ -277,7 +298,7 @@ legend {
 
 .content {
 	padding-top: 1em;
-	padding-bottom: 2em;
+	padding-bottom: 1em;
 	width: 68%;
 	float: left;
 	padding-left: 1%;
@@ -401,9 +422,6 @@ article ul {
 #delivery_content section:last-child {
 	 width: 40%;
 	 float: right;
-}
-.content {
-	padding-bottom: 2em;
 }
 .content ul, .content p, .content dl, .content table{
 	margin-bottom: 1.25em;
