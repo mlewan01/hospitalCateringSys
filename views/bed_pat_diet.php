@@ -1,15 +1,38 @@
 <?php
 displayErroros(); // error output
-$b = '<br/>';
-$cookie = $_COOKIE['catering']; // retrivig a cookie
-
-$hospital_id = explode(' ',$cookie['hospital'])[0];
-$hospital_name = explode(' ',$cookie['hospital'],2)[1];
-
+$b = '<br/>'; $dev = '';
 $ward_id = '';
-$ward_id = explode(' ',$cookie['ward'])[0];
-$ward_name = explode(' ',$cookie['ward'],2)[1];
-$where = '';
+$ward_name = '';
+$hospital_id = '';
+$hospital_name = '';
+$cookie = array();
+if(isset($_COOKIE['catering'])){
+	$dev .= "cookie catering exists".$b;
+	$cookie = $_COOKIE['catering'];
+	if(isset($cookie['hospital'])){
+		$hospital_id = explode(' ',$cookie['hospital'])[0];
+		$hospital_name = explode(' ',$cookie['hospital'],2)[1];
+	}
+	if(isset($cookie['ward'])){
+		$ward_id = explode(' ',$cookie['ward'])[0];
+		$ward_name = explode(' ',$cookie['ward'],2)[1];
+	}
+	// if(isset($cookie['bed'])){
+	// 	$bed_id = explode(' ',$cookie['bed'])[0];
+	// 	$bed_name = explode(' ',$cookie['bed'],2)[1];
+	// }
+}else{
+	$dev .= "cookie catering does not exists".$b;
+}
+// $cookie = $_COOKIE['catering']; // retrivig a cookie
+//
+// $hospital_id = explode(' ',$cookie['hospital'])[0];
+// $hospital_name = explode(' ',$cookie['hospital'],2)[1];
+//
+// $ward_id = '';
+// $ward_id = explode(' ',$cookie['ward'])[0];
+// $ward_name = explode(' ',$cookie['ward'],2)[1];
+// $where = '';
 
 $userId = 0;
 $pat2id = '';

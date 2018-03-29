@@ -1,6 +1,6 @@
 <?php
 	displayErroros(); // error output
-	
+
 	$b = '<br/>';
 	$tmp = array('','');
 	$l = new myLogin();
@@ -102,11 +102,11 @@
 		//Fetch our results into an associative array
 		$re = mysqli_fetch_assoc( $re );
 
-		$content .= ' id: '.$re['u_id'].$b;
-		$content .= ' name: '.$re['u_name'].$b;
-		$content .= ' user: '.$re['u_username'].$b;
-		$content .= ' email: '.$re['u_email'].$b;
-		$content .= ' authLevel: '.$re['u_privileges'].$b;
+		$content .= '<div class="info"> id: '.$re['u_id'].$b;
+		$content .= 'name: '.$re['u_name'].$b;
+		$content .= 'user: '.$re['u_username'].$b;
+		$content .= 'email: '.$re['u_email'].$b;
+		$content .= 'authLevel: '.$re['u_privileges'].$b.'</div>';
 		$authLevel = $re['u_privileges'];
 		if(isset($_POST['l_chngpass'])){
 			changePassword($re['u_id'],$re['u_username'],$_POST['l_newpass'],$re['u_regdate'],'l_newpass');

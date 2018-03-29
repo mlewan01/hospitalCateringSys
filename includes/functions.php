@@ -71,17 +71,20 @@ function getLocation(){
 		$cookie = $_COOKIE['catering'];
 		$out['cookie_set'] = true;
 		if(isset($cookie['hospital'])){
-			$out['$hospital_id'] = explode(' ',$cookie['hospital'])[0];
+			$out['hospital_id'] = explode(' ',$cookie['hospital'])[0];
 			$out['hospital_name'] = explode(' ',$cookie['hospital'],2)[1];
-		}
+			$out['hospital_set'] = true;
+		}else $out['hospital_set'] = false;
 		if(isset($cookie['ward'])){
 			$out['ward_id'] = explode(' ',$cookie['ward'])[0];
 			$out['ward_name'] = explode(' ',$cookie['ward'],2)[1];
-		}
+			$out['ward_set'] = true;
+		}else $out['ward_set'] = false;
 		if(isset($cookie['bed'])){
 			$out['bed_id'] = explode(' ',$cookie['bed'])[0];
 			$out['bed_name'] =explode(' ',$cookie['bed'],2)[1];
-		}
+			$out['bed_set'] = true;
+		}else $out['bed_set'] = false;
 	}else{
 		$out['msg'] = "cookie catering does not exists".$b;
 		$out['cookie_set'] = false;
