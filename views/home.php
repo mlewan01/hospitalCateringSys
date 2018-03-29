@@ -146,7 +146,7 @@ if($bed_id != 0 && $patient_id != 0){
 		foreach($itemsOrdered as $itm){
 
 			$sql7 = "delete from orders where o_meal=\"$meal\"
-						and o_id_item=$itm and o_date_meal=$curDay";
+						and o_id_item=$itm and o_date_meal=$curDay and o_id_patient=$patient_id";
 			$db->myQuery($sql7);
 
 			$msg ='id '.$itm.' '.$lang['msg_itemcancelled'].$patient_id;

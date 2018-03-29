@@ -58,17 +58,22 @@
 			// print_r($row);
 			// $dev .=  'the bed id: '.$bed_id.$b.'the patient id: ';print_r($row);$dev .=  $b;
 			$patient_id = $row['pb_id_patient'];
-			$pat_name = $row['p_name'];
-			$content .= ' '.$pat_name.$b;
-			$sql4 = "select o_id_item, i_name from orders join items on (o_id_item = i_id) where o_date_meal=$curDay
-							and o_id_patient=$patient_id and o_meal='$currentMeal'";
-			$res4 = $db->myQuery($sql4);
-			while($r3 = $res4->fetch_assoc()){
-				$content .= ' .. .. '.$r3['o_id_item'].' '.$r3['i_name'].$b;
-			}
+			// $content .= var_dump($patient_id);
+			if($patient_id != null){
+				$pat_name = $row['p_name'];
+				$content .= ' '.$pat_name.$b;
+				$sql4 = "select o_id_item, i_name from orders join items on (o_id_item = i_id) where o_date_meal=$curDay
+								and o_id_patient=$patient_id and o_meal='breakfast'";
+				// echo $sql4;
+				$res4 = $db->myQuery($sql4);
+				while($r3 = $res4->fetch_assoc()){
+					$content .= ' .. .. '.$r3['o_id_item'].' '.$r3['i_name'].$b;
+				}
+			}else $content .= ' <b>EMPTY</b>'.$b;
 			$content .= $b;
 		}
 	}
+	// $content .= $b.$sql4.$b;
 	$content .= '................<b>TOTAL ORDERS for '.$menuday.' '.$currentMeal.'</b>.................'.$b;
 	$sql = "SELECT o_id_item, i_name, COUNT(*)
 			FROM orders JOIN items ON (o_id_item = i_id)
@@ -80,6 +85,7 @@
 		$content .= $row['i_name'].' - '.$row['COUNT(*)'].$b;
 		$total = $total + $row['COUNT(*)'];
 	}
+	$content .= '.................................................'.$b;
 	$content .= ' total quantity of orders: '.$total.$b;
 
 	$content .= DEV ? $dev: '';
