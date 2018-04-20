@@ -23,30 +23,36 @@ function navigation($access){
 		'logs' => '<li><a href="index.php?page=logs">[+m18+]</a></li>',
 		'login' => '<li><a href="index.php?page=login">[+m19+]</a></li>'
 	);
-	if($access >= 1){
+	if($access >= 0){
 		$nav = $nava['menu'];
+	}
+	if($access >= 1){
 		$nav .= $nava['set_location']; // $nav .= $nava['bed_pat_diet'];
 		$nav .= $nava['view_order'];
 	}
-	if($access >= 5){
+	if($access >= 2){
 		$nav .= $nava['bed_pat_diet']; // $nav .= $nava['users'];
 	}
-	if($access >= 7){
+	if($access >= 3){
 		$nav .= $nava['items'];
 		$nav .= $nava['menus'];
 		$nav .= $nava['menu_sets'];
 		$nav .= $nava['menu_items'];
-		$nav .= $nava['orders'];
+	}
+	if($access >= 4){
 		$nav .= $nava['hospitals'];
 		$nav .= $nava['wards'];
 		$nav .= $nava['beds'];
 		$nav .= $nava['patients'];
 		$nav .= $nava['logs'];
 	}
-	if($access >= 10){
+	if($access >= 5){
+		$nav .= $nava['users'];
+	}
+	if($access >= 6){
+		$nav .= $nava['orders'];
 		$nav .= $nava['pat_bed'];
 		$nav .= $nava['pat_diet'];
-		$nav .= $nava['users'];
 	}
 	$nav .= $nava['login'];
 	return $nav;
@@ -94,12 +100,13 @@ function getLocation(){
 // checks given string for allowed alpha-numeric and additional characters
 // returns true if string contain allowed characters false otherwise
 function sanitise($in){
-	$repl = array('@', ' ', '.', ',', '?', '!',':', '-', '&');
+
+	$repl = array('@', ' ', '.', ',', '?', '!',':', '-', '&', '_'); // allowed characters in sanitise functions
 	$temp = str_replace($repl, '', $in);
 	if(ctype_alnum($temp)){
-		return true;
+		return true; // if contains allowed characters
 	}else{
-		return false;
+		return false; // if contains not allowed characters
 	}
 }
 // checks given string for allowed alpha-numeric and additional characters
@@ -109,7 +116,7 @@ function sanitiseInput($post, $arr, $req=null){
 	$dev = "sanitise function".'<br/>';
 	// $clean array fields: error, title, description
 
-	$repl = array('@', ' ', '.', ',', '?', '!',':', '-', '&');
+	$repl = array('@', ' ', '.', ',', '?', '!',':', '-', '&', '_');// allowed characters in sanitise functions
 	$len = count($arr);
 	$clean = array($len);
 	$msg = '<br/>1<br/>';
@@ -474,7 +481,7 @@ function formEdit($to_clean, $required, $dbwhere, $id, $fieldType=null){
 
 		// $msg .= $db->myQuery($sql);
 		$msg .= $clean[1];
-
+		$_POST[$id] = $h_id;
 	}else {
 		$msg .= 'not clean !!!!<br/>';
 		$msg .= $clean[0];
@@ -537,18 +544,13 @@ function getMyTime($v=0, $time=0) {
 		 $nonce = md5('registration-'.$username.$userreg.NONCE_SALT);
 		 $userpass = $db->hash_password($newpass, $nonce);
 		 $sql3 = 'UPDATE users SET u_password = "'.$userpass.'" WHERE u_id = '.$userId;
-		 echo $sql3.'<br/>';
 
 		 $results = $db->myQuery($sql3);
-		 //echo "clean : ".$results;
-		 print_r($results);
-		 //8354905c3e08a785191081a41e6dfce56c5e810b7ff53d2925274f6a302ea3e5d3ed5d4f16ac5cf98546e1e714c7b15a468663304510702418616e1d9856e6c9
-	 }else {
+		}else {
 		 $msg = 'not clean !!!!<br/>';
 		 $msg .= $clean[0];
 		 $msg .= $lang[$clean[0]];
 		 $msg .= $clean[1];
-		 echo "not clean : ".$msg;
 	 }
  }
 ?>

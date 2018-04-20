@@ -7,12 +7,12 @@ $pr = 'u_'; // database prefix
 $id = $pr.'id'; // database id field with prefix
 $dbwhere = 'users'; // database target table
 $out = array('','','',); // for output from form generating function
-$formFields = array('id','name','username','password','privileges','department','role','phone','email','regdate'); // form fields array
+$formFields = array('id','name','username','password','privileges','department','role','phone','email','regdate','active'); // form fields array
 $to_clean = array_merge(array(''), addPrefix($formFields, $pr)); // prepering for sanitazation of data
 $formButtons = array('edit','add','delete','fetch','reset', 'changePassword'); // form buttons
 $sql = ""; // for constructing SQL query
-$required = array(0,1,1,1,0,0,0,0,0,0); // marks required fields of the form
-$txtField = array(0,0,0,0,0,0,0,0,0,2); // 0-input text, 1-textArea, 2-date,
+$required = array(0,1,1,1,0,0,0,0,0,0,0); // marks required fields of the form
+$txtField = array(0,0,0,0,0,0,0,0,0,2,0); // 0-input text, 1-textArea, 2-date,
 
 $form = makeForm(array($pr, $dbwhere, $formFields, $formButtons, $txtField)); // form, not yet translated
 

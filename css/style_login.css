@@ -70,7 +70,26 @@ a:link, a:visited {
 a:hover, a:focus {
 	color: #095D22;
 }
+ /* section styling */
 
+section {
+  width: 45%;
+  background-color: #fcffcf;
+  padding: 5px;
+  margin: 5px;
+  border-radius: 4px;
+  display: inline-grid;
+}
+section h3 {
+  display: block;
+  width: 100%;
+  text-align: center;
+  border-bottom: 1px solid #79e4ab;
+  margin-bottom: 5px;
+}
+section h4 {
+  display: contents;
+}
 /* form style declaration */
 
 form {
@@ -619,7 +638,9 @@ nav#pagesidebar ul li a {
 	.controlgroup:last-of-type {
     padding-bottom: 0em;
 	}
-
+  section {
+    width: 96%;
+  }
 	.controlgroup {
 		clear: both;
 		padding-bottom: 0em;

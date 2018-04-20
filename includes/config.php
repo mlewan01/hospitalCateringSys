@@ -34,13 +34,14 @@ define('APP_DIR', dirname(dirname(__FILE__)));
 $config['in_development'] = false;
 define('IN_DEVELOPMENT', false);
 //$config['hospital'] = 1;
-
+// allowed characters in sanitise functions
+$config['sanitise'] = array('@', ' ', '.', ',', '?', '!',':', '-', '&', '_');
 // patient type
 $config['type'] = array('nhs','private');
 // diet
 $config['diet'] = array('standard','vegetarian','vegan','halal','kosher');
 // nutrition
-$config['nutrition'] = array('water','clear fluids','free fluids','soft diet','light diet','eating & drinking');
+$config['nutrition'] = array('nil','water','clear fluids','free fluids','soft diet','light diet','eating & drinking');
 // allergens
 $config['allergens'] = array('celery','crustaceans','eggs','fish','lupin','milk','molluscs','mustard','tree nuts','peanuts','sesame','soybeans','sulphites');
 //meals time end

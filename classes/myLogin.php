@@ -16,9 +16,6 @@ class myLogin {
 		 * process the form data.
 		 */
 
-		 echo ' referer: '.$referrer.$b;
-		 echo ' current: '.$current.$b;
-
 		if ( !empty ( $_POST ) ) {
 
 			/*
@@ -29,7 +26,6 @@ class myLogin {
 			 */
 			if ( $referrer == $current ) {
 
-				echo ' same referrer and current page'.$b;
 				// checking if the usrename already exists
 				$userlogin = $_POST['username'];
 
@@ -46,9 +42,6 @@ class myLogin {
 				}
 				//Set up the variables we'll need to pass to our insert method
 
-				//These are the fields in that table that we want to insert data into
-				$fields = array('name', 'username', 'password', 'email', 'regdate', 'info', 'privileges', 'title');
-
 				//These are the values from our registration form... cleaned using our clean method
 			// $values = $cdb->clean($_POST);   // produces errors, change to msqli due to php 7 upgrade
 				$values = $_POST;
@@ -58,10 +51,12 @@ class myLogin {
 				$userlogin = $_POST['username'];
 				$userpass = $_POST['password'];
 				$useremail = $_POST['email'];
+				$userphone = $_POST['phone'];
 				$userreg =( new myTime())-> getMyTime();   // $_POST['date'];
 				$userinfo = $_POST['info'];
 				$userprivileges = $_POST['privileges'];
-				$usertitle = $_POST['title'];
+				$userdepartment = $_POST['department'];
+				$userrole = $_POST['role'];
 
 				//We create a NONCE using the action, username, timestamp, and the NONCE SALT
 				$nonce = md5('registration-' . $userlogin . $userreg . NONCE_SALT);
@@ -75,9 +70,13 @@ class myLogin {
 							'u_username' => $userlogin,
 							'u_password' => $userpass,
 							'u_email' => $useremail,
+							'u_phone' => $userphone,
 							'u_regdate' => $userreg,
 							'u_info' => $userinfo,
-							'u_privileges' => $userprivileges
+							'u_privileges' => 0,
+							'u_role' => $userrole,
+							'u_department' => $userdepartment,
+							'u_active' =>$userprivileges
 						);
 
 				//And, we insert our data

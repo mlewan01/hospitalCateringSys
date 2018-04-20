@@ -5,7 +5,7 @@ $l->loginEnforce(RED);
 
 $b = '<br/>';
 $msg = ''; $err=''; $dev='';
-$msg2='Currently excample data in hostptal 2, ward 22, bed 2201/2';
+$msg2= ''; // 'Currently excample data in hostptal 2, ward 22, bed 2201/2';
 $hospital_id = '';
 $ward_id = '';
 $bed_id = '';

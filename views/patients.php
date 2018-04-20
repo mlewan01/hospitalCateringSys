@@ -23,12 +23,27 @@ $db = new myDB();
 if(isset($_POST['edit'])){
 
 	$out = formEdit($to_clean, $required, $dbwhere, $id, $txtField);
-	if($out[2] != '')$msg = $db->myQuery($out[2]);
+	if($out[2] != ''){
+		$msg = $db->myQuery($out[2]);
+
+		$pid = $_POST['p_id'];
+		$sql = "INSERT INTO pat_diet (pd_id_patient, pd_date, pd_type, pd_diet, pd_nutrition, pd_allergies)
+		VALUES ('$pid', ".time().", '$_POST[p_type]', '$_POST[p_diet]', '$_POST[p_nutrition]', '$_POST[p_allergies]')";
+		$db->myQuery($sql);
+	}
 
 }elseif(isset($_POST['add'])){
 
 	$out = formAdd($to_clean, $required, $dbwhere, $id, $txtField);
-	if($out[2] != '')$msg = $db->myQuery($out[2]);
+	if($out[2] != ''){
+		$msg = $db->myQuery($out[2]);
+
+		$pid = $_POST['p_id'];
+		$sql = "INSERT INTO pat_diet (pd_id_patient, pd_date, pd_type, pd_diet, pd_nutrition, pd_allergies)
+		VALUES ('$pid', ".time().", '$_POST[p_type]', '$_POST[p_diet]', '$_POST[p_nutrition]', '$_POST[p_allergies]')";
+		$db->myQuery($sql);
+	}
+
 
 }elseif(isset($_POST['delete'])){
 

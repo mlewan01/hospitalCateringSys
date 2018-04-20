@@ -41,7 +41,6 @@
 
 	}elseif(isset($_POST['l_register'])){
 
-		$content .= " Registering ";
 		$logged = 'reg';
 
 	}elseif(isset($_POST['l_registered'])){
@@ -67,7 +66,7 @@
 		$content .= '<input type="password" id="l_password" name="l_password" /></div>';
 		$content .= '<input type="submit" value="Login" name="l_login">';
 		$content .= '<input type="submit" value="Register" name="l_register">';
-		$content .= '<input type="submit" value="password Recovery" name="l_passRecovery">';
+		$content .= '<input type="submit" value="Password Recovery" name="l_passRecovery">';
 		$content .= '</fieldset></form>';
 
 	}elseif($logged == 'logged'){

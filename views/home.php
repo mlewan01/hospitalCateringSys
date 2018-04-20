@@ -33,8 +33,6 @@ if(!isset($_COOKIE['catering'])){
 	}
 }
 
-// $cookie = $_COOKIE['catering'];
-// $bed_id = explode(' ',$cookie['bed'])[0];
 $meal = '';
 $dbwhere = "orders";
 $curDay = $mt->getCurDay();
@@ -53,6 +51,8 @@ if($bed_id != 0){
 	$result = $db->myQuery($sql);
 	$row = $result->fetch_assoc();
 	$bed_name = $row['b_name'];
+	// query for retriving patient based on current bed locatin from pat_bed table where
+	// pb_id_bed is current bed and pb_date_to=0 which means patient has not left the bed jet
 	$sql = "select pb_id_patient, p_name, p_allergies, p_type, p_nutrition, p_diet from pat_bed
 		join patients on (pb_id_patient = p_id)
 		where pb_id_bed=$bed_id and pb_date_to=0";
@@ -72,41 +72,43 @@ if($bed_id != 0){
 		$disabled = "disabled";
 	}
 }
-//$t = getMyTime(3, '2017-03-07 17:50:10');
+
 $t =  $mt->getMyTime();
 $t1 = $mt->curHur(); // current houres of the time of the day where 60min = 100
 $dev .=  'current time, t1: '.$t1.$b;
+// selecting apropriate menu_sets only based on time of the days
+// for selecting based on dietary requirements pls add apropriate condition to the Query
+// AND ms_type = p_type AND ms_diet = p_diet AND ms_nutrition = p_nutrition
+$temp_sql = " AND ms_type = '$p_type' AND ms_diet = '$p_diet' AND ms_nutrition = '$p_nutrition'";
 if($t1 < TIME_BREAKFAST){
 	$menuday = date('l', strtotime('today'));
 	$dev .=  "next meal : ".$meal ='breakfast'; $dev .=  $b;
-	$sql = 'select * from menu_sets where ms_name = "Breakfast"';
+	$sql = 'select * from menu_sets where ms_name = "Breakfast" '.$temp_sql;
 }elseif($t1 < TIME_LUNCH){
 	$menuday = date('l', strtotime('today'));
 	$dev .=  "next meal : ".$meal = 'lunch'; $dev .=  $b;
-	$sql = 'select * from menu_sets where ms_name = "Lunch"';
+	$sql = 'select * from menu_sets where ms_name = "Lunch" '.$temp_sql;
 }elseif($t1 < TIME_SUPPER){
 	$menuday = date('l', strtotime('today'));
 	$dev .=  "next meal : ".$meal = 'supper'; $dev .=  $b;
-	$sql = 'select * from menu_sets where ms_name = "Supper"';
+	$sql = 'select * from menu_sets where ms_name = "Supper" '.$temp_sql;
 }else {
 	$menuday = date('l', strtotime('tomorrow'));
 	$dev .=  "next meal : ".'next day breakfast'; $dev .=  $b;
 	$meal = 'breakfast';
-	$sql = 'select * from menu_sets where ms_name = "Breakfast"';
+	$sql = 'select * from menu_sets where ms_name = "Breakfast" '.$temp_sql;
 	$t += $d;
 	$curDay += $d;
 }
+// if bed location exists and if patient is assigned to that bed
 if($bed_id != 0 && $patient_id != 0){
 	$sql9 = "select o_id_item from orders where o_date_meal=$curDay and o_id_patient=$patient_id";
-	$result3 = $db->myQuery($sql9);
+	$result3 = $db->myQuery($sql9); // retrivig already ordered items to detect changes in order
 	$itemsOrdered = array(); $i=0;
 	while($row = $result3->fetch_assoc()){
-		//$content .= 'id item: '.$row['o_id_item'].$b;
 		$itemsOrdered[$i] = $row['o_id_item'];
 		$i++;
 	}
-	//print_r($itemsOrdered);
-
 
 	$order = array("o_id_patient" => $patient_id, "o_id_item" => '',
 					"o_id_bed" => $bed_id, "o_date_meal" => $curDay,
@@ -114,20 +116,19 @@ if($bed_id != 0 && $patient_id != 0){
 
 	if(isset($_POST['order'])){
 		unset($_POST['order']);
-
+		// detecting already ordered items
 		foreach($_POST as $index => $value){
 			$con=false;
 			for($j=0;$j<count($itemsOrdered); $j++){
 				if($value == $itemsOrdered[$j]){
 					$dev .=  ' it '.$itemsOrdered[$j].' val '.$value.$b;
 					$con = true;
-					array_splice($itemsOrdered, $j, 1);
+					array_splice($itemsOrdered, $j, 1); // removing already ordered items from an array
 					continue;
 				}
 			}
 			if($con) continue;
 
-			// $content .= "index: $index -- value: $value <br/>";
 			$order["o_id_item"] = $value;
 			$sql8 = sprintf(
 					'insert into '.$dbwhere.' (%s) values ("%s")',
@@ -139,10 +140,10 @@ if($bed_id != 0 && $patient_id != 0){
 			 $msg = 'id: '.$patient_id.' '.$lang['msg_mealordered'].$value;
 			 $dev .=  ' msg order '.$msg.$b;
 
-			 if(LOG_)$db->logDB($msg, $patient_id, 4, $sql8); // logging the event
+			 if(LOG_)$db->logDB($msg, $patient_id, 4, $sql8); // logging placement of an order
 		}
 		$dev .=  'items TO BE DELETED '; $dev .= print_r($itemsOrdered,true); $dev .=  $b;
-		//DELETE FROM `orders` WHERE `orders`.`o_id` = 1
+		// deleting removed order
 		foreach($itemsOrdered as $itm){
 
 			$sql7 = "delete from orders where o_meal=\"$meal\"
@@ -152,7 +153,7 @@ if($bed_id != 0 && $patient_id != 0){
 			$msg ='id '.$itm.' '.$lang['msg_itemcancelled'].$patient_id;
 			$dev .=  ' msg cancel '.$msg.$b;
 
-			if(LOG_)$db->logDB($msg, $patient_id, 5, $sql7); // logging the event
+			if(LOG_)$db->logDB($msg, $patient_id, 5, $sql7); // logging cancellation of an order
 			$dev .=  $sql7.$b;
 		}
 	}
@@ -163,31 +164,36 @@ $res = $result->fetch_assoc();
 $msid = $res['ms_id'];
 $dev .=  'menue set id: ms_id: '.$msid.$b;
 
-$dev .=  ' menue lenght in days: '. $len = $res['ms_length'];
-$from = $res['ms_date_from'];
-$seq = (($t - $from )%($len*$d))/$d;
-$seq = ($seq - ($seq - $seq%$d))+1;
-$dev .=  $b.'sequence day: '.$seq.'<br/>';
+// checkinf if the corresponding menu_sets exists
+if($msid > 0){ // apropriate menu for patient exists
 
-$sql2 = "SELECT i_id, i_name, i_allergens FROM
-		menu_sets JOIN menus ON
-		(ms_id = m_id_menuset) JOIN menu_items ON
-		(m_id = mi_id_menu) JOIN items ON
-		(mi_id_product = i_id)
-		 WHERE ms_id = $msid AND m_sequence = $seq ";
+	$dev .=  ' menue lenght in days: '. $len = $res['ms_length'];
+	$from = $res['ms_date_from'];
+	$seq = (($t - $from )%($len*$d))/$d;
+	$seq = ($seq - ($seq - $seq%$d))+1;
+	$dev .=  $b.'sequence day: '.$seq.'<br/>';
 
-$result2 = $db->myQuery($sql2);
+	$sql2 = "SELECT i_id, i_name, i_allergens FROM
+			menu_sets JOIN menus ON
+			(ms_id = m_id_menuset) JOIN menu_items ON
+			(m_id = mi_id_menu) JOIN items ON
+			(mi_id_product = i_id)
+			 WHERE ms_id = $msid AND m_sequence = $seq ";
 
-if($bed_id != 0 && $patient_id != 0){
-	$sql9 = "select o_id_item from orders where o_date_meal=$curDay and o_id_patient=$patient_id";
-	$result3 = $db->myQuery($sql9);
-	$itemsOrdered = array(); $i=0;
-	while($row = $result3->fetch_assoc()){
-		//$content .= 'id item: '.$row['o_id_item'].$b;
-		$itemsOrdered[$i] = $row['o_id_item'];
-		$i++;
+	$result2 = $db->myQuery($sql2);
+
+	if($bed_id != 0 && $patient_id != 0){
+		$sql9 = "select o_id_item from orders where o_date_meal=$curDay and o_id_patient=$patient_id";
+		$result3 = $db->myQuery($sql9);
+		$itemsOrdered = array(); $i=0;
+		while($row = $result3->fetch_assoc()){
+			//$content .= 'id item: '.$row['o_id_item'].$b;
+			$itemsOrdered[$i] = $row['o_id_item'];
+			$i++;
+		}
 	}
-}
+}else {} // apropriate menu does not exits
+
 $content .= '<div class="info">';
 if($ward_name == '' && $bed_name == ''){
 	$content .= "Location is not set...";
@@ -205,6 +211,9 @@ $content .= '</div>';
 //  <b>nutrition:</b> $p_nutrition, <b>allergies:</b> $p_aller";
 $content .= '<form action="index.php" method="post"><fieldset>
 						<legend>'.$menuday.' '.$meal.'</legend>';
+
+// checkinf if the corresponding menu_sets exists
+if($msid > 0){ // apropriate menu for patient exists
 $i = 1;
 $checked = '';
 while($row = $result2->fetch_assoc()) {
@@ -248,9 +257,21 @@ while($row = $result2->fetch_assoc()) {
 	$checked = '';
 	$alrgDisabled = '';
 }
-$content .= '<input type="submit" value="Confirm !" name="order" '.$disabled.'></fieldset></form>';
+if($p_nutrition === 'nil'){
+	$content .= "Your currnet diet does not allowe you to have anything...";
+	$disabled ='disabled';
+}
+$content .= '<input type="submit" value="Confirm" name="order" '.$disabled.'>';
+$result2->free();
+}else { // apropriate menu does not exits
+	$content .= 'Sorry, apropriate menu for your requirements does not exist...<br>';
+	$content .= 'Please ask member of staff for assistance.<br>';
+	$content .= '<b>Currently menues for patients with nhs and standard diet have been set up for tests</b>';
+	$disabled = 'disabled';
+}
+$content .= '</fieldset></form>';
 if(DEV)$content .= '<div class="devout"><h4>Dev out:</h4>'.$dev.'</div>';
 //print_r($order);
  $result->free();
- $result2->free();
+
 ?>

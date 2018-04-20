@@ -1,8 +1,4 @@
 <?php
-// displayErroros();
-// error_reporting(0);
-// ini_set('display_errors', 0);
-// session_start();
 // connecting to required/included files
 $ds = DIRECTORY_SEPARATOR;
 require_once 'includes/config.php';
@@ -18,21 +14,28 @@ $logged = $l->checkLogin();
 $loginCheck = '';
 $authLevel = 0;
 
-// Code to detect whether index.php has been requested without query string goes here
 if (!isset($_GET['page'])) { // TODO sanitise the input finally !!
 	$pageid = 'home'; // display home page
 } else {
-	// $l = new myLogin();
-	// $logged = $l->checkLogin();
-	if($logged[0] == 'not') {
-		if($_GET['page'] == 'passrec'){
-			$pageid = 'passrec';
+	if(sanitise($_GET['page'])){
+		if($logged[0] == 'not') {
+			if($_GET['page'] == 'passrec'){
+				$pageid = 'passrec';
+			}else {
+				$content .= 'you are not loged in';
+				$pageid = 'login';
+			}// $l->redirect("index.php?page=login");
 		}else {
-			$pageid = 'login';
-		}// $l->redirect("index.php?page=login");
-	}else {
-		$pageid = $_GET['page']; // else requested page,
-		// $navMain = navigation($logged[2]);
+			if(strpos(navigation($logged[2]), $_GET['page']) === false){
+				$content .= '<b>You have no rights to access '.$_GET['page'].' page.</b>';
+				$pageid = 'login';
+			}else {
+				$pageid = $_GET['page']; // else requested page,
+			}
+		}
+	}else{
+		$pageid = '404';
+		$content .= '<b>Link contains wrong characters</b>';
 	}
 }
 if (!file_exists("views/$pageid.php")) $pageid = '404';
@@ -41,20 +44,16 @@ include "views/$pageid.php";
 $heading1 = "h_".$pageid;
 
 $logged = $l->checkLogin();
-// echo ' session login status: '.($_SESSION['auth'] ? 'LOGGED IN' : 'LOGGED NOT').$b;
 if($logged[0] == 'logged' || $loginCheck == 'loggedIn'){
 	if($logged[0] == 'logged'){
 		$navMain = navigation($logged[2]);
 	}else $navMain = navigation($authLevel);
-
-// 	echo 'loginCheck:_'.$loginCheck.'_value logged[0]:_'.$logged[0].'_value'.$b; //.$navMain;
-// 	echo 'login level:_'.$logged[2].'_value'.$b;
-// 	echo ' autentication level:_'.$authLevel.'_value'.$b;
 }
 //-----------------------------------------------------------------------------------------------
 // $navMain = navigation(10);
-$domen = '/nhs/'; // strstr($_SERVER['REQUEST_URI'],"index", TRUE);
-// echo $domen;
+// $domen = '/nhs/'; // strstr($_SERVER['REQUEST_URI'],"index", TRUE);
+// echo strstr($_SERVER['REQUEST_URI'],"index", TRUE);
+$domen = strstr($_SERVER['REQUEST_URI'],"index", TRUE);
 $s = ((!empty($_SERVER['HTTPS'])) ? "s" : "");
 $link = "http".$s."://".$_SERVER['SERVER_NAME'].$domen."index.php?page=login";
 if($pageid != 'service'){

@@ -17,22 +17,10 @@ if(isset($_COOKIE['catering'])){
 		$ward_id = explode(' ',$cookie['ward'])[0];
 		$ward_name = explode(' ',$cookie['ward'],2)[1];
 	}
-	// if(isset($cookie['bed'])){
-	// 	$bed_id = explode(' ',$cookie['bed'])[0];
-	// 	$bed_name = explode(' ',$cookie['bed'],2)[1];
-	// }
+
 }else{
 	$dev .= "cookie catering does not exists".$b;
 }
-// $cookie = $_COOKIE['catering']; // retrivig a cookie
-//
-// $hospital_id = explode(' ',$cookie['hospital'])[0];
-// $hospital_name = explode(' ',$cookie['hospital'],2)[1];
-//
-// $ward_id = '';
-// $ward_id = explode(' ',$cookie['ward'])[0];
-// $ward_name = explode(' ',$cookie['ward'],2)[1];
-// $where = '';
 
 $userId = 0;
 $pat2id = '';
@@ -156,10 +144,15 @@ if(isset($_POST['freebed'])){
 					p_allergies=\"$dietRe[allergies]\" where p_id=$pat2id";
 			$dev .= 'allergies: '.$dietRe['allergies'];
 			$resutl = $db->myQuery($sql);
+
 			$dietTemp = $dietRe['allergies'];
 			$dietRe['allergies'] = explode(',' , $dietRe['allergies']);
 			$msg = $lang['msg_dietreqsaved'].$dietRe['type'].' '.$dietRe['diet'].' '.$dietRe['nutrition'].' '.$dietTemp ;
 			if(LOG_)$db->logDB($msg, $userId, 3, $sql); // logging the event
+
+			$sql = "INSERT INTO pat_diet (pd_id_patient, pd_date, pd_type, pd_diet, pd_nutrition, pd_allergies)
+			VALUES ('$pat2id', ".time().", '$dietRe[type]', '$dietRe[diet]', '$dietRe[nutrition]', '$dietTemp')";
+			echo $sql ; $db->myQuery($sql);
 		}else {
 			$err = $lang['err_input'];
 		}
@@ -276,7 +269,7 @@ if($ward_id != ''){
 
 	$res7 = $db->myQuery($sql7);
 	$content .= '<legend>dietary requirements</legend>';
-	$content .= '<div class="controlgroup"><label for="pat2">'.'for patient:'.'</label>';
+	$content .= '<div class="controlgroup"><label for="pat2">'.'For patient:'.'</label>';
 	$content .= '<select id="pat2" name="pat2">';
 	while($row = $res7->fetch_assoc()) {
 		if($row['p_id'] == $pat2id) $sel = ' selected';
@@ -285,7 +278,7 @@ if($ward_id != ''){
 	}
 	$content .= "</select></div>";
 	$content .= '<div class="controlgroup">';
-	$content .= '<label for="p_type">nhs or private </label><select id="type" name="type">';
+	$content .= '<label for="p_type">Nhs or private </label><select id="type" name="type">';
 
 	foreach($type as $item){
 		if($item == $dietRe['type']) {
@@ -296,7 +289,7 @@ if($ward_id != ''){
 	}
 	$content .= '</select></div>';
 	$content .= '<div class="controlgroup">';
-	$content .= '<label for="p_diet">diet type </label><select id="diet" name="diet">';
+	$content .= '<label for="p_diet">Diet type </label><select id="diet" name="diet">';
 	foreach($diet as $item){
 		if($item === $dietRe['diet']) { $sel = " selected"; }
 		$content .= '<option value="'.$item.'"'.$sel.'>'.$item.'</option>';
@@ -304,7 +297,7 @@ if($ward_id != ''){
 	}
 	$content .= '</select></div>';
 	$content .= '<div class="controlgroup">';
-	$content .= '<label for="p_nutrition">nutrition </label><select id="nutrition" name="nutrition">';
+	$content .= '<label for="p_nutrition">Nutrition </label><select id="nutrition" name="nutrition">';
 	foreach($nutrition as $item){
 		if($item === $dietRe['nutrition']) { $sel = " selected"; }
 		$content .= '<option value="'.$item.'"'.$sel.'>'.$item.'</option>';
@@ -334,7 +327,7 @@ if($ward_id != ''){
 	}
 
 	$customAllergen = rtrim($customAllergen, ', ');
-	$content .= "<div class=\"controlgroup\"><label for=\"other_allergies\">other allergies: </label>
+	$content .= "<div class=\"controlgroup\"><label for=\"other_allergies\">Other allergies: </label>
 				<input type=\"text\" name=\"other_allergies\" value=\"$customAllergen\"/><br/>";
 	$content .= '</div>';
 	$content .= '<input type="submit" value="Fetch" name="fetch">';
@@ -355,8 +348,5 @@ if(!empty($cookie)){
 	Please set your location <a href=\"index.php?page=set_location\">here</a>.";
 }
 if(DEV) $content .= $dev;
-//$w = ctype_alnum("");
-//$w = 'apple';
-//$dev .= $w.($w ? 'true' : 'false');
-//$dev .= 'strlen'.(strlen($w));
+
 ?>
