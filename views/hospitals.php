@@ -53,6 +53,8 @@ $pagin = pagination($pi["statement"],$pi["limit"],$pi["page"], $pi["link"]);
 // output
 $content .= "<div id='pagingg' >$pagin</div>";
 
+if(isset($_GET['pn']) || $pagin == ''){ // to prefent initial display
+
 $result = $db->myQuery($pi["sql"]);
 $content .= '<ul>';
 while($row = $result->fetch_assoc()){
@@ -61,7 +63,8 @@ while($row = $result->fetch_assoc()){
 $content .= '</ul>';
 
 $content .= "<div id='pagingg' >$pagin</div>";
-$dev .= $pi['dev'];
 // result object method to free result set
 $result->free();
+}
+$dev .= $pi['dev'];
 ?>

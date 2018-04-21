@@ -56,7 +56,7 @@ $config['log'] = true; // enables logging of important database changes
 define('LOG_',true);
 define('DEV', true); // enables development aid output
 define('RED', true); // for login redirection enforcement
-define('PAG', 20); // amount of items displayed in paginated output
+define('PAG', 5); // amount of items displayed in paginated output
 //SALT Information
 
 /* Application Keys

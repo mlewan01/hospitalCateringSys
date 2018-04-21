@@ -12,6 +12,8 @@ $pagin = pagination($pi["statement"],$pi["limit"],$pi["page"], $pi["link"]);
 
 $content .= "<div id='pagingg' >$pagin</div>";
 
+if(isset($_GET['pn']) || $pagin == ''){ // to prefent initial display
+
 $result = $db->myQuery($pi["sql"]);
 $content .= '<ul>';
 while($row = $result->fetch_assoc()){
@@ -20,5 +22,6 @@ while($row = $result->fetch_assoc()){
 $content .= '</ul>';
 $result->free();
 $content .= "<div id='pagingg' >$pagin</div>";
+}
 $dev .= $pi['dev'];
 ?>
