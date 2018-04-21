@@ -1,6 +1,6 @@
 <?php
 displayErroros(); // error output
-$b = '<br/>'; $dev = '';
+$b = '<br/>';
 $ward_id = '';
 $ward_name = '';
 $hospital_id = '';
@@ -343,6 +343,4 @@ if(!empty($cookie)){
 	$content .= "Your location is not set.
 	Please set your location <a href=\"index.php?page=set_location\">here</a>.";
 }
-if(DEV) $content .= $dev;
-
 ?>

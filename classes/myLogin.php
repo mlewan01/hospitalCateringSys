@@ -40,6 +40,7 @@ class myLogin {
 					echo 'submited: '.$userlogin.' existing: '.$result['u_username'].$b;
 					return 'reg';
 				}
+				$result1->free();
 				//Set up the variables we'll need to pass to our insert method
 
 				//These are the values from our registration form... cleaned using our clean method
@@ -132,13 +133,13 @@ class myLogin {
 				die('Sorry, that username does not exist!');
 			}
 
-			//Fetch our results into an associative array
-			$results = mysqli_fetch_assoc( $results );
+			//Fetching results into an associative array
+			$results = $results->fetch_assoc();
 
-			//The registration date of the stored matching user
+			//The registration date of the user
 			$storeg = $results['u_regdate'];
 
-			//The hashed password of the stored matching user
+			//The hashed password of the user
 			$stopass = $results['u_password'];
 
 			//Recreate our NONCE used at registration

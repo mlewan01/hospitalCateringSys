@@ -1,6 +1,5 @@
 <?php
 displayErroros(); // error output
-$dev = "<p>"; // development output
 $msg = "<p>";// app normal output
 $pr = 'm_'; // database prefix
 $id = $pr.'id';// database id field with prefix
@@ -48,22 +47,21 @@ $dev .= $out[0];
 $arr_lang = arr_lang(array_merge($formFields, $formButtons, array($pr.'legend','msg')));
 $content .= tpl(3, $form, $arr_lang);
 
-if(DEV)$content .= '<div class="devout"><h4>Dev out:</h4>'.$dev.'</div>';
-// retriving data from database
-$sql = "select * from $dbwhere";
-$result = $db->myQuery($sql);
-$content .= "\n";
+// pagination
+$pi = paginationInit("menus", "m_id");
+$pagin = pagination($pi["statement"],$pi["limit"],$pi["page"], $pi["link"]);
+// output
+$content .= "<div id='pagingg' >$pagin</div>";
 
-// formating output with data from database
-$content .= "<ul>";
-while($row = $result->fetch_assoc()) {
-	$content .= "<li>";
-	foreach ($row as $column => $value){
-		$content .= $column.":".$value."  ";
-	}
-	$content .= "</p>";
+$result = $db->myQuery($pi["sql"]);
+$content .= '<ul>';
+while($row = $result->fetch_assoc()){
+	$content .= "<li> $row[m_id] - $row[m_name] </li>";
 }
-$content .= "</ul>";
+$content .= '</ul>';
+
+$content .= "<div id='pagingg' >$pagin</div>";
+$dev .= $pi['dev'];
 // result object method to free result set
 $result->free();
 ?>

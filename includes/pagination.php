@@ -1,12 +1,10 @@
 <?php
-
 /**
  * @link: http://www.Awcore.com/dev
  */
-
    function pagination($query, $per_page = 10,$page = 1, $url = '?'){
     	$query = "SELECT COUNT(*) as `num` FROM {$query}";
-      
+
     	$db = new myDB();
 		$res = $db->myQuery($query);
 		$res = $res->fetch_assoc();
@@ -95,4 +93,26 @@
 
         return $pagination;
     }
+
+    // Mariusz Lewandowski function helper sets up for pagination
+  function paginationInit($table, $orderBy, $limitt=null, $order=null){
+    // setting up the default values
+    if ($limitt === null) $limitt = PAG;
+    if ($order === null) $order = 'asc';
+
+  	$dev = '';
+  	$page = (int) (!isset($_GET["pn"]) ? 1 : $_GET["pn"]);  $dev .= 'page: '.$page;
+  	$limit = $limitt; //if you want to dispaly 10 records per page then you have to change here
+  	$startpoint = ($page * $limit) - $limit;  $dev .= 'startpoing: '.$startpoint;
+  	$order = "order by $orderBy $order";
+  	$statement = $table; //you have to pass your query over here
+  	$sql = "select * from {$statement} {$order} LIMIT {$startpoint} , {$limit}";  $dev .= "$sql <br>";
+  	$statement = "{$statement} {$order}";
+  	$sq = $_SERVER["QUERY_STRING"];  $dev .= "sq: $sq<br>";
+  	$sq = strstr($sq, 'pn', true) === false ? $sq : rtrim(strstr($sq, 'pn', true), "?&") ;  $dev .= "sq trimmed: $sq<br>";
+  	$sq = $sq == '' ? '?': '?'.$sq.'&';  $dev .= 'url: '.$_SERVER["PHP_SELF"].$sq."<br>";
+  	$s = ((!empty($_SERVER['HTTPS'])) ? "s" : "");
+  	$link = "http".$s."://".$_SERVER['SERVER_NAME'].$_SERVER["PHP_SELF"].$sq;  $dev .= "link : $link <br>";
+  	return array("sql"=>$sql, "statement"=>$statement, "limit"=>$limit, "page"=>$page, "link"=>$link, "dev"=>$dev);
+  }
 ?>

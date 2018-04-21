@@ -62,19 +62,23 @@ $msge .= $out[1];
 $arr_lang = arr_lang(array_merge($formFields, $formButtons, array($pr.'legend','msg')));
 $content .= tpl(3, $form, $arr_lang);
 
-$content .= $msg.'<p>';
+$dev .= $msg.'<p>';
 
-// retriving data from database
-$sql = "select $id, ".$pr."name from $dbwhere";
-$result = $db->myQuery($sql);
-$content .= "\n";
+// pagination
+$pi = paginationInit("wards", "w_id");
+$pagin = pagination($pi["statement"],$pi["limit"],$pi["page"], $pi["link"]);
+// output
+$content .= "<div id='pagingg' >$pagin</div>";
 
-// formating output with data from database
-$content .= "<ul>";
-while($row = $result->fetch_assoc()) {
-	$content .= "<li>$row[$id]. ".$row[$pr."name"]." </li>";
+$result = $db->myQuery($pi["sql"]);
+$content .= '<ul>';
+while($row = $result->fetch_assoc()){
+	$content .= "<li> $row[w_id] - $row[w_name] </li>";
 }
-$content .= "</ul>";
+$content .= '</ul>';
+
+$content .= "<div id='pagingg' >$pagin</div>";
+$dev .= $pi['dev'];
 // result object method to free result set
 $result->free();
 ?>

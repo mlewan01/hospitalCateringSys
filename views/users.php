@@ -40,6 +40,7 @@ if(isset($_POST['edit'])){
 		$out = formFetch($to_clean, $required, $dbwhere, $id);
 		$result = $db->myQuery($out[2])->fetch_assoc();
 		$form = tpl(2, $form, $result, $txtField);
+
 	}else {
 		$msg = " Fetch, id not provided...";
 	}
@@ -63,19 +64,22 @@ $msge .= $out[1];
 $arr_lang = arr_lang(array_merge($formFields, $formButtons, array($pr.'legend','msg')));
 $content .= tpl(3, $form, $arr_lang);
 
-$content .= $msg.'<p>';
+$dev .= $msg.'<p>';
+// patination
+$pi = paginationInit("users", "u_id");
+$pagin = pagination($pi["statement"],$pi["limit"],$pi["page"], $pi["link"]);
+// output
+$content .= "<div id='pagingg' >$pagin</div>";
 
-// retriving data from database
-$sql = "select $id, ".$pr."name from $dbwhere";
-$result = $db->myQuery($sql);
-$content .= "\n";
-
-// formating output with data from database
-$content .= "<ul>";
-while($row = $result->fetch_assoc()) {
-	$content .= "<li>$row[$id]. ".$row[$pr."name"]." </li>";
+$result = $db->myQuery($pi["sql"]);
+$content .= '<ul>';
+while($row = $result->fetch_assoc()){
+	$content .= "<li> $row[u_id] - $row[u_username] </li>";
 }
-$content .= "</ul>";
+$content .= '</ul>';
+
+$content .= "<div id='pagingg' >$pagin</div>";
+$dev .= $pi['dev'];
 // result object method to free result set
 $result->free();
 ?>
