@@ -1,6 +1,6 @@
 <?php
 displayErroros(); // error output
-$b = '<br/>'; $dev = '';
+$b = '<br/>';
 $mt = new myTime();
 $patient_id = 0;
 $pat_name = '';
@@ -140,7 +140,7 @@ if($bed_id != 0 && $patient_id != 0){
 			 $msg = 'id: '.$patient_id.' '.$lang['msg_mealordered'].$value;
 			 $dev .=  ' msg order '.$msg.$b;
 
-			 if(LOG_)$db->logDB($msg, $patient_id, 4, $sql8); // logging placement of an order
+			 if(LOG_)$db->logDB($msg, 1, 4, $sql8); // logging placement of an order
 		}
 		$dev .=  'items TO BE DELETED '; $dev .= print_r($itemsOrdered,true); $dev .=  $b;
 		// deleting removed order
@@ -153,7 +153,7 @@ if($bed_id != 0 && $patient_id != 0){
 			$msg ='id '.$itm.' '.$lang['msg_itemcancelled'].$patient_id;
 			$dev .=  ' msg cancel '.$msg.$b;
 
-			if(LOG_)$db->logDB($msg, $patient_id, 5, $sql7); // logging cancellation of an order
+			if(LOG_)$db->logDB($msg, 1, 5, $sql7); // logging cancellation of an order
 			$dev .=  $sql7.$b;
 		}
 	}
@@ -270,8 +270,5 @@ $result2->free();
 	$disabled = 'disabled';
 }
 $content .= '</fieldset></form>';
-if(DEV)$content .= '<div class="devout"><h4>Dev out:</h4>'.$dev.'</div>';
-//print_r($order);
  $result->free();
-
 ?>

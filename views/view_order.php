@@ -1,8 +1,7 @@
 <?php
 	displayErroros(); // error output
-	$dev = ''; // for development output
 	$loc = getLocation();
-	$dev = print_r($loc, true);
+	$dev .= print_r($loc, true);
 	$locH = isset($loc['hospital_id']) ? $loc['hospital_id'] : false; // check for set catering cookie with location
 	$b = '<br/>'; // html output line breaker
 	if($locH === false){// check for presence of hospital location
@@ -97,6 +96,5 @@
 
 	$content .= '<h4>total quantity of orders: 	</h4>'.$total.$b;
 	$content .= '</section>';
-	$content .= DEV ? $dev: '';
 }// end of else check for hospital location
 ?>

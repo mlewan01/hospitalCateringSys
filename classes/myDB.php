@@ -130,9 +130,8 @@ class myDB extends mysqli {
 		$logData = myLog($msg, $userId, $type, $sql, $date);
 
 		$sql2 = $this->makeInsertSql($logTable, $logData);
-
 		$this->myQuery($sql2);
-		return 'logged <br/>';
+		return 'logged';
 	}
 }
 

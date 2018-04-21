@@ -21,22 +21,22 @@ if(isset($_COOKIE['catering'])){
 }else{
 	$dev .= "cookie catering does not exists".$b;
 }
-
-$userId = 0;
+$db = new myDB();
+// getting users id, it is forced login now so it must be there
+$uidTemp = $_COOKIE['catering']['user'];
+$res = ($db->myQuery("SELECT u_id FROM users WHERE u_username = '$uidTemp'"))->fetch_assoc();
+$userId = $res['u_id'];
 $pat2id = '';
 $dietRe = array('type','diet','nutrition', 'allergies');
 $dietRe['type'] = '';$dietRe['diet'] = '';$dietRe['nutrition'] = '';$dietRe['allergies'] = array();
 $err = '';
 $msg = '';
 $log = '';
-$dev = '';
 $allergens = array();
 $type = array();
 $diet = array();
 $nutrition = array();
 $otherall = array();
-
-$db = new myDB();
 
 $sql = "select v_value from valus where v_type = 'allergens'";
 $result = $db->myQuery($sql);
@@ -75,8 +75,7 @@ if(isset($_POST['freebed'])){
 	$sql6 = "update pat_bed set pb_date_to =".getMyTime()." where pb_id_bed=$bed_id and pb_date_to=0";
 	$db->myQuery($sql6);
 	$msg = $patFreeName.$lang['msg_patbedremoved'].$bed_name;
-	if(LOG_)$db->logDB($msg, $userId, 2, $sql6); // logging the event
-
+	if(LOG_)$db->logDB($msg, $userId, 2, $sql6); // logging removing patient from a bed
 } elseif(isset($_POST['assign'])){
 
 	// move the queries heere !!
@@ -102,7 +101,7 @@ if(isset($_POST['freebed'])){
 			$sql8 = "insert into pat_bed (pb_id_bed, pb_id_patient, pb_date_from) values (\"$bed_id\", \"$pat_id\", \"$date\")";
 			$db->myQuery($sql8);
 			$msg = "Assigning patient: $pat_number - $pat_name to a bed: $bed_name";
-			// logging the event
+			// logging an event of assigning patient to a bed
 			if(LOG_)$db->logDB($msg, $userId, 1, $sql8);
 		}else {
 			$err = $lang['err_asgn'];
@@ -147,12 +146,15 @@ if(isset($_POST['freebed'])){
 
 			$dietTemp = $dietRe['allergies'];
 			$dietRe['allergies'] = explode(',' , $dietRe['allergies']);
-			$msg = $lang['msg_dietreqsaved'].$dietRe['type'].' '.$dietRe['diet'].' '.$dietRe['nutrition'].' '.$dietTemp ;
-			if(LOG_)$db->logDB($msg, $userId, 3, $sql); // logging the event
+			$res = ($db->myQuery("SELECT p_name FROM patients WHERE p_id = '$pat2id'"))->fetch_assoc();
+			$pName = $res['p_name'];
+			$msg = $lang['msg_dietreqsaved']." $pat2id - $pName ".$dietRe['type'].' '.$dietRe['diet'].' '.$dietRe['nutrition'].' '.$dietTemp ;
+			// logging an event of changes to dietary requirements
+			if(LOG_)$db->logDB($msg, $userId, 3, $sql);
 
 			$sql = "INSERT INTO pat_diet (pd_id_patient, pd_date, pd_type, pd_diet, pd_nutrition, pd_allergies)
 			VALUES ('$pat2id', ".time().", '$dietRe[type]', '$dietRe[diet]', '$dietRe[nutrition]', '$dietTemp')";
-			echo $sql ; $db->myQuery($sql);
+			$db->myQuery($sql);
 		}else {
 			$err = $lang['err_input'];
 		}
@@ -169,7 +171,6 @@ if(isset($_POST['freebed'])){
 		$sql = "select p_type, p_diet, p_nutrition, p_allergies from patients where p_id = $pat2id";
 		$result = $db->myQuery($sql);
 		$row=$result->fetch_assoc();
-		// $dev .= "data: "; print_r($row); $dev .= '<br/>'
 		$dietRe["type"] = $row['p_type'];
 		$dietRe['diet'] = $row['p_diet'];
 		$dietRe['nutrition'] = $row['p_nutrition'];
@@ -179,8 +180,6 @@ if(isset($_POST['freebed'])){
 		$err = $lang['err_fetch'];
 	}
 }
-
-// print_r($allergens); // log
 $content .= '<div id="err"><h4>'.$err.'</h4></div>';
 $content .= '<div id="msg"><h4>'.$msg.'</h4></div>';
 if($ward_id != ''){
@@ -225,13 +224,10 @@ if($ward_id != ''){
 	$idbed = array();
 	$i = 0;
 	while($row = $result9->fetch_assoc()){
-		// $dev .= "<br/> $row[pb_id_bed] $row[pb_id_patient]";
 		$idpat[$i] = $row['pb_id_patient'];
 		$idbed[$i] = $row['pb_id_bed'];
 		$i++;
 	}
-	//print_r($idpat);
-	//print_r($idbed);
 	$sql4 = "select p_id, p_number, p_name from patients where p_active = 1";
 	$result4 = $db->myQuery($sql4);
 

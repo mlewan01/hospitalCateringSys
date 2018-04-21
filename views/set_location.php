@@ -87,7 +87,7 @@ $selected ='';
 $sql = "select h_id, h_name from hospitals";
 $result = $db->myQuery($sql);
 $content .= '<form enctype="multipart/form-data" action="index.php?page=set_location" method="post" role="form">
-			<fieldset><div class="controlgroup">
+			<fieldset><legend>Set location</legend><div class="controlgroup">
 			<label for="hospital">Hospital:</label>
 			<select id="hospital" name="hospital">';
 while($row = $result->fetch_assoc()) {
@@ -127,16 +127,15 @@ $content .= '</select><input type="submit" value="Select" name="selectbed"></div
 
 if(!empty($cookie) || $hospital_id != '' || $ward_id != '' || $bed_id != ''){
 
-	$content .= "<br/> your current location is:</br>";
+	$content .= '<form enctype="multipart/form-data" action="index.php?page=set_location" method="post">
+								<fieldset><legend>Reset location</legend>';
+	$content .= "<b> your current location is:</b></br>";
 	$content .= " hospital: $hospital_name".'</br>';
 	$content .= " ward: $ward_name".'</br>';
 	$content .= " bed: $bed_name".'</br>';
-
-	$content .= '<form enctype="multipart/form-data" action="index.php?page=set_location" method="post">
-			<label for="resetloccookie">Reset location: </label>
-			<input type="submit" value="reset" name="resetloccookie"></form>';
+	$content .= '<label for="resetloccookie">Reset location: </label>
+							<input type="submit" value="reset" name="resetloccookie"></fieldset></form>';
 }
-$content .= $dev;
 
 function resetLocCookies(){
 	setcookie('catering[hospital]', '', -3600, '', '', '', true);
@@ -151,5 +150,4 @@ function resetLocCookies(){
 	$hospital_name = '';
 	$cookie = array();
 }
-
 ?>

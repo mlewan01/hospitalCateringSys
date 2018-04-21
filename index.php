@@ -4,6 +4,7 @@ $ds = DIRECTORY_SEPARATOR;
 require_once 'includes/config.php';
 require 'lang/'.LANGUAGE.'.php';
 require_once 'includes/functions.php';
+require_once 'includes/pagination.php';
 displayErroros();
 autoloader();
 $content = '';
@@ -13,6 +14,7 @@ $l = new myLogin();
 $logged = $l->checkLogin();
 $loginCheck = '';
 $authLevel = 0;
+$dev = '';
 
 if (!isset($_GET['page'])) { // TODO sanitise the input finally !!
 	$pageid = 'home'; // display home page
@@ -22,7 +24,7 @@ if (!isset($_GET['page'])) { // TODO sanitise the input finally !!
 			if($_GET['page'] == 'passrec'){
 				$pageid = 'passrec';
 			}else {
-				$content .= 'you are not loged in';
+				// $content .= 'you are not logged in';
 				$pageid = 'login';
 			}// $l->redirect("index.php?page=login");
 		}else {
@@ -53,7 +55,10 @@ if($logged[0] == 'logged' || $loginCheck == 'loggedIn'){
 // $navMain = navigation(10);
 // $domen = '/nhs/'; // strstr($_SERVER['REQUEST_URI'],"index", TRUE);
 // echo strstr($_SERVER['REQUEST_URI'],"index", TRUE);
-$domen = strstr($_SERVER['REQUEST_URI'],"index", TRUE);
+$domen = strstr($_SERVER['REQUEST_URI'],"index", TRUE);   $dev .= "domen: ".$domen;
+
+$domen = $domen == '' ? $_SERVER['REQUEST_URI'] : $domen;   $dev .= " domen: ".$domen. ' request uri: '.$_SERVER['REQUEST_URI'];
+
 $s = ((!empty($_SERVER['HTTPS'])) ? "s" : "");
 $link = "http".$s."://".$_SERVER['SERVER_NAME'].$domen."index.php?page=login";
 if($pageid != 'service'){
@@ -89,5 +94,7 @@ $arr = array(
 	$out = tpl(1, './templates/page_tpl.html', $arr);
 // outputing all collected data to the browser
 	echo $out;
+
+	if(DEV) echo '<div class="devout"><h4>Dev out:</h4>'.$dev.'</div>';
 }
 ?>

@@ -6,7 +6,6 @@
 	$l = new myLogin();
 	$user='';
 	$cookie='';
-	$dev = '';
 	$checkLoginOut = array();
 	$db = new myDB();
 	// $logged = $l->checkLogin();
@@ -129,5 +128,4 @@
 		$content .= $out;
 
 	}
-	if(DEV)$content .= '<div class="devout"><h4>Dev out:</h4>'.$dev.'</div>';
 ?>

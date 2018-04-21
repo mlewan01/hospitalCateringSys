@@ -82,6 +82,11 @@ class myLogin {
 				//And, we insert our data
 				$sql2 = $db->makeInsertSql('users', $values);
 				$insert = $db->myQuery($sql2);
+				// logging registration event
+				$res = ($db->myQuery("SELECT u_id FROM users WHERE u_username = '$userlogin'"))->fetch_assoc();
+				$ti = new myTime(); $ti = $ti->getMyTime(1);
+				$ms = "$userlogin REGISTERED at $ti";
+				if(LOG_)$db->logDB($ms, $res['u_id'], 8, $sql2);
 
 				if ( $insert == TRUE ) {
 						return array('Registration successful.',$username);
@@ -155,7 +160,10 @@ class myLogin {
 				//Set our authorization cookie
 				setcookie('catering[user]', $subname, 0, '', '', '', true);
 				setcookie('catering[authID]', $authID, 0, '', '', '', true);
-
+				// logging successful login of a user
+				$ti = new myTime(); $ti = $ti->getMyTime(1);
+				$ms = "$subname logged in at $ti";
+				if(LOG_)$db->logDB($ms, $results['u_id'], 6, $sql);
 				return array('loggedin', $msg, $subname);
 			} else {
 				return array('invalid', $msg, '');
@@ -166,11 +174,18 @@ class myLogin {
 	}
 
 	function logout() {
+		$username = $_COOKIE['catering']['user'];
 		//Expire our auth coookie to log the user out
 		$idout = setcookie('catering[authID]', '', -3600, '', '', '', true);
 		$userout = setcookie('catering[user]', '', -3600, '', '', '', true);
 		// $_SESSION['auth'] = false;
 		if ( $idout == true && $userout == true ) {
+			// logging successful logout of a user
+			$db = new myDB();
+			$res = ($db->myQuery("SELECT u_id FROM users WHERE u_username = '$username'"))->fetch_assoc();
+			$ti = new myTime(); $ti = $ti->getMyTime(1);
+			$ms = "$username logged out at $ti";
+			if(LOG_)$db->logDB($ms, $res['u_id'], 7, '$sql no query');
 			return true;
 		} else {
 			return false;

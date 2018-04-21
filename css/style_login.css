@@ -99,8 +99,8 @@ form {
 textarea, input, select, option {
 	font-family: Arial, Verdana, Geneva, sans-serif;
   padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
+  border: 1px solid #e6e31b;
+  border-radius: 4px; 
 	color: #04080b;
 	font-size: 1em;
 }

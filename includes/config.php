@@ -12,10 +12,10 @@ if($_SERVER['SERVER_NAME'] != 'artemlux.com'){
   define('DB_NAME', 'catering'); $config['db_name'] = 'catering';
 }else{ // if($_SERVER['SERVER_NAME'] == 'artemlux.com'){
   define('ERR', false); // false for hiding all errors output
-  define('DB_USER', 'nelhae01_nhs');
+  define('DB_USER', 'nelhae01_nhs2');
   define('DB_PASS', 'nhsnhs');
   define('DB_HOST', 'localhost');
-  define('DB_NAME', 'nelhae01_nhs');
+  define('DB_NAME', 'nelhae01_nhs2');
 }
 // Language settings, commet out the right settings for you
 $config['language'] = 'en';
@@ -54,7 +54,7 @@ define('TIME_SUPPER', 18);
 // logging, to enable set it of 'true' to disable set to 'false'
 $config['log'] = true; // enables logging of important database changes
 define('LOG_',true);
-define('DEV', false); // enables development aid output
+define('DEV', true); // enables development aid output
 define('RED', true); // for login redirection enforcement
 //SALT Information
 

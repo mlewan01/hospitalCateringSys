@@ -1,46 +1,41 @@
 <?php
 displayErroros(); // error output
 $dev = '';
-$mt = new myTime();
 $b = '<br/>';
 $content = '';
 $sql = '';
-$curDay = $mt->getCurDay();
-$date_from = $curDay;
-$date_to = $mt->getMyTime();
 
 $db = new myDB();
 
-if(isset($_POST['get_logs'])){
-	$dev .=  ' get_logs '.$b;
-	$date_from = $_POST['l_date_from'];
-	$date_to = $_POST['l_date_to'];
-	$dev .=  "from: $date_from - to: $date_to";
-	$date_from = $mt->getMyTime(3, $date_from);
-	$date_to = $mt->getMyTime(3, $date_to);
+$page = (int) (!isset($_GET["pn"]) ? 1 : $_GET["pn"]);  $dev = 'page: '.$page;
 
-}else {
-	$dev .=  ' not get_logs '.$b;
-}
+$limit = 10; //if you want to dispaly 10 records per page then you have to change here
+$startpoint = ($page * $limit) - $limit;  $dev = 'startpoing: '.$startpoint;
 
-$content .= '<form enctype="multipart/form-data" action="index.php?page=logs" method="post" role="form">';
-$content .= '<fieldset>';
-$content .= '<legend>Logs time range</legend>';
-$content .= '<div class="controlgroup"><label for="l_date_from">Date from</label>';
-$content .= '<input type="text" id="l_date_from" name="l_date_from" value="'.$mt->getMyTime(2, $date_from).'" /></div>';
-$content .= '<div class="controlgroup"><label for="l_date_to">Date to</label>';
-$content .= '<input type="text" id="l_date_to" name="l_date_to" value="'.$mt->getMyTime(2, $date_to).'" /></div>';
-$content .= '<input type="submit" value="Get Logs" name="get_logs">';
-$content .= '</fieldset></form>';
+$order = "order by l_id desc";
+$statement = "logs"; //you have to pass your query over here
 
+$sql = "select * from {$statement} {$order} LIMIT {$startpoint} , {$limit}";  $dev = "$sql <br>";
+$statement = "{$statement} {$order}";
 
-$sql = "select * from logs where l_date > $date_from and l_date < $date_to ORDER BY l_id DESC";
+$sq = $_SERVER["QUERY_STRING"];  $dev = "sq: $sq<br>";
+$sq = strstr($sq, 'pn', true) === false ? $sq : rtrim(strstr($sq, 'pn', true), "?&") ;  $dev = "sq trimmed: $sq<br>";
+$sq = $sq == '' ? '?': '?'.$sq.'&';  $dev = 'url: '.$_SERVER["PHP_SELF"].$sq."<br>";
+$s = ((!empty($_SERVER['HTTPS'])) ? "s" : "");
+$link = "http".$s."://".$_SERVER['SERVER_NAME'].$_SERVER["PHP_SELF"].$sq;  $dev = "link : $link <br>";
+$pagin = pagination($statement,$limit,$page, $link);
+
+$content .= "<div id='pagingg' >$pagin</div>";
+
 $result = $db->myQuery($sql);
 $content .= '<ul>';
 while($row = $result->fetch_assoc()){
 	$content .= "<li> $row[l_id] - $row[l_msg] </li>";
 }
 $content .= '</ul>';
-$dev .= 'current day: '.$curDay.$b;
+
+$content .= "<div id='pagingg' >$pagin</div>";
+
 if(DEV)$content .= '<div class="devout"><h4>Dev out:</h4>'.$dev.'</div>';
+$s = ((!empty($_SERVER['HTTPS'])) ? "s" : "");
 ?>
