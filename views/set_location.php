@@ -1,7 +1,5 @@
 <?php
 displayErroros(); // error output
-$l = new myLogin();
-$l->loginEnforce(RED);
 
 $b = '<br/>';
 $msg = ''; $err=''; $dev='';

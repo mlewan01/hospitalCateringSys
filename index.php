@@ -52,15 +52,19 @@ if($logged[0] == 'logged' || $loginCheck == 'loggedIn'){
 	}else $navMain = navigation($authLevel);
 }
 //-----------------------------------------------------------------------------------------------
-// $navMain = navigation(10);
-// $domen = '/nhs/'; // strstr($_SERVER['REQUEST_URI'],"index", TRUE);
-// echo strstr($_SERVER['REQUEST_URI'],"index", TRUE);
+// preparing the redirection link
 $domen = strstr($_SERVER['REQUEST_URI'],"index", TRUE);   $dev .= "domen: ".$domen;
-
 $domen = $domen == '' ? $_SERVER['REQUEST_URI'] : $domen;   $dev .= " domen: ".$domen. ' request uri: '.$_SERVER['REQUEST_URI'];
-
 $s = ((!empty($_SERVER['HTTPS'])) ? "s" : "");
-$link = "http".$s."://".$_SERVER['SERVER_NAME'].$domen."index.php?page=login";
+$l = $pageid == 'login' ? '' : '?page=login';
+$link = "http".$s."://".$_SERVER['SERVER_NAME'].$domen."index.php".$l;
+// footer location and navigation
+$lo = footerLocation($logged[0], $pageid);
+// footer navigations
+if(isset($_POST['h_foot'])) {
+	footerLink();
+	header("Location: http".$s."://".$_SERVER['SERVER_NAME'].$domen.'index.php');
+}
 if($pageid != 'service'){
 // prepearing data for use with usage with site template
 $arr = array(
@@ -69,7 +73,8 @@ $arr = array(
 	'[+content+]' => $content,
 	'[+nav_main+]' => $navMain,
 	'[+logoImage+]' => $link,
-	'[+f_message+]' => $lang['f_message'],
+	// '[+f_message+]' => $lang['f_message'],
+	'[+f_message+]' => $lo[0],
 	'[+logo+]' => $lang['logo_title'],
 	'[+m1+]' => $lang['menue'],
 	'[+m2+]' => $lang['items'],

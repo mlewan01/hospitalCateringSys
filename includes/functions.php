@@ -1,5 +1,52 @@
 <?php
+function footerLink(){
+	setcookie('catering[bed]', $_POST['h_beds'], time()+60*60*24*365, '', '', '', true);
+}
+/* formats location info for footer
+ * @return array where 0 is location string and 1 location test
+ */
+function footerLocation($logged, $pid){
+	// footer location and navigation
+	$l = getLocation(); $n = 0;
+	$lo = '<div class="foot2"><b>Location:</b> ';
+	if($l['cookie_set'] === true){
+		$lo .= "<b>hospital:</b>";
+		if($l['hospital_set'] === true){
+			$lo .= " $l[hospital_name] "; $n += 1;
+		}else $lo .= " not set ";
+		$lo .= "<b>ward:</b>";
+		if($l['ward_set'] === true){
+			$lo .= " $l[ward_name] "; $n += 3;
+		}else $lo .= " not set ";
+		$lo .= "<b>bed:</b>";
+		if($l['bed_set'] === true){
+			$lo .= " $l[bed_name] "; $n += 5;
+		}else $lo .= " not set ";
+	}else $lo .= 'is not set...';
+	$lo .= '</div>';
+	if($logged == 'logged' && $n>4 && $pid=='home'){
+		// echo "footloc if $pid $logged ".$n.'<br>';
+		$db = new myDB();
+		$sql = "select b_id, b_name, b_id_ward from	beds	where b_id = $l[bed_id]";
+		$res = $db->myQuery($sql);
+		$res = $res->fetch_assoc();
+		// echo "id ward: $res[b_id_ward]<br>";
+		$sql = "select b_id, b_name from beds
+		join wards on (b_id_ward = w_id) where w_id = $res[b_id_ward]";
+		$res = $db->myQuery($sql);
+		$lo .= '<form action="index.php" method="post" role="form">';
+		$lo .= "<select name=\"h_beds\" id=\"h_beds\">";
+			while($row = $res->fetch_assoc()){
+				$lo .= "<option value=\"$row[b_id] $row[b_name]\">$row[b_name]</option>";
+			}
+		$lo .= '<input type="submit" name="h_foot" id="h_foot" value="Change"/>';
+		$lo .= '</select></form>';
+	}// else echo "footloc else $pid $logged ".$n.'<br>';
+	return array($lo, $n);
+}
 /* generates navigations based no users rights
+*  @param $access access level from 0 to 10
+*  $return html formated links acording to access level
 */
 function navigation($access){
 	$nav = '';
@@ -23,14 +70,14 @@ function navigation($access){
 		'logs' => '<li><a href="index.php?page=logs">[+m18+]</a></li>',
 		'login' => '<li><a href="index.php?page=login">[+m19+]</a></li>'
 	);
-	if($access >= 0){
+	if($access >= 0){ // for not confirmed registred user
 		$nav = $nava['menu'];
 	}
-	if($access >= 1){
+	if($access >= 1){ // for confiremd registred user with minimum access level like Ward Host
 		$nav .= $nava['set_location']; // $nav .= $nava['bed_pat_diet'];
 		$nav .= $nava['view_order'];
 	}
-	if($access >= 2){
+	if($access >= 2){ // for confiremd registred user with minimum access level like Health Care Assistant
 		$nav .= $nava['bed_pat_diet']; // $nav .= $nava['users'];
 	}
 	if($access >= 3){
@@ -57,7 +104,8 @@ function navigation($access){
 	$nav .= $nava['login'];
 	return $nav;
 }
-// displays php errors and wornings
+/** displays php errors and wornings
+*/
 function displayErroros(){
 	if(ERR){
 		ini_set('display_errors', 1);
@@ -218,15 +266,12 @@ function arr_lang($words){
 	$p = '[+';
 	$s = '+]';
 	$a_lang = array();
-	// echo 'length  '.$len;
-	// print_r($words);
-	// print_r($lang);
-	// echo($dir."\lang\\".$config['language'].'.php<br/>');
+
 	for($i=0; $i<$len; $i++){
-		// echo $i."  ".$p.$f.$words[$i].$s."--".$f.$words[$i].'<br/>';
+
 		$a_lang[$p.$f.$words[$i].$s] = $lang[$f.$words[$i]];
 	}
-	// print_r($a_lang);
+
 	return $a_lang;
 }
 /**
@@ -341,8 +386,7 @@ function formFetch($to_clean, $required, $dbwhere, $id){
 */
 function formDelete($to_clean, $required, $dbwhere, $id){
 	$dir = dirname(dirname(__FILE__));
-	// require $dir.'/includes/config.php';
-	// require $dir.'/lang/'.$config['language'].'.php';LANGUAGE
+
 	require $dir.'/lang/'.LANGUAGE.'.php';
 	$msg = 'Deleting !!';
 	$msge = '';
@@ -378,8 +422,7 @@ function formDelete($to_clean, $required, $dbwhere, $id){
 */
 function formAdd($to_clean, $required, $dbwhere, $id, $fieldType=null){
 	$dir = dirname(dirname(__FILE__));
-	// require $dir.'/includes/config.php';
-	// require $dir.'/lang/'.$config['language'].'.php';LANGUAGE
+
 	require $dir.'/lang/'.LANGUAGE.'.php';
 
 	$msg = 'Adding !!';
@@ -437,8 +480,7 @@ function formAdd($to_clean, $required, $dbwhere, $id, $fieldType=null){
 */
 function formEdit($to_clean, $required, $dbwhere, $id, $fieldType=null){
 	$dir = dirname(dirname(__FILE__));
-	// require $dir.'/includes/config.php';
-	// require $dir.'/lang/'.$config['language'].'.php';LANGUAGE
+
 	require $dir.'/lang/'.LANGUAGE.'.php';
 
 	$msg = 'Editing !!';

@@ -1,6 +1,6 @@
 <?php
 	displayErroros(); // error output
-
+	// variable inicialisation
 	$b = '<br/>';
 	$tmp = array('','');
 	$l = new myLogin();
@@ -8,43 +8,41 @@
 	$cookie='';
 	$checkLoginOut = array();
 	$db = new myDB();
-	// $logged = $l->checkLogin();
 	$checkLoginOut = $l->checkLogin();
-	// print_r($checkLoginOut);
 	$logged = $checkLoginOut[0];
 	$dev .= $checkLoginOut[1];
-
+	// if user logs in
 	if(isset($_POST['l_login'])){
-		if($_POST['l_username']==''){
+		if($_POST['l_username']==''){ // if username not provided
 			$content .= 'Username not provided, pls try again !';
 			$logged = 'not';
-		}else{
+		}else{ // username provided
 			$dev .=' trying to Login '.$b;
-			$tmp = $l->login();
-			if($tmp[0] == 'loggedin'){
+			$tmp = $l->login(); // trying to login
+			if($tmp[0] == 'loggedin'){ // if loggedin
 				$logged = 'logged';
 				$loginCheck = 'loggedIn';
 				$authLevel = $checkLoginOut[2];
-			}else{
+			}else{ // if usernaee or password were incorrect
 				$logged = 'not';
 				$content .= 'Username or password incorrect';
 			}
 		}
-
-	}elseif(isset($_POST['l_logout'])){
+	}elseif(isset($_POST['l_logout'])){ // user logs out
 
 		$dev .= ' loging out '.$b;
 		$l->logout();
 		$logged = 'not';
 		$loginCheck = 'loggedOut';
 
-	}elseif(isset($_POST['l_register'])){
+	}elseif(isset($_POST['l_register'])){ // user regiser
 
 		$logged = 'reg';
 
 	}elseif(isset($_POST['l_registered'])){
-		$tmp = $l->register();
-		if($tmp == 'reg'){
+		$tmp = $l->register();   $dev .= $tmp[2];  // registering and collecting devout
+
+		if($tmp[0] == 'reg'){
 			$content .= "username already exists, try different one";
 			$logged = 'reg';
 		}
@@ -54,7 +52,7 @@
 
 	}
 
-	if($logged == 'not'){
+	if($logged == 'not'){ // if not logged in display login form
 
 		$content .= '<form enctype="multipart/form-data" action="index.php?page=login" method="post" role="form">';
 		$content .= '<fieldset>';
@@ -123,9 +121,8 @@
 		$content .= '<input type="submit" value="Logout" name="l_logout">';
 		$content .= '</fieldset></form>';
 	}elseif($logged == 'reg'){
-
+		// getting the registration form
 		$out=file_get_contents('./templates/reg_form.html');
 		$content .= $out;
-
 	}
 ?>

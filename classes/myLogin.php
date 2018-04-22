@@ -1,8 +1,10 @@
 <?php
 class myLogin {
-
+/* registers user
+ * @return array where 0 is message, 1 is username, 2 devout
+ */
 	function register() {
-
+		$dev = "--------------<b>start of function register</b>------------------<br>";
 		$b = '<br/>';
 		//Check to make sure the form submission is coming from our script
 		//The full URL of our registration page
@@ -36,9 +38,9 @@ class myLogin {
 				$result1 = $db->myQuery($sql1);
 				$result = $result1->fetch_assoc();
 				if($userlogin == $result['u_username']){
-					echo 'username exists'.$b;
-					echo 'submited: '.$userlogin.' existing: '.$result['u_username'].$b;
-					return 'reg';
+					$dev .= 'username exists'.$b;
+					$dev .= 'submited: '.$userlogin.' existing: '.$result['u_username'].$b."--------------<b>end of function register</b>--------------<br>";
+					return array('reg',$userlogin, $dev);
 				}
 				$result1->free();
 				//Set up the variables we'll need to pass to our insert method
@@ -86,18 +88,23 @@ class myLogin {
 				// logging registration event
 				$res = ($db->myQuery("SELECT u_id FROM users WHERE u_username = '$userlogin'"))->fetch_assoc();
 				$ti = new myTime(); $ti = $ti->getMyTime(1);
-				$ms = "$userlogin REGISTERED at $ti";
-				if(LOG_)$db->logDB($ms, $res['u_id'], 8, $sql2);
+				$ms = "$userlogin <b>REGISTERED</b> at $ti";
+
+				if(LOG_)$db->logDB($ms, $res['u_id'], 8, $sql2); // logging the registration
 
 				if ( $insert == TRUE ) {
-						return array('Registration successful.',$username);
+					$dev = $ms."--------------<b>end of function register</b>--------------<br>";
+					return array('Registration successful.',$username, $dev);
 				}
 			} else {
-				die('Your form submission did not come from the correct page. Please check with the site administrator.');
+				die('Submission from wrong page. Please contact administrator.');
 			}
 		}
 	}
-
+/* Logs in user
+ * @return an array, 0 is status, either 'empty','invalid' or 'loggedin'.
+ *         1 is a message from that function. 3 is urername or empty
+ */
 	function login() {
 		$b = '<br/>';
 		$msg = ''; $out = array();
@@ -163,7 +170,7 @@ class myLogin {
 				setcookie('catering[authID]', $authID, 0, '', '', '', true);
 				// logging successful login of a user
 				$ti = new myTime(); $ti = $ti->getMyTime(1);
-				$ms = "$subname logged in at $ti";
+				$ms = "$subname logged <b>IN</b> on $ti";
 				if(LOG_)$db->logDB($ms, $results['u_id'], 6, $sql);
 				return array('loggedin', $msg, $subname);
 			} else {
@@ -173,7 +180,9 @@ class myLogin {
 			return array('empty', $msg, '');
 		}
 	}
-
+/* logs ures out
+ * $return returns either true or false depends on the status of the operation
+ */
 	function logout() {
 		$username = $_COOKIE['catering']['user'];
 		//Expire our auth coookie to log the user out
@@ -185,14 +194,16 @@ class myLogin {
 			$db = new myDB();
 			$res = ($db->myQuery("SELECT u_id FROM users WHERE u_username = '$username'"))->fetch_assoc();
 			$ti = new myTime(); $ti = $ti->getMyTime(1);
-			$ms = "$username logged out at $ti";
-			if(LOG_)$db->logDB($ms, $res['u_id'], 7, '$sql no query');
+			$ms = "$username logged <b>OUT</b> on $ti";
+			if(LOG_)$db->logDB($ms, $res['u_id'], 7, '$sql no query'); // loggin the loged  out event
 			return true;
 		} else {
 			return false;
 		}
 	}
-
+/* Checks if user is logged in
+ * @return an array where 0 is status, 1 is message, 2 is user privilages
+ */
 	function checkLogin() {
 		$user='';
 		$authID='';
@@ -210,7 +221,7 @@ class myLogin {
 				$authID = $cookie['authID'];
 			}else {
 				// $_SESSION['auth'] = false;
-				$msg .= 'user not set in catering cookie';
+				$msg .= 'user not set in catering cookie<br>';
 				$out[0] = 'not';
 				$out[1] = $msg;
 				return $out;
@@ -270,15 +281,18 @@ class myLogin {
 			$out[0] = 'not';
 		}
 		$out[1] = $msg;
-		// print_r($out);
-		// return $results;
 		return $out;
 	}
+	/* redirect to a given page
+	 */
 	function redirect($page){
 		$domen =  strstr($_SERVER['REQUEST_URI'],"index", TRUE);
 		$s = ((!empty($_SERVER['HTTPS'])) ? "s" : "");
 		header("Location: http".$s."://".$_SERVER['SERVER_NAME'].$domen.$page);//"index.php?page=login" );
 	}
+	/* redirect back to login page if user not logged in
+	 * CURRENTLY NOT IN USE !!!
+	 */
 	function loginEnforce($red){
 		// $l = new myLogin();
 		// $logged = $l->checkLogin();

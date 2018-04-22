@@ -24,7 +24,7 @@
     	if($lastpage > 1)
     	{
     		$pagination .= "<ul class='pagination'>";
-                    $pagination .= "<li class='details' style='margin-top:2px'>Page $page of $lastpage</li>";
+                    $pagination .= "<li class='details' style='margin-top:-2px'>Page $page of $lastpage</li>";
     		if ($lastpage < 7 + ($adjacents * 2))
     		{
     			for ($counter = 1; $counter <= $lastpage; $counter++)
