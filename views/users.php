@@ -50,8 +50,8 @@ if(isset($_POST['edit'])){
 	$p = $_POST;
 	$regTime = (new myTime())->getMyTime(3,$p['u_regdate']);
 
-	echo "changing pass !!!11, regtime: ".$regTime;
-	print_r($p);
+	$dev .= "changing pass !!!11, regtime: ".$regTime."<br>";
+	$dev .= print_r($p, true)."<br>";
 	$out = formEdit($to_clean, $required, $dbwhere, $id, $txtField);
 	if($out[2] != '')$msg = $db->myQuery($out[2]);
 

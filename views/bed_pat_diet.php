@@ -331,16 +331,4 @@ if($ward_id != ''){
 
 }
 //------------------------------------forms end------------------------------------------------------------
-
-if(!empty($cookie)){
-
-	$content .= "<br/> your current location is:</br>";
-	$content .= " hospital name: $hospital_name , id: $hospital_id </br>";
-	$content .= " ward name: $ward_name , id: $ward_id </br>";
-
-	$content .= " to change your location go <a href=\"index.php?page=set_location\">here</a>.";
-}else{
-	$content .= "Your location is not set.
-	Please set your location <a href=\"index.php?page=set_location\">here</a>.";
-}
 ?>
