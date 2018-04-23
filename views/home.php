@@ -2,6 +2,12 @@
 displayErroros(); // error output
 $b = '<br/>';
 $mt = new myTime();
+// echo 'system time: '.$mt->getMyTime(1).'<br>'	;
+// echo $mt->curHur();
+// echo $mt->getMyTime().' '.$mt->curHur();
+// echo date('Y-m-d H:i:s T', time()) . "\n";
+// echo 'time zone assigning '.date_default_timezone_set("Europe/London");
+// echo date('Y-m-d H:i:s T', time()) . "\n";
 $patient_id = 0;
 $pat_name = '';
 $bed_id = 0; $ward_id = 0; $ward_name = 0;
@@ -41,8 +47,6 @@ $h = $mt->h;
 $d = $mt->d;
 
 // connection with database
-$db = new myDB();
-
 $sql = '';
 
 // retriving data from database

@@ -11,39 +11,44 @@ function refreshAt() {
     var then = new Date();
     var se = [10, 14, 18]; // end of meal times, breakfast lunch and supper acordingly
     var sec = 0; var ofset = 0;
-    if(now.getSeconds() <= se[0]) { // same day reload
+    if(now.getHours() < se[0]) { // same day reload
         sec = se[0];
-    }else if(now.getSeconds() <= se[1]){
+        lo('getHours: '+now.getHours());
+    }else if(now.getHours() < se[1]){
       sec = se[1];
-    }else if(now.getSeconds() <= se[2]){
+      lo('getHours: '+now.getHours());
+    }else if(now.getHours() < se[2]){
       sec = se[2];
+      lo('getHours: '+now.getHours());
     }else { // addjustment for next day reload calculation
       sec = se[0];
       // ofset = 1; // for testing with seconds
       then.setDate(now.getDate() + 1);
+      lo('getHours: '+now.getHours());
     }
-
+    lo('time set: '+sec);
     then.setHours(sec);
     then.setMinutes(0);
     then.setSeconds(0);
 
     var timeout = (then.getTime() - now.getTime());
     setTimeout(function() {
-      // window.location.reload(true);
-      ajax();
+      window.location.reload(true);
+      // ajax();
     }, timeout);
-    now.setTime(timeout); lo('meal ends in: '+now.getHours()+'h '+now.getMinutes()+'m');
+    now.setTime(timeout);
+    lo('meal ends in: '+now.getHours()+'h '+now.getMinutes()+'m');
 }
 function showTime() {
     var now = new Date();
     var then = new Date();
     var se = [10, 14, 18]; // end of meal times, breakfast lunch and supper acordingly
     var sec = 0; var ofset = 0;
-    if(now.getSeconds() <= se[0]) { // same day reload
+    if(now.getHours() < se[0]) { // same day reload
         sec = se[0];
-    }else if(now.getSeconds() <= se[1]){
+    }else if(now.getHours() < se[1]){
       sec = se[1];
-    }else if(now.getSeconds() <= se[2]){
+    }else if(now.getHours() < se[2]){
       sec = se[2];
     }else { // addjustment for next day reload calculation
       sec = se[0];

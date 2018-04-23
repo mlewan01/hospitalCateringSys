@@ -12,7 +12,8 @@ class myTime {
 	 * PHP4 compatibility layer for calling the PHP5 constructor.
 	 * @uses CateringDatabase::__construct()
 	 */
-	function myTime() {
+	function myTime($zone="Europe/London") {
+		date_default_timezone_set($zone);
 		return $this->__construct();
 	}
 
@@ -25,9 +26,9 @@ class myTime {
 
 	 // Class fields
 	public $m = 60; // 1 minute = 60 sec
-	public $h = ''; // 1 houre = 60 min
+	public $h = 3600; // 1 houre = 60 min
 	public $d = ''; // 1 day = 24 houres
-	public $w = ''; // 1 week = 7 days
+	public $w = ''; // 1 week = 7 day`s
 
 	// function myTime(){
 		// $this->h = 60 * $this->m; // 1 houre = 60 min
@@ -44,16 +45,21 @@ class myTime {
 	* @return $v=2 returns formated date from provided Unix timestamp
 	* @return $v=3 returns Unix timestamp from provided string containing time
 	*/
-	function getMyTime($v=0, $time=0) {
-		date_default_timezone_set('UTC');
+	public static function getMyTime($v=0, $time=0) {
+		// date_default_timezone_set('UTC');
+		date_default_timezone_set("Europe/London");
 
 		//echo 'v: '.$v.' provided time: --  '.$time.' date formated-- '.date("Y-m-d H:i:s",$time).'  unix-- '.strtotime($time).'<br/>';
 		//echo 'v: '.$v.' current:   '.time().' -- '.date("Y-m-d H:i:s",time()).'<br/>';
 
 		if($v == 0){
-			return time(); // returns Unix timestamp
+			// echo 'mt h: '.$this->h;
+			// echo 'time(): '.time().' <br>';
+			return (time()); // returns Unix timestamp
 		}elseif($v == 1){
-			return date("Y-m-d H:i:s",time()); // returns formated Unix timestamp
+			// echo 'getMytime(1) '.$t = getMyTime().' <br>';
+			$t = time();
+			return date("Y-m-d H:i:s",$t); // returns formated Unix timestamp
 		}elseif($v == 2){
 			return date("Y-m-d H:i:s",$time);// returns formated date from provided Unix timestamp
 		}elseif($v == 3){
@@ -70,16 +76,25 @@ class myTime {
 	 */
 
 	function curHur(){
-		$t = getMyTime();
-		$temp = $t%$this->d/$this->h;
-		// return (int)$temp; // would return houres only
-		return $temp; // returns houres and the minutes converted where 30min = 50
+		$t = $this->getMyTime();
+		// $td = ($t%$this->d);
+		// echo "time: $t<br>";
+		// echo "day: $this->d<br>";
+		// echo 'time % day: ' .$td.'<br>';
+		// echo "hour: $this->h<br>";
+		// $th = $td/$this->h;
+		// echo '(time % day)/hour: '.$th.'<br>';
+		// $temp = (int) number_format(($t%$this->d)/$this->h);
+		$temp = (($t%$this->d)/$this->h);
+		// return round($temp,0,PHP_ROUND_HALF_UP); // would return houres only
+		// return $temp; // returns houres and the minutes converted where 30min = 50
+		return (int)$temp+1;
 	}
 	/*
 	 * returns representation of begining of a current day in seconds(unix timestamp)
 	 */
 	function getCurDay(){
-		$t = getMyTime();
+		$t = $this->getMyTime();
 		$temp = $t%$this->d;
 		$temp = $t - $temp;
 		return $temp;

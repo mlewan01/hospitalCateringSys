@@ -55,7 +55,7 @@ class myLogin {
 				$userpass = $_POST['password'];
 				$useremail = $_POST['email'];
 				$userphone = $_POST['phone'];
-				$userreg =( new myTime())-> getMyTime();   // $_POST['date'];
+				$userreg =  myTime::getMyTime();   // $_POST['date'];
 				$userinfo = $_POST['info'];
 				$userprivileges = $_POST['privileges'];
 				$userdepartment = $_POST['department'];
@@ -169,7 +169,7 @@ class myLogin {
 				setcookie('catering[user]', $subname, 0, '', '', '', true);
 				setcookie('catering[authID]', $authID, 0, '', '', '', true);
 				// logging successful login of a user
-				$ti = new myTime(); $ti = $ti->getMyTime(1);
+				$ti = myTime::getMyTime(1);
 				$ms = "$subname logged <b>IN</b> on $ti";
 				if(LOG_)$db->logDB($ms, $results['u_id'], 6, $sql);
 				return array('loggedin', $msg, $subname);
@@ -193,7 +193,7 @@ class myLogin {
 			// logging successful logout of a user
 			$db = new myDB();
 			$res = ($db->myQuery("SELECT u_id FROM users WHERE u_username = '$username'"))->fetch_assoc();
-			$ti = new myTime(); $ti = $ti->getMyTime(1);
+			$ti = myTime::getMyTime(1);
 			$ms = "$username logged <b>OUT</b> on $ti";
 			if(LOG_)$db->logDB($ms, $res['u_id'], 7, '$sql no query'); // loggin the loged  out event
 			return true;

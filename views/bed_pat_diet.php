@@ -72,7 +72,7 @@ if(isset($_POST['freebed'])){
 	$bed_id = $_POST['bed_id'];
 	$bed_name = $_POST['bed_name'];
 	$patFreeName = $_POST['pat_name'];
-	$sql6 = "update pat_bed set pb_date_to =".getMyTime()." where pb_id_bed=$bed_id and pb_date_to=0";
+	$sql6 = "update pat_bed set pb_date_to =".myTime::getMyTime()." where pb_id_bed=$bed_id and pb_date_to=0";
 	$db->myQuery($sql6);
 	$msg = $patFreeName.$lang['msg_patbedremoved'].$bed_name;
 	if(LOG_)$db->logDB($msg, $userId, 2, $sql6); // logging removing patient from a bed
@@ -97,7 +97,7 @@ if(isset($_POST['freebed'])){
 			$pat_id = $temp[0];
 			$pat_number = $temp[1];
 			$pat_name = $temp[2];
-			$date = getMyTime();
+			$date = myTime::getMyTime();
 			$sql8 = "insert into pat_bed (pb_id_bed, pb_id_patient, pb_date_from) values (\"$bed_id\", \"$pat_id\", \"$date\")";
 			$db->myQuery($sql8);
 			$msg = "Assigning patient: $pat_number - $pat_name to a bed: $bed_name";

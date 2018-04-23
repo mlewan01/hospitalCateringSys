@@ -230,7 +230,7 @@ function sanitiseInput($post, $arr, $req=null){
 			}elseif($tarea[$i] == 1) {
 				$file = str_replace($key.'"></t', $key.'">'.$value.'</t', $file);
 			}elseif($tarea[$i] == 2) {
-				$file = str_replace('name="'.$key.'"', ' name="'.$key.'" '.'value="'.getMyTime(2,$value).'"', $file);
+				$file = str_replace('name="'.$key.'"', ' name="'.$key.'" '.'value="'.myTime::getMyTime(2,$value).'"', $file);
 			}
 			$i++;
 		}
@@ -320,7 +320,7 @@ function makeForm($data){
 			$content .= '<textarea type="text" placeholder="'.$fields[$i].'" id="'.$prefix2.$fields[$i].'" name="'.$prefix2.$fields[$i].'"></textarea>';
 		}elseif($fieldType[$i]==2){
 			$content .= '<label for="'.$prefix2.$fields[$i].'">[+'.$prefix1.$fields[$i].'+]</label>';
-			$content .= '<input type="text" id="'.$prefix2.$fields[$i].'" name="'.$prefix2.$fields[$i].'" value="'.getMyTime(1).'" />';
+			$content .= '<input type="text" id="'.$prefix2.$fields[$i].'" name="'.$prefix2.$fields[$i].'" value="'.myTime::getMyTime(1).'" />';
 		}
 		$content .= '</div>';
 	}
@@ -437,7 +437,7 @@ function formAdd($to_clean, $required, $dbwhere, $id, $fieldType=null){
 		for($i=0;$i<count($fieldType);$i++){
 			if($fieldType[$i] == 2) {
 				//echo "the time submited: ".$clean[$i+1].'<br/>';
-				$clean[$i+1] = getMyTime(3,$clean[$i+1]);
+				$clean[$i+1] = myTime::getMyTime(3,$clean[$i+1]);
 			}
 		}
 	}
@@ -502,7 +502,7 @@ function formEdit($to_clean, $required, $dbwhere, $id, $fieldType=null){
 				if($fieldType[$i] == 2) {
 					//echo "the time submited: ".$clean[$i+1].'<br/>';
 					$df = $to_clean[$i+1];
-					$_POST[$df] = getMyTime(3,$_POST[$df]);
+					$_POST[$df] = myTime::getMyTime(3,$_POST[$df]);
 				}
 			}
 		}
@@ -541,9 +541,10 @@ function formEdit($to_clean, $required, $dbwhere, $id, $fieldType=null){
 * @return $v=2 returns formated date from provided Unix timestamp
 * @return $v=3 returns Unix timestamp from provided string containing time
 */
-function getMyTime($v=0, $time=0) {
-	date_default_timezone_set('UTC');
-
+function getMyTimeFunction($v=0, $time=0) {
+	echo 'function getMyTime executed <br>';
+	// date_default_timezone_set('UTC');
+	date_default_timezone_set("Europe/London");
 	//echo 'v: '.$v.' provided time: --  '.$time.' date formated-- '.date("Y-m-d H:i:s",$time).'  unix-- '.strtotime($time).'<br/>';
 	//echo 'v: '.$v.' current:   '.time().' -- '.date("Y-m-d H:i:s",time()).'<br/>';
 
@@ -568,7 +569,7 @@ function getMyTime($v=0, $time=0) {
  * @param String $l_sql a SQL query associated with the event, optional
  */
  function myLog($l_msg, $l_id_staff, $l_type, $l_sql='', $l_date=0){
-	 if($l_date == 0) $l_date = getMyTime();
+	 if($l_date == 0) $l_date = myTime::getMyTime();
 	 $log['l_msg'] = $l_msg;
 	 $log['l_sql'] = str_replace("\"", "\\\"", $l_sql);
 	 $log['l_date'] = $l_date;

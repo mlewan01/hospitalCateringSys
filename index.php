@@ -7,6 +7,8 @@ require_once 'includes/functions.php';
 require_once 'includes/pagination.php';
 displayErroros();
 autoloader();
+$mt = new myTime(); // setting the timezone
+$db = new myDB(); // connection with database
 $content = '';
 $b = '</b>';
 $navMain = '';
@@ -16,7 +18,7 @@ $loginCheck = '';
 $authLevel = 0;
 $dev = '';
 
-if (!isset($_GET['page'])) { // TODO sanitise the input finally !!
+if (!isset($_GET['page'])) { // TODO sanitise the input finally !! Done !
 	$pageid = 'home'; // display home page
 } else {
 	if(sanitise($_GET['page'])){
