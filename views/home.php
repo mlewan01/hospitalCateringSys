@@ -194,17 +194,18 @@ if($msid > 0){ // apropriate menu for patient exists
 	}
 }else {} // apropriate menu does not exits
 
-$content .= '<div class="info">';
+$content .= '<div class="info"><p id="time">';
 if($ward_name == '' && $bed_name == ''){
-	$content .= "Location is not set...";
+	$content .= "Location is not set...</p>";
 }else{
-	$content .= "Location: $ward_name, $bed_name.".$b;
+	$content .= "Location: $ward_name, $bed_name</p>";
+	$content .= "<p>";
 	if($patient_id == 0){
 		$content .= 'Patient not assigned to this bed';
 	}else{
 		$content .= "$pat_name, <b>type:</b> $p_type, <b>diet</b>: $p_diet,
 	 		<b>nutrition:</b> $p_nutrition, <b>allergies:</b> $p_aller";
-	}
+	}$content .= "</p>";
 }
 $content .= '</div>';
 // $content .= "$pat_name, <b>type:</b> $p_type, <b>diet</b>: $p_diet,

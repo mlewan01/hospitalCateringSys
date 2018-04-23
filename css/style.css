@@ -512,7 +512,9 @@ article ul {
 	background-color: #e6eee9;
 	color: #576823;
 }
-
+#time {
+  margin-bottom: 0em;
+}
 video {
 	display: block;
 	margin: 0 auto;

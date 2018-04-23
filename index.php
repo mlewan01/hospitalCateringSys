@@ -43,6 +43,10 @@ if (!isset($_GET['page'])) { // TODO sanitise the input finally !!
 if (!file_exists("views/$pageid.php")) $pageid = '404';
 
 include "views/$pageid.php";
+// for ajax
+if(isset($_GET['is'])){
+	echo $content;
+}else { // if not ajax call then curry on as normal
 $heading1 = "h_".$pageid;
 
 $logged = $l->checkLogin();
@@ -98,8 +102,11 @@ $arr = array(
 );
 	$out = tpl(1, './templates/page_tpl.html', $arr);
 // outputing all collected data to the browser
+if(!isset($_GET['is'])){
 	echo $out;
+}
 
 	if(DEV) echo '<div class="devout"><h4>Dev out:</h4>'.$dev.'</div>';
 }
+} // ajax if
 ?>
