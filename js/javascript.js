@@ -81,8 +81,8 @@ function aMenue(){
     ajax();
   }, 1000);
 }
-function ajax(whe = ''){
-  whe = window.location.href;
+function ajax(whe = window.location.href){
+  // whe = window.location.href;
   if(window.location.search == ''){
     where = whe+'?is=ajax'
   }else{
@@ -108,15 +108,23 @@ function ajax(whe = ''){
     }
   });
 }
+function cancelOrders(){
+  lo('function cancelOrders()');
+  link = window.location.href;
+  lo('href'+window.location.href);
+}
 $(document).ready(function() {
   if (window.location.search == '') {
     lo('home page');
     refreshAt();
     showTime();
     // aMenue();
+    // cancelOrders();
   }else if(window.location.search == '?page=view_order'){
     lo('page view_order');
     aOrders();
+  }else if(window.location.search == '?page=bed_pat_diet'){
+    cancelOrders();
   }
   else {
     lo('different page...');

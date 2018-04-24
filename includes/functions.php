@@ -1,5 +1,5 @@
 <?php
-function footerLink(){
+function footerLinkUpdate(){
 	setcookie('catering[bed]', $_POST['h_beds'], time()+60*60*24*365, '', '', '', true);
 }
 /* formats location info for footer
@@ -136,7 +136,7 @@ function getLocation(){
 		}else $out['ward_set'] = false;
 		if(isset($cookie['bed'])){
 			$out['bed_id'] = explode(' ',$cookie['bed'])[0];
-			$out['bed_name'] =explode(' ',$cookie['bed'],2)[1];
+			$out['bed_name'] = explode(' ',$cookie['bed'],2)[1];
 			$out['bed_set'] = true;
 		}else $out['bed_set'] = false;
 	}else{

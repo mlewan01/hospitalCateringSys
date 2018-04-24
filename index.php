@@ -66,10 +66,14 @@ $l = $pageid == 'login' ? '' : '?page=login';
 $link = "http".$s."://".$_SERVER['SERVER_NAME'].$domen."index.php".$l;
 // footer location and navigation
 $lo = footerLocation($logged[0], $pageid);
+
 // footer navigations
 if(isset($_POST['h_foot'])) {
-	footerLink();
-	header("Location: http".$s."://".$_SERVER['SERVER_NAME'].$domen.'index.php');
+	footerLinkUpdate(); // sets the location cookie for new selected bed
+	// // HACK: since the new value assigned to cookie is not immidiatly accessible
+	$b =explode(' ',$_POST['h_beds'],2)[1];
+	$lo[0] = preg_replace("/<b>bed:<\/b>.*<form/", "<b>bed:</b>".$b."<form", $lo[0]);
+
 }
 if($pageid != 'service'){
 // prepearing data for use with usage with site template
@@ -102,6 +106,7 @@ $arr = array(
 	'[+m19+]' => $lang['c_login']
 
 );
+
 	$out = tpl(1, './templates/page_tpl.html', $arr);
 // outputing all collected data to the browser
 if(!isset($_GET['is'])){

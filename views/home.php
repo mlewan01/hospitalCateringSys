@@ -38,6 +38,7 @@ if(!isset($_COOKIE['catering'])){
 		$ward_name = explode(' ',$cookie['ward'],2)[1];
 	}
 }
+if(isset($_GET['is'])){ $bed_id = $_GET['bid'];} // for ajax !
 
 $meal = '';
 $dbwhere = "orders";
@@ -64,6 +65,9 @@ if($bed_id != 0){
 	$row = $result->fetch_assoc();
 	// $dev .=  'the bed id: '.$bed_id.$b.'the patient id: ';print_r($row);$dev .=  $b;
 	$patient_id = $row['pb_id_patient'];
+
+	if(isset($_GET['is'])){ $patient_id = $_GET['pid'];} // for ajax !
+
 	$pat_name = $row['p_name'];
 	$p_type = $row['p_type']; $p_nutrition = $row['p_nutrition']; $p_diet = $row['p_diet'];
 	$p_aller = $row['p_allergies'];
@@ -109,7 +113,7 @@ if($bed_id != 0 && $patient_id != 0){
 	$sql9 = "select o_id_item from orders where o_date_meal=$curDay and o_id_patient=$patient_id";
 	$result3 = $db->myQuery($sql9); // retrivig already ordered items to detect changes in order
 	$itemsOrdered = array(); $i=0;
-	while($row = $result3->fetch_assoc()){
+	while($row = $result3->fetch_assoc() && (!isset($_GET['is'])) ){
 		$itemsOrdered[$i] = $row['o_id_item'];
 		$i++;
 	}
@@ -199,10 +203,11 @@ if($msid > 0){ // apropriate menu for patient exists
 }else {} // apropriate menu does not exits
 
 $content .= '<div class="info"><p id="time">';
-if($ward_name == '' && $bed_name == ''){
-	$content .= "Location is not set...</p>";
+if($bed_name == ''){
+	$content .= "Current time: ".$mt->getMyTime(1);
+	$content .= "</p>";
 }else{
-	$content .= "Location: $ward_name, $bed_name</p>";
+	$content .= "Current time: ".$mt->getMyTime(1);
 	$content .= "<p>";
 	if($patient_id == 0){
 		$content .= 'Patient not assigned to this bed';

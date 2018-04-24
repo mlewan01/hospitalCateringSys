@@ -46,7 +46,7 @@ min length 8" required aria-required="true" aria-labbelledby="l2_password"/>';
       if($username == ''){
         $content .= "usernme not provided, pls try again".$b;
       }else{
-        $content .= "provided name: ".$username.$b;
+        $content .= "provided username: ".$username.$b;
         $sql = "SELECT * from users WHERE u_username = '".$username."'";
         $result = $db->myQuery($sql);
         $result = mysqli_fetch_assoc($result);
@@ -65,7 +65,7 @@ min length 8" required aria-required="true" aria-labbelledby="l2_password"/>';
           $page = "index.php?page=passrec&token=".$passrec;
       		$header = "http".$s."://".$_SERVER['SERVER_NAME'].$domen.$page;
           $content .= 'Plese check your email for instructions.<br>';
-          
+
           $to      = 'le.wy@op.pl'; //$result['u_email'];
           $subject = 'Passwor reset for hospital system';
           $message = 'hello! Please follow the link below in order reset your password: ';

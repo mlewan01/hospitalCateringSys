@@ -270,7 +270,7 @@ legend {
 }
 #pageheader nav#primary li {
 	font-weight: bold;
-	margin-right: 1em;
+	margin-right: 0.5em;
 }
 #pageheader nav#primary li:last-child {
 	margin-right: 0;
@@ -282,9 +282,9 @@ legend {
 	display: block;
 	border-radius: 0.375em;
 	padding-top: 0.375em;
-	padding-right: 1.25em;
+	padding-right: 1em;
 	padding-bottom: 0.375em;
-	padding-left: 1.25em;
+	padding-left: 1em;
 	text-decoration: none;
 }
 #pageheader nav#primary li a:focus, #pageheader nav#primary li a:hover{
