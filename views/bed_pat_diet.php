@@ -5,6 +5,7 @@ $ward_id = '';
 $ward_name = '';
 $hospital_id = '';
 $hospital_name = '';
+$mt = new myTime();
 $cookie = array();
 if(isset($_COOKIE['catering'])){
 	$dev .= "cookie catering exists".$b;
@@ -155,6 +156,9 @@ if(isset($_POST['freebed'])){
 			$sql = "INSERT INTO pat_diet (pd_id_patient, pd_date, pd_type, pd_diet, pd_nutrition, pd_allergies)
 			VALUES ('$pat2id', ".time().", '$dietRe[type]', '$dietRe[diet]', '$dietRe[nutrition]', '$dietTemp')";
 			$db->myQuery($sql);
+
+			$sql13 = "UPDATE patients SET p_info = CONCAT(p_info, 'Your dietary requirements have changed. ') WHERE p_id = $pat2id";
+			$db->myQuery($sql13);
 		}else {
 			$err = $lang['err_input'];
 		}
@@ -178,6 +182,37 @@ if(isset($_POST['freebed'])){
 		$dev .= print_r($dietRe, true);
 	}else{
 		$err = $lang['err_fetch'];
+	}
+}elseif(isset($_POST['cancelOrders'])){
+	if(isset($_POST['pat2'])){
+		$anyOrders = false;
+		$patient_id = $_POST['pat2'];
+		$meal = getCurrentMeal()[0];
+		$curDay = $mt->getCurDay();
+		$msg = ' test, test, test.';
+		$sql10 = "select o_id_item from orders where o_date_meal=$curDay and o_id_patient=$patient_id";
+		$result3 = $db->myQuery($sql10); // retrivig already ordered items to detect changes in order
+		$itemsOrdered = array(); $i=0;
+		while($row = $result3->fetch_assoc()){
+			$itemsOrdered[$i] = $row['o_id_item'];
+			$i++;
+		}
+		foreach($itemsOrdered as $itm){
+			$sql11 = "delete from orders where o_meal=\"$meal\"
+						and o_id_item=$itm and o_date_meal=$curDay and o_id_patient=$patient_id";
+			$db->myQuery($sql11);
+
+			$msg ='id '.$itm.' '.$lang['msg_itemcancelled'].$patient_id.' in patient-bed-diet';
+			$dev .=  ' msg cancel '.$msg.$b;
+
+			if(LOG_)$db->logDB($msg, 1, 5, $sql11); // logging cancellation of an order
+			$dev .=  $sql11.$b;
+			$anyOrders = true;
+		}
+		if($anyOrders){
+			$sql12 = "UPDATE patients SET p_info = CONCAT(p_info, 'Your order have been cancelled.  Pleas make new order. ') WHERE p_id = $patient_id";
+			$db->myQuery($sql12);
+		}
 	}
 }
 $content .= '<div id="err"><h4>'.$err.'</h4></div>';
@@ -254,7 +289,7 @@ if($ward_id != ''){
 
 // ----------------------------save/fetch patient dietary requirements form------------------------------
 	$sel = ''; // to preselect an item in the form after fetching data about patient
-	$content .= '<form enctype="multipart/form-data" action="index.php?page=bed_pat_diet" method="post" role="form">
+	$content .= '<form enctype="multipart/form-data" action="index.php?page=bed_pat_diet" method="post" role="form" id="form9" name="form9">
 							<fieldset>';
 
 	$sql7 = "select p_id, p_number, p_name from
@@ -326,8 +361,9 @@ if($ward_id != ''){
 	$content .= "<div class=\"controlgroup\"><label for=\"other_allergies\">Other allergies: </label>
 				<input type=\"text\" name=\"other_allergies\" value=\"$customAllergen\"/><br/>";
 	$content .= '</div>';
-	$content .= '<input type="submit" value="Fetch" name="fetch">';
-	$content .= '<input type="submit" value="Save" name="save"></fieldset></form>';
+	$content .= '<input type="submit" value="Fetch" name="fetch" onclick="clicked=\'Fetch\'">';
+	$content .= '<input type="submit" value="Save" name="save" onclick="clicked=\'Save\'">';
+	$content .= '<input type="submit" value="Cancel orders" name="cancelOrders" onclick="clicked=\'cancelorders\'"></fieldset></form>';
 
 }
 //------------------------------------forms end------------------------------------------------------------

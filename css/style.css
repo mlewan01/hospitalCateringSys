@@ -174,12 +174,7 @@ legend {
   border-radius: 4px;
   margin-left: 3px;
 }
-.info {
-  padding: 0 5px 10px 7px;
-  line-height: 1.5;
-  font-size: 1.1em;
-  width: 80%;
-}
+
 /* ----- global elements styling ----- */
 .foot2 {
   float: left;
@@ -512,8 +507,22 @@ article ul {
 	background-color: #e6eee9;
 	color: #576823;
 }
-#time {
-  margin-bottom: 0em;
+.info {
+  padding: 0 5px 10px 7px;
+  line-height: 1.5;
+  font-size: 1.1em;
+  width: 80%;
+}
+.info p {
+  padding-bottom: 0.4em;
+  margin-bottom: 0;
+}
+#patient_info {
+  display: block;
+  color: red;
+  font-weight: bold;
+  background-color: #f9ff004d;
+  padding: 10px 20px 10px 20px;
 }
 video {
 	display: block;
@@ -573,6 +582,9 @@ nav#pagesidebar ul li a {
 		width: 100%;
 	}
   .content {
+    width: 98%;
+  }
+  .info {
     width: 98%;
   }
 }

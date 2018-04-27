@@ -71,9 +71,9 @@ $lo = footerLocation($logged[0], $pageid);
 if(isset($_POST['h_foot'])) {
 	footerLinkUpdate(); // sets the location cookie for new selected bed
 	// // HACK: since the new value assigned to cookie is not immidiatly accessible
-	$b =explode(' ',$_POST['h_beds'],2)[1];
-	$lo[0] = preg_replace("/<b>bed:<\/b>.*<form/", "<b>bed:</b>".$b."<form", $lo[0]);
-
+	// $b =explode(' ',$_POST['h_beds'],2)[1];
+	// $lo[0] = preg_replace("/<b>bed:<\/b>.*<form/", "<b>bed:</b> ".$b."<form", $lo[0]);
+	header("Location: http".$s."://".$_SERVER['SERVER_NAME'].$domen.'index.php');
 }
 if($pageid != 'service'){
 // prepearing data for use with usage with site template
@@ -109,11 +109,11 @@ $arr = array(
 
 	$out = tpl(1, './templates/page_tpl.html', $arr);
 // outputing all collected data to the browser
-if(!isset($_GET['is'])){
-	echo $out;
-}
-
+// if(!isset($_GET['is'])){
+// 	echo $out;
+// }
+echo $out;
 	if(DEV) echo '<div class="devout"><h4>Dev out:</h4>'.$dev.'</div>';
-}
+} // end service if
 } // ajax if
 ?>

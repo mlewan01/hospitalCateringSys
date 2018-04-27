@@ -1,4 +1,36 @@
 <?php
+/* calculates current meal based on global variable set in comgig.php file
+ * @return array where 0 is the meal, 1 date of the meal, 2 development output
+ */
+ function getCurrentMeal(){
+	 $b = '</b>';
+	 $mt = new myTime();
+	 $t =  $mt->getMyTime();
+	 $curDay = $mt->getCurDay();
+	 $t1 = $mt->curHur();
+	 $menuday = '';
+	 $meal = '';
+	 $dev = '';
+	 if($t1 < TIME_BREAKFAST){
+	 	$menuday = date('l', strtotime('today'));
+	 	$dev .=  "next meal : ".$meal ='breakfast'; $dev .=  $b;
+	 }elseif($t1 < TIME_LUNCH){
+	 	$menuday = date('l', strtotime('today'));
+	 	$dev .=  "next meal : ".$meal = 'lunch'; $dev .=  $b;
+	 }elseif($t1 < TIME_SUPPER){
+	 	$menuday = date('l', strtotime('today'));
+	 	$dev .=  "next meal : ".$meal = 'supper'; $dev .=  $b;
+	 }else {
+	 	$menuday = date('l', strtotime('tomorrow'));
+	 	$dev .=  "next meal : ".'next day breakfast'; $dev .=  $b;
+	 	$meal = 'breakfast';
+	 	$t += $d;
+	 	$curDay += $d;
+	 }
+	 return array($meal, $menuday, $dev);
+ }
+/* sets qookie for the footer in index.php
+ */
 function footerLinkUpdate(){
 	setcookie('catering[bed]', $_POST['h_beds'], time()+60*60*24*365, '', '', '', true);
 }

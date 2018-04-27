@@ -2,12 +2,6 @@
 displayErroros(); // error output
 $b = '<br/>';
 $mt = new myTime();
-// echo 'system time: '.$mt->getMyTime(1).'<br>'	;
-// echo $mt->curHur();
-// echo $mt->getMyTime().' '.$mt->curHur();
-// echo date('Y-m-d H:i:s T', time()) . "\n";
-// echo 'time zone assigning '.date_default_timezone_set("Europe/London");
-// echo date('Y-m-d H:i:s T', time()) . "\n";
 $patient_id = 0;
 $pat_name = '';
 $bed_id = 0; $ward_id = 0; $ward_name = 0;
@@ -38,7 +32,6 @@ if(!isset($_COOKIE['catering'])){
 		$ward_name = explode(' ',$cookie['ward'],2)[1];
 	}
 }
-if(isset($_GET['is'])){ $bed_id = $_GET['bid'];} // for ajax !
 
 $meal = '';
 $dbwhere = "orders";
@@ -58,7 +51,7 @@ if($bed_id != 0){
 	$bed_name = $row['b_name'];
 	// query for retriving patient based on current bed locatin from pat_bed table where
 	// pb_id_bed is current bed and pb_date_to=0 which means patient has not left the bed jet
-	$sql = "select pb_id_patient, p_name, p_allergies, p_type, p_nutrition, p_diet from pat_bed
+	$sql = "select pb_id_patient, p_name, p_allergies, p_info, p_type, p_nutrition, p_diet from pat_bed
 		join patients on (pb_id_patient = p_id)
 		where pb_id_bed=$bed_id and pb_date_to=0";
 	$result = $db->myQuery($sql);
@@ -66,8 +59,7 @@ if($bed_id != 0){
 	// $dev .=  'the bed id: '.$bed_id.$b.'the patient id: ';print_r($row);$dev .=  $b;
 	$patient_id = $row['pb_id_patient'];
 
-	if(isset($_GET['is'])){ $patient_id = $_GET['pid'];} // for ajax !
-
+	$p_info = $row['p_info'];
 	$pat_name = $row['p_name'];
 	$p_type = $row['p_type']; $p_nutrition = $row['p_nutrition']; $p_diet = $row['p_diet'];
 	$p_aller = $row['p_allergies'];
@@ -113,10 +105,11 @@ if($bed_id != 0 && $patient_id != 0){
 	$sql9 = "select o_id_item from orders where o_date_meal=$curDay and o_id_patient=$patient_id";
 	$result3 = $db->myQuery($sql9); // retrivig already ordered items to detect changes in order
 	$itemsOrdered = array(); $i=0;
-	while($row = $result3->fetch_assoc() && (!isset($_GET['is'])) ){
+	while($row = $result3->fetch_assoc()){
 		$itemsOrdered[$i] = $row['o_id_item'];
 		$i++;
 	}
+
 
 	$order = array("o_id_patient" => $patient_id, "o_id_item" => '',
 					"o_id_bed" => $bed_id, "o_date_meal" => $curDay,
@@ -124,6 +117,9 @@ if($bed_id != 0 && $patient_id != 0){
 
 	if(isset($_POST['order'])){
 		unset($_POST['order']);
+		$sql10 = "UPDATE patients SET p_info = '' WHERE p_id = $patient_id";
+		$db->myQuery($sql10);
+		$dev .= DEV ?  "deleting info" :'';
 		// detecting already ordered items
 		foreach($_POST as $index => $value){
 			$con=false;
@@ -150,7 +146,9 @@ if($bed_id != 0 && $patient_id != 0){
 
 			 if(LOG_)$db->logDB($msg, 1, 4, $sql8); // logging placement of an order
 		}
+
 		$dev .=  'items TO BE DELETED '; $dev .= print_r($itemsOrdered,true); $dev .=  $b;
+
 		// deleting removed order
 		foreach($itemsOrdered as $itm){
 
@@ -158,7 +156,7 @@ if($bed_id != 0 && $patient_id != 0){
 						and o_id_item=$itm and o_date_meal=$curDay and o_id_patient=$patient_id";
 			$db->myQuery($sql7);
 
-			$msg ='id '.$itm.' '.$lang['msg_itemcancelled'].$patient_id;
+			$msg ='id '.$itm.' '.$lang['msg_itemcancelled'].$patient_id.' in home page';
 			$dev .=  ' msg cancel '.$msg.$b;
 
 			if(LOG_)$db->logDB($msg, 1, 5, $sql7); // logging cancellation of an order
@@ -207,8 +205,8 @@ if($bed_name == ''){
 	$content .= "Current time: ".$mt->getMyTime(1);
 	$content .= "</p>";
 }else{
-	$content .= "Current time: ".$mt->getMyTime(1);
-	$content .= "<p>";
+	$content .= "Current time: ".$mt->getMyTime(1).'</p>';
+	$content .= "<p id=diet>";
 	if($patient_id == 0){
 		$content .= 'Patient not assigned to this bed';
 	}else{
@@ -216,6 +214,8 @@ if($bed_name == ''){
 	 		<b>nutrition:</b> $p_nutrition, <b>allergies:</b> $p_aller";
 	}$content .= "</p>";
 }
+$content .= "<p id=\"patient_info\">$p_info</p>";
+$content .= "<p id=\"patient_id\" hidden>$patient_id</p>";
 $content .= '</div>';
 // $content .= "$pat_name, <b>type:</b> $p_type, <b>diet</b>: $p_diet,
 //  <b>nutrition:</b> $p_nutrition, <b>allergies:</b> $p_aller";

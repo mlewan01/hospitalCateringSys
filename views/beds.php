@@ -52,9 +52,9 @@ $content .= tpl(3, $form, $arr_lang);
 $pi = paginationInit("beds", "b_id");
 $pagin = pagination($pi["statement"],$pi["limit"],$pi["page"], $pi["link"]);
 // output
-$content .= "<div id='pagingg' >$pagin</div>";
+$content .= "<div id='pagingg' >$pagin</div>"; // initial upper row of the pagination will display
 
-if(isset($_GET['pn']) || $pagin == ''){ // to prefent initial display
+if(isset($_GET['pn']) || $pagin == ''){ // to prevent initial display of data
 
 $result = $db->myQuery($pi["sql"]);
 $content .= '<ul>';
@@ -63,7 +63,7 @@ while($row = $result->fetch_assoc()){
 }
 $content .= '</ul>';
 
-$content .= "<div id='pagingg' >$pagin</div>";
+$content .= "<div id='pagingg' >$pagin</div>"; // lower row of pagination links will be displayed on first access
 // result object method to free result set
 $result->free();
 }

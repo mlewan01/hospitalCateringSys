@@ -41,6 +41,8 @@
 	}
 	$sql = "SELECT w_id, w_name FROM wards WHERE w_id_hospital = '$locH'";
 	// $content .= $sql.$b;
+	$content .= '<div id="view_orders">';
+
 	$res1 = $db->myQuery($sql);
 	while($r = $res1->fetch_assoc()){
 		$content .= '<section>';
@@ -96,5 +98,6 @@
 
 	$content .= '<h4>total quantity of orders: 	</h4>'.$total.$b;
 	$content .= '</section>';
+	$content .= '</div>';
 }// end of else check for hospital location
 ?>

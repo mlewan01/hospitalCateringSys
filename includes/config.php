@@ -42,7 +42,7 @@ define('TIME_LUNCH', 14); // change to required value
 define('TIME_SUPPER', 18); // change to required value
 // site operation
 define('LOG_',true); // enables logging of important database changes, to enable set it of 'true' to disable set to 'false'
-define('DEV', false); // enables development aid output
+define('DEV', true); // enables development aid output
 define('PAG', 10); // amount of items displayed in paginated output
 //SALT Information
 
