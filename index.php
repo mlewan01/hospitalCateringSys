@@ -10,15 +10,16 @@ autoloader();
 $mt = new myTime(); // setting the timezone
 $db = new myDB(); // connection with database
 $content = '';
-$b = '</b>';
+$b = '</br>';
 $navMain = '';
 $l = new myLogin();
-$logged = $l->checkLogin();
+$logged = $l->checkLogin($db);
 $loginCheck = '';
 $authLevel = 0;
 $dev = '';
+$user_id = 0;
 
-if (!isset($_GET['page'])) { // TODO sanitise the input finally !! Done !
+if (!isset($_GET['page'])) { //
 	$pageid = 'home'; // display home page
 } else {
 	if(sanitise($_GET['page'])){
@@ -30,6 +31,7 @@ if (!isset($_GET['page'])) { // TODO sanitise the input finally !! Done !
 				$pageid = 'login';
 			}// $l->redirect("index.php?page=login");
 		}else {
+			$user_id = $logged[3];
 			if(strpos(navigation($logged[2]), $_GET['page']) === false){
 				$content .= '<b>You have no rights to access '.$_GET['page'].' page.</b>';
 				$pageid = 'login';
@@ -51,7 +53,7 @@ if(isset($_GET['is'])){
 }else { // if not ajax call then curry on as normal
 $heading1 = "h_".$pageid;
 
-$logged = $l->checkLogin();
+$logged = $l->checkLogin($db);
 if($logged[0] == 'logged' || $loginCheck == 'loggedIn'){
 	if($logged[0] == 'logged'){
 		$navMain = navigation($logged[2]);
@@ -70,10 +72,7 @@ $lo = footerLocation($logged[0], $pageid);
 // footer navigations
 if(isset($_POST['h_foot'])) {
 	footerLinkUpdate(); // sets the location cookie for new selected bed
-	// // HACK: since the new value assigned to cookie is not immidiatly accessible
-	// $b =explode(' ',$_POST['h_beds'],2)[1];
-	// $lo[0] = preg_replace("/<b>bed:<\/b>.*<form/", "<b>bed:</b> ".$b."<form", $lo[0]);
-	header("Location: http".$s."://".$_SERVER['SERVER_NAME'].$domen.'index.php');
+	header("Location: http".$s."://".$_SERVER['SERVER_NAME'].$domen.'index.php'); // HACK: since the new value assigned to cookie is not immidiatly accessible
 }
 if($pageid != 'service'){
 // prepearing data for use with usage with site template
@@ -106,12 +105,8 @@ $arr = array(
 	'[+m19+]' => $lang['c_login']
 
 );
-
 	$out = tpl(1, './templates/page_tpl.html', $arr);
 // outputing all collected data to the browser
-// if(!isset($_GET['is'])){
-// 	echo $out;
-// }
 echo $out;
 	if(DEV) echo '<div class="devout"><h4>Dev out:</h4>'.$dev.'</div>';
 } // end service if

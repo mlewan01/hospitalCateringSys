@@ -1,9 +1,11 @@
 <?php
 class myLogin {
 /* registers user
+ * @param class myDB database object
+  * @param class myTime custom Time object
  * @return array where 0 is message, 1 is username, 2 devout
  */
-	function register() {
+	function register($db, $mt) {
 		$dev = "--------------<b>start of function register</b>------------------<br>";
 		$b = '<br/>';
 		//Check to make sure the form submission is coming from our script
@@ -12,14 +14,11 @@ class myLogin {
 
 		//The full URL of the page the form was submitted from
 		$referrer = $_SERVER['HTTP_REFERER'];
-
 		/*
 		 * Check to see if the $_POST array has date (i.e. our form was submitted) and if so,
 		 * process the form data.
 		 */
-
 		if ( !empty ( $_POST ) ) {
-
 			/*
 			 * Here we actually run the check to see if the form was submitted from our
 			 * site. Our registration from submits to itself, if
@@ -27,12 +26,8 @@ class myLogin {
 			 * we don't allow the data through.
 			 */
 			if ( $referrer == $current ) {
-
 				// checking if the usrename already exists
 				$userlogin = $_POST['username'];
-
-				//Require our database class
-				$db = new myDB();
 
 				$sql1 = "Select * from users where u_username = '$userlogin'";
 				$result1 = $db->myQuery($sql1);
@@ -55,7 +50,7 @@ class myLogin {
 				$userpass = $_POST['password'];
 				$useremail = $_POST['email'];
 				$userphone = $_POST['phone'];
-				$userreg =  myTime::getMyTime();   // $_POST['date'];
+				$userreg =  $mt->getMyTime();   // $_POST['date'];
 				$userinfo = $_POST['info'];
 				$userprivileges = $_POST['privileges'];
 				$userdepartment = $_POST['department'];
@@ -87,7 +82,7 @@ class myLogin {
 				$insert = $db->myQuery($sql2);
 				// logging registration event
 				$res = ($db->myQuery("SELECT u_id FROM users WHERE u_username = '$userlogin'"))->fetch_assoc();
-				$ti = new myTime(); $ti = $ti->getMyTime(1);
+				$ti = $mt->getMyTime(1);
 				$ms = "$userlogin <b>REGISTERED</b> at $ti";
 
 				if(LOG_)$db->logDB($ms, $res['u_id'], 8, $sql2); // logging the registration
@@ -101,14 +96,14 @@ class myLogin {
 			}
 		}
 	}
-/* Logs in user
- * @return an array, 0 is status, either 'empty','invalid' or 'loggedin'.
+/** Logs in user
+ * @param class myDB object
+ * @return array, 0 is status, either 'empty','invalid' or 'loggedin'.
  *         1 is a message from that function. 3 is urername or empty
  */
-	function login() {
+	function login($db) {
 		$b = '<br/>';
 		$msg = ''; $out = array();
-		$db = new myDB();
 
 		if(!empty($_POST )){
 			// print_r($_POST);
@@ -180,37 +175,37 @@ class myLogin {
 			return array('empty', $msg, '');
 		}
 	}
-/* logs ures out
- * $return returns either true or false depends on the status of the operation
+/** logs ures out
+ * @param int user_id database primary key
+ * @param class myDB database object
+ * @return returns either true or false depends on the status of the operation
  */
-	function logout() {
+	function logout($user_id, $db) {
 		$username = $_COOKIE['catering']['user'];
 		//Expire our auth coookie to log the user out
 		$idout = setcookie('catering[authID]', '', -3600, '', '', '', true);
 		$userout = setcookie('catering[user]', '', -3600, '', '', '', true);
-		// $_SESSION['auth'] = false;
+
 		if ( $idout == true && $userout == true ) {
 			// logging successful logout of a user
-			$db = new myDB();
-			$res = ($db->myQuery("SELECT u_id FROM users WHERE u_username = '$username'"))->fetch_assoc();
 			$ti = myTime::getMyTime(1);
 			$ms = "$username logged <b>OUT</b> on $ti";
-			if(LOG_)$db->logDB($ms, $res['u_id'], 7, '$sql no query'); // loggin the loged  out event
+			if(LOG_)$db->logDB($ms, $user_id, 7, '$sql no query'); // loggin the loged  out event
 			return true;
 		} else {
 			return false;
 		}
 	}
-/* Checks if user is logged in
- * @return an array where 0 is status, 1 is message, 2 is user privilages
+/** Checks if user is logged in
+ * @param class myDB database object
+ * @return array where 0 is status, 1 is message, 2 is user privilages, 3 user id
  */
-	function checkLogin() {
+	function checkLogin($db) {
 		$user='';
 		$authID='';
-		$db = new myDB();
 		$msg = '';
 		$results = false;
-		$out = array('','',0);
+		$out = array('','',0,1);
 
 		//Grab our authorization cookie array
 		if(isset($_COOKIE['catering']) ){
@@ -267,6 +262,7 @@ class myLogin {
 
 			if ( $stopass == $authID ) {
 				// $_SESSION['auth'] = true;
+				$out[3] = $results["u_id"];
 				$out[2] = $u_privileges;
 				$out[1] = 'logged';
 				$out[0] = 'logged';
@@ -290,7 +286,7 @@ class myLogin {
 		$s = ((!empty($_SERVER['HTTPS'])) ? "s" : "");
 		header("Location: http".$s."://".$_SERVER['SERVER_NAME'].$domen.$page);//"index.php?page=login" );
 	}
-	/* redirect back to login page if user not logged in
+	/** redirect back to login page if user not logged in
 	 * CURRENTLY NOT IN USE !!!
 	 */
 	function loginEnforce($red){
@@ -300,6 +296,34 @@ class myLogin {
 		if($red){
 			if($logged[0] == 'not') self::redirect("index.php?page=login");
 		}
+	}
+	/** changes user password
+	* @param userId user id
+	* @param username user name
+	* @param newpass new Password
+	* @param userreg user registration date
+	* @param index for accociative array used to sanitiseInput
+	* @return array where 0 is status and 1 is message
+	*/
+	function changePassword($userId, $username, $newpass, $userreg,$index){
+		$out = array();
+		$clean = array();
+		$clean[$index] = $newpass;
+		$clean = sanitiseInput($clean, array('',$index),array(0,1));
+		if($clean[0]==false){
+			$db = new myDB();
+			$nonce = md5('registration-'.$username.$userreg.NONCE_SALT);
+			$userpass = $db->hash_password($newpass, $nonce);
+			$sql3 = 'UPDATE users SET u_password = "'.$userpass.'" WHERE u_id = '.$userId;
+			$results = $db->myQuery($sql3);
+			$out[0] = true; $out[1] = 'password change successful';
+		 }else {
+			$out[1] = false;  $out[1] = 'not clean !!!!<br/>';
+			$out[1] .= $clean[0];
+			$out[1] .= $lang[$clean[0]];
+			$out[1] .= $clean[1];
+		}
+		return $out;
 	}
 }
 ?>

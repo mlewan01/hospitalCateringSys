@@ -36,14 +36,25 @@ if(isset($_POST['edit'])){
 }elseif(isset($_POST['fetch'])){
 	if($_POST[$to_clean[1]]!=''){
 		$out = formFetch($to_clean, $required, $dbwhere, $id);
-		$result = $db->myQuery($out[2])->fetch_assoc();
+		$result = $db->myQuery($out[2]);
+		if($result != false){
+			$result = $result->fetch_assoc();
+			if($result == null){
+				$msg = " Provided \"ID\" does not exist... Pls try again !".$b;
+				$result = array();
+			}
+		}else{
+			$result = array();
+			$msg = " Provided \"ID\" probaly was not a number... Pls try again !".$b;
+		}
 		$form = tpl(2, $form, $result, $txtField);
 	}else {
-		$dev .= " Fetch, id not provided...";
+		$msg = " Fetch, id not provided... Pls try again !";
 	}
 }
 $dev .= $out[0];
 
+$content .= $msg;
 $arr_lang = arr_lang(array_merge($formFields, $formButtons, array($pr.'legend','msg')));
 $content .= tpl(3, $form, $arr_lang);
 

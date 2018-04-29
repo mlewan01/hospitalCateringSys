@@ -1,8 +1,5 @@
 <?php
   displayErroros();
-  $b = '<br/>';
-  $l = new myLogin();
-  $db = new myDB();
   if(isset($_POST['l_savepass'])){
     $newpass = $_POST['l2_password'];
     // $newpass =
@@ -18,7 +15,7 @@
       // die("$user,  Sorry, that username does not exist!");
     }else{
 
-      $content .= changePassword($re['u_id'],$re['u_username'],$newpass,$re['u_regdate'],'newpas');
+      $content .= $l->changePassword($re['u_id'],$re['u_username'],$newpass,$re['u_regdate'],'newpas', $db);
       $content .= 'Password has been changed for: '.$re['u_username'].$b;
 
       $sql = 'UPDATE users SET u_passrec = "0" WHERE u_id = '.$re['u_id'];

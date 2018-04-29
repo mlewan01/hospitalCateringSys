@@ -42,13 +42,13 @@ if(isset($_POST['edit'])){
 		$result = $db->myQuery($out[2]);
 		if($result != false){
 			$result = $result->fetch_assoc();
-			if($result == null){ // TODO marys idea notification
+			if($result == null){
 				$msg = " Provided \"ID\" does not exist... Pls try again !".$b;
 				$result = array();
 			}
 		}else{
 			$result = array();
-			$msg = " Prowided \"ID\" probaly was not a number... Pls try again !".$b;
+			$msg = " Provided \"ID\" probaly was not a number... Pls try again !".$b;
 		}
 		$form = tpl(2, $form, $result, $txtField);
 	}else {
@@ -56,13 +56,12 @@ if(isset($_POST['edit'])){
 	}
 }
 
-$msg .= $out[0];
+$msg .= $out[0];   $dev .= $msg.'<p>';
 $msge .= $out[1];
 
+$content .= $msg;
 $arr_lang = arr_lang(array_merge($formFields, $formButtons, array($pr.'legend','msg')));
 $content .= tpl(3, $form, $arr_lang);
-
-$dev .= $msg.'<p>';
 
 // pagination
 $pi = paginationInit("wards", "w_id");

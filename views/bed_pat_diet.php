@@ -1,11 +1,9 @@
 <?php
 displayErroros(); // error output
-$b = '<br/>';
 $ward_id = '';
 $ward_name = '';
 $hospital_id = '';
 $hospital_name = '';
-$mt = new myTime();
 $cookie = array();
 if(isset($_COOKIE['catering'])){
 	$dev .= "cookie catering exists".$b;
@@ -22,7 +20,6 @@ if(isset($_COOKIE['catering'])){
 }else{
 	$dev .= "cookie catering does not exists".$b;
 }
-$db = new myDB();
 // getting users id, it is forced login now so it must be there
 $uidTemp = $_COOKIE['catering']['user'];
 $res = ($db->myQuery("SELECT u_id FROM users WHERE u_username = '$uidTemp'"))->fetch_assoc();
@@ -187,8 +184,9 @@ if(isset($_POST['freebed'])){
 	if(isset($_POST['pat2'])){
 		$anyOrders = false;
 		$patient_id = $_POST['pat2'];
-		$meal = getCurrentMeal()[0];
-		$curDay = $mt->getCurDay();
+		$currentMealArray =  getCurrentMeal($mt->getMyTime(), $mt->d, $mt->getCurDay(), $mt->curHur());
+		$meal = $currentMealArray[0];
+		$curDay = $currentMealArray[2];
 		$msg = ' test, test, test.';
 		$sql10 = "select o_id_item from orders where o_date_meal=$curDay and o_id_patient=$patient_id";
 		$result3 = $db->myQuery($sql10); // retrivig already ordered items to detect changes in order
@@ -205,12 +203,12 @@ if(isset($_POST['freebed'])){
 			$msg ='id '.$itm.' '.$lang['msg_itemcancelled'].$patient_id.' in patient-bed-diet';
 			$dev .=  ' msg cancel '.$msg.$b;
 
-			if(LOG_)$db->logDB($msg, 1, 5, $sql11); // logging cancellation of an order
+			if(LOG_)$db->logDB($msg, $user_id, 5, $sql11); // logging cancellation of an order
 			$dev .=  $sql11.$b;
 			$anyOrders = true;
 		}
 		if($anyOrders){
-			$sql12 = "UPDATE patients SET p_info = CONCAT(p_info, 'Your order have been cancelled.  Pleas make new order. ') WHERE p_id = $patient_id";
+			$sql12 = "UPDATE patients SET p_info = CONCAT(p_info, 'Your order has been cancelled.  Pleas make new order. ') WHERE p_id = $patient_id";
 			$db->myQuery($sql12);
 		}
 	}

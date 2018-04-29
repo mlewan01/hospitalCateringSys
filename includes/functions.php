@@ -1,11 +1,17 @@
 <?php
-/* calculates current meal based on global variable set in comgig.php file
- * @return array where 0 is the meal, 1 date of the meal, 2 development output
+/**
+ * calculates current meal based on global variable set in comgig.php file
+ * @param int t Unix timestamp
+ * @param int d one day represented in seconds
+ * @param int curDaay Unix timestamp of the begining of current day
+ * @param int t1 current hour and minutes (where 60 == 100min) of the day
+ * @return array where 0 is the meal, 1 date of the meal, 2 curret day for meal, 3 development output
  */
- function getCurrentMeal(){
-	 $b = '</b>';
+ function getCurrentMeal($t, $d, $curDay, $t1){
+	 $b = '</br>';
 	 $mt = new myTime();
 	 $t =  $mt->getMyTime();
+   $d = $mt->d;
 	 $curDay = $mt->getCurDay();
 	 $t1 = $mt->curHur();
 	 $menuday = '';
@@ -27,14 +33,18 @@
 	 	$t += $d;
 	 	$curDay += $d;
 	 }
-	 return array($meal, $menuday, $dev);
+	 return array($meal, $menuday, $curDay, $dev);
  }
-/* sets qookie for the footer in index.php
+/**
+ *sets qookie for the footer in index.php
  */
 function footerLinkUpdate(){
 	setcookie('catering[bed]', $_POST['h_beds'], time()+60*60*24*365, '', '', '', true);
 }
-/* formats location info for footer
+/**
+ * formats location info for footer
+ * @param logged status output from myLogin->checkLogin() function
+ * @param pid current page name
  * @return array where 0 is location string and 1 location test
  */
 function footerLocation($logged, $pid){
@@ -76,9 +86,10 @@ function footerLocation($logged, $pid){
 	}// else echo "footloc else $pid $logged ".$n.'<br>';
 	return array($lo, $n);
 }
-/* generates navigations based no users rights
-*  @param $access access level from 0 to 10
-*  $return html formated links acording to access level
+/**
+* generates navigations based no users access rights
+*  @param int $access access level from 0 to 10
+*  @return string html formated links acording to access level
 */
 function navigation($access){
 	$nav = '';
@@ -136,7 +147,8 @@ function navigation($access){
 	$nav .= $nava['login'];
 	return $nav;
 }
-/** displays php errors and wornings
+/**
+* displays php errors and wornings based on value of global PHP setup in config.php file
 */
 function displayErroros(){
 	if(ERR){
@@ -148,7 +160,11 @@ function displayErroros(){
 		ini_set('display_errors', 0);
 	}
 }
-// returns an array with current location set in cookie
+/** returns an array with current location set in cookie
+ * @return array $out where "msg" is a string message, "cookie_set" bolean, confirms cookie has been detected
+ * self descriptive: "hospital_id", "hospital_name", "hospital_set"
+ *                   "ward_id", "ward_name", "ward_set", "bed_id","bed_name","bed_set"
+ */
 function getLocation(){
 	$cookie = array(); $b = '<br/>';
 	$out = array();
@@ -177,10 +193,12 @@ function getLocation(){
 	}
 	return $out;
 }
-// checks given string for allowed alpha-numeric and additional characters
-// returns true if string contain allowed characters false otherwise
+/**
+ * checks given string for allowed alpha-numeric and additional characters
+ * @param string item to be checked for
+ * @return boolean true if string contain allowed characters false otherwise
+ */
 function sanitise($in){
-
 	$repl = array('@', ' ', '.', ',', '?', '!',':', '-', '&', '_'); // allowed characters in sanitise functions
 	$temp = str_replace($repl, '', $in);
 	if(ctype_alnum($temp)){
@@ -189,8 +207,14 @@ function sanitise($in){
 		return false; // if contains not allowed characters
 	}
 }
-// checks given string for allowed alpha-numeric and additional characters
-// function ready to be used with input from forms operating on database tables
+/**
+ * checks given string for allowed alpha-numeric and additional characters
+ * function ready to be used with input from forms operating on database tables
+ * @param array post data to be checkt for containing not allowed characters
+ * @param array arr array keys
+ * @param array req 1 indicates required field, it must not be empty
+ * @return array(status, message)
+ */
 function sanitiseInput($post, $arr, $req=null){
 
 	$dev = "sanitise function".'<br/>';
@@ -214,7 +238,7 @@ function sanitiseInput($post, $arr, $req=null){
 			}else {
 				$msg .= '5<br/>';
 				$clean[1] = $msg;
-				if(strlen($temp) == 0 && $req[$i-1]==1){
+				if(strlen($temp) == 0 && $req[$i-1]==1){ // where req =1 post must not be empty
 					$msg .= '6<br/>';
 					$clean[0] = 'fu_notAllProvided';
 					return $clean;
@@ -239,45 +263,46 @@ function sanitiseInput($post, $arr, $req=null){
 	return $clean;
 }
 
-// to work with templates. needs file path and an array with key and value
-// $readFile if set ot 1 $file is a file path
-// if set ot "0" $file is a file content
+/**
+ * to work with templates. needs file path and an array with key and value
+ * @param readFile if set to "0" $file is a file content. if set ot 1 $file is a file path
+ * @return out html content with replaced kyes
+ */
  function tpl($readFile, $file, $arr, $tarea=null){
-
+  $out = '';
 	if($readFile == 1){
 		$out=file_get_contents($file);
 
 		foreach ($arr as $key => $value){
 			$out = str_replace($key, $value, $out);
 		}
-
-		//echo "tpl function read file";
-		return $out;
-	}elseif($readFile == 2) {
+	}elseif($readFile == 2) { // used to populate the form with data
 		$i = 0;
 		foreach ($arr as $key => $value){
-			// echo "key: $key -- value: $value<br/>";
-			if($tarea[$i] == 0){
+			if($tarea[$i] == 0){ // if textfield
 				$file = str_replace('name="'.$key.'"', ' name="'.$key.'" '.'value="'.$value.'"', $file);
-			}elseif($tarea[$i] == 1) {
+			}elseif($tarea[$i] == 1) { // test area
 				$file = str_replace($key.'"></t', $key.'">'.$value.'</t', $file);
-			}elseif($tarea[$i] == 2) {
+			}elseif($tarea[$i] == 2) { // date
 				$file = str_replace('name="'.$key.'"', ' name="'.$key.'" '.'value="'.myTime::getMyTime(2,$value).'"', $file);
 			}
 			$i++;
 		}
-		//echo "tpl function no red file nessesery";
-		return $file;
-	}elseif($readFile == 3){
+		$out = $file;
+	}elseif($readFile == 3){ // used for translation of the form
 		foreach ($arr as $key => $value){
 			// echo "key: $key -- value: $value<br/>";
 			$file = str_replace($key, $value, $file);
 		}
 		//echo "tpl function read file";
-		return $file;
+		$out = $file;
 	}
+  return $out;
 }
-// becarefule where you calling this function from.
+/**
+* Loads classess from prdefined location with the use of myAutolodac(class) function.
+* Be carefule about where you calling this function from. Posible problems with path
+*/
 function autoloader(){
 	spl_autoload_register('myAutoloader');
 }
@@ -285,32 +310,27 @@ function myAutoloader($class){
 	include 'classes/'.$class.'.php';// my need to adjust path acordingly
 }
 /**
- * function to return a language array
- * $param
- * $return
+ * function prepares and returns a language array
+ * @param $words an array with words
+ * @return array (associative) with words for application translation
  */
 function arr_lang($words){
-
 	global $lang, $config, $dir;
-
 	$len = count($words);
 	$f = 'f_';
 	$p = '[+';
 	$s = '+]';
 	$a_lang = array();
-
 	for($i=0; $i<$len; $i++){
-
 		$a_lang[$p.$f.$words[$i].$s] = $lang[$f.$words[$i]];
 	}
-
 	return $a_lang;
 }
 /**
  * function will add prefixes to the elements of the array
  * @param $arr array of text elements for witch prefixes will be added
  * @param $pref prefix to be added to the elements of the array
- * @return an array with elemens starting with the prefix
+ * @return array with elemens starting with the prefix
  */
 function addPrefix($arr, $pref){
 	$ar = array(count($arr));
@@ -326,6 +346,7 @@ function addPrefix($arr, $pref){
 * @param $data[2] form fileds list
 * @param $data[3] button names list
 * @param $data[4] fields type: input/textarea 0/1
+* @return content html formated form
 */
 function makeForm($data){
 	$prefix1 = 'f_';
@@ -368,14 +389,13 @@ function makeForm($data){
 	$content .= '</fieldset></form>';
 	return $content;
 }
-
-/*
+/**
 * Generates and returns SQL query for returning data of a record given ID
 * @param $to_clean an array of data to be checked agains database data
 * @param $required an array of intigers where 1 stands for required field and 0 not required
 * @param $dbwhere a database's table name to be quered
 * @param $id database's table's targeted ID field
-* @return an arrey consisting of (0)dev output, (1)normal output, (2)SQL querry
+* @return arrey consisting of (0)dev output, (1)normal output, (2)SQL querry
 */
 function formFetch($to_clean, $required, $dbwhere, $id){
 		$msg = 'Fetching !!';
@@ -392,11 +412,9 @@ function formFetch($to_clean, $required, $dbwhere, $id){
 				$sql = 'select '.implode(',',array_keys($_POST)).
 						" from $dbwhere where $id=".$_POST[$id];
 				$msg .= $sql;
-				//$result = $db->myQuery($sql)->fetch_assoc();
+
 				$msg .= $clean[1];
-				//print_r($result);
-				// $form = tpl(2, $form, $result, $txtField);
-				//$result->free();
+
 			}else $msg .= $msge .= 'id not supplayed or incorret. pls, try again !';
 
 		}else {
@@ -408,13 +426,13 @@ function formFetch($to_clean, $required, $dbwhere, $id){
 		}
 		return array($msg, $msge, $sql);
 }
-/*
+/**
 * Generates and returns SQL query for deleting a record with given ID
 * @param $to_clean an array of data to be checked agains database data
 * @param $required an array of intigers where 1 stands for required field and 0 not required
 * @param $dbwhere a database's table name to be quered
 * @param $id database's table's targeted ID field
-* @return an arrey consisting of (0)dev output, (1)normal output, (2)SQL querry
+* @return array consisting of (0)dev output, (1)normal output, (2)SQL querry
 */
 function formDelete($to_clean, $required, $dbwhere, $id){
 	$dir = dirname(dirname(__FILE__));
@@ -443,14 +461,14 @@ function formDelete($to_clean, $required, $dbwhere, $id){
 	}
 	return array($msg, $msge, $sql);
 }
-/*
+/**
 * Generates and returns SQL query for deleting a record with given ID
 * @param $to_clean an array of data to be checked agains database data
 * @param $required an array of intigers where 1 stands for required field and 0 not required
 * @param $dbwhere a database's table name to be quered
 * @param $id database's table's targeted ID field
 * @param $fieldType
-* @return an arrey consisting of (0)dev output, (1)normal output, (2)SQL querry
+* @return arrey consisting of (0)dev output, (1)normal output, (2)SQL querry
 */
 function formAdd($to_clean, $required, $dbwhere, $id, $fieldType=null){
 	$dir = dirname(dirname(__FILE__));
@@ -462,27 +480,26 @@ function formAdd($to_clean, $required, $dbwhere, $id, $fieldType=null){
 	$sql = '';
 
 	$clean = array();
-	// TODO cleaned falues not used, using $_POST unsanitized values later
+
 	$clean = sanitiseInput($_POST, $to_clean, $required);
 
-	if($fieldType != 0){
-		for($i=0;$i<count($fieldType);$i++){
-			if($fieldType[$i] == 2) {
-				//echo "the time submited: ".$clean[$i+1].'<br/>';
-				$clean[$i+1] = myTime::getMyTime(3,$clean[$i+1]);
-			}
-		}
-	}
-	if($clean[0] == false){
+  if($clean[0] == false){ // check if data are safe to inser to database
 		$msg .= 'is clean !!<br/>';
+    // injecting unix timestamp to database where field == date
+  	if($fieldType != 0){
+  		for($i=0;$i<count($fieldType);$i++){
+  			if($fieldType[$i] == 2) { // TODO: currently always applyes new timestamp
+  				$clean[$i+1] = myTime::getMyTime(3,$clean[$i+1]);
+  			}
+  		}
+  	}
 
 		if(isset($_POST[$id]) && strlen($_POST[$id])!=0){
-// todo: adding with provided id,
-// only for development, shuld be distabled in production system
+// TODO: : adding with provided id, only for development, shuld be distabled in production system
 			$msg .= " is set !! post id lenght: ".strlen($_POST[$id]).'<br/>';
 		}else {
 			$msg .= " unsetting !! ";
-			unset($_POST[$id]);
+			unset($_POST[$id]); // executing this always will make sure that new ID will be assigned automaticaly by databes
 		}
 		unset($_POST['add']);
 		$sql = sprintf(
@@ -490,7 +507,6 @@ function formAdd($to_clean, $required, $dbwhere, $id, $fieldType=null){
 				implode(',',array_keys($_POST)),
 				implode('","',array_values($_POST)) );
 		$msg .= $sql;
-		// $msg .= $db->myQuery($sql);
 		$msg .= $clean[1];
 
 	}else {
@@ -502,13 +518,13 @@ function formAdd($to_clean, $required, $dbwhere, $id, $fieldType=null){
 	}
 	return array($msg, $msge, $sql);
 }
-/*
+/**
 * Generates and returns SQL query for deleting a record with given ID
 * @param $to_clean an array of data to be checked agains database data
 * @param $required an array of intigers where 1 stands for required field and 0 not required
 * @param $dbwhere a database's table name to be quered
 * @param $id database's table's targeted ID field
-* @return an arrey consisting of (0)dev output, (1)normal output, (2)SQL querry
+* @return arrey where (0)dev output, (1)normal output, (2)SQL querry
 */
 function formEdit($to_clean, $required, $dbwhere, $id, $fieldType=null){
 	$dir = dirname(dirname(__FILE__));
@@ -525,14 +541,11 @@ function formEdit($to_clean, $required, $dbwhere, $id, $fieldType=null){
 
 	if($clean[0]==false){
 
+    // injecting formated date based on unix timestamp from database if field == date
 		$ftlen = count($fieldType);
-		// echo 'field type length:  '.$ftlen.'<br/>';
-
 		if($fieldType != null){
 			for($i=0;$i<$ftlen;$i++){
-				// echo '327 functions, to_clean[i+1]: '.$_POST[$to_clean[$i+1]].'<br/>';
 				if($fieldType[$i] == 2) {
-					//echo "the time submited: ".$clean[$i+1].'<br/>';
 					$df = $to_clean[$i+1];
 					$_POST[$df] = myTime::getMyTime(3,$_POST[$df]);
 				}
@@ -565,67 +578,4 @@ function formEdit($to_clean, $required, $dbwhere, $id, $fieldType=null){
 	}
 	return array($msg, $msge, $sql);
 }
-/*
-* Generates current date and time
-* @param $time either Unix time stamp or string containing time
-* @return $v=0 Unix timestamp
-* @return $v=1 returns formated Unix timestamp
-* @return $v=2 returns formated date from provided Unix timestamp
-* @return $v=3 returns Unix timestamp from provided string containing time
-*/
-function getMyTimeFunction($v=0, $time=0) {
-	echo 'function getMyTime executed <br>';
-	// date_default_timezone_set('UTC');
-	date_default_timezone_set("Europe/London");
-	//echo 'v: '.$v.' provided time: --  '.$time.' date formated-- '.date("Y-m-d H:i:s",$time).'  unix-- '.strtotime($time).'<br/>';
-	//echo 'v: '.$v.' current:   '.time().' -- '.date("Y-m-d H:i:s",time()).'<br/>';
-
-	if($v == 0){
-		return time(); // returns Unix timestamp
-	}elseif($v == 1){
-		return date("Y-m-d H:i:s",time()); // returns formated Unix timestamp
-	}elseif($v == 2){
-		return date("Y-m-d H:i:s",$time);// returns formated date from provided Unix timestamp
-	}elseif($v == 3){
-		return strtotime($time);// returns Unix timestamp from provided string containing time
-	}
-}
-
-/*
- * Helps preparing data for to enter to the log table
- *
- * @param String $l_msg message to be logged
- * @param Int $l_id_staff a number representing stuff u_id in users table
- * @param Int $l_type a number representing a type of the log event
- * @param Int $l_date a Unix time stamp of the event, autogenerated if not provided
- * @param String $l_sql a SQL query associated with the event, optional
- */
- function myLog($l_msg, $l_id_staff, $l_type, $l_sql='', $l_date=0){
-	 if($l_date == 0) $l_date = myTime::getMyTime();
-	 $log['l_msg'] = $l_msg;
-	 $log['l_sql'] = str_replace("\"", "\\\"", $l_sql);
-	 $log['l_date'] = $l_date;
-	 $log['l_id_staff'] = $l_id_staff;
-	 $log['l_type'] = $l_type;
-
-	 return $log;
- }
- function changePassword($userId, $username, $newpass, $userreg,$index){
-	 $clean = array();
-	 $clean[$index] = $newpass;
-	 $clean = sanitiseInput($clean, array('',$index),array(0,1));
-	 if($clean[0]==false){
-		 $db = new myDB();
-		 $nonce = md5('registration-'.$username.$userreg.NONCE_SALT);
-		 $userpass = $db->hash_password($newpass, $nonce);
-		 $sql3 = 'UPDATE users SET u_password = "'.$userpass.'" WHERE u_id = '.$userId;
-
-		 $results = $db->myQuery($sql3);
-		}else {
-		 $msg = 'not clean !!!!<br/>';
-		 $msg .= $clean[0];
-		 $msg .= $lang[$clean[0]];
-		 $msg .= $clean[1];
-	 }
- }
 ?>

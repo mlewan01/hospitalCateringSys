@@ -1,9 +1,7 @@
 <?php
 displayErroros(); // error output
-$b = '<br/>';
-$mt = new myTime();
 $patient_id = 0;
-$pat_name = '';
+$pat_name = ''; $p_info = '';
 $bed_id = 0; $ward_id = 0; $ward_name = 0;
 $bed_name = '';
 $itemsOrdered = array();
@@ -199,7 +197,7 @@ if($msid > 0){ // apropriate menu for patient exists
 		}
 	}
 }else {} // apropriate menu does not exits
-
+$content .= '<div id=menue>';
 $content .= '<div class="info"><p id="time">';
 if($bed_name == ''){
 	$content .= "Current time: ".$mt->getMyTime(1);
@@ -216,7 +214,8 @@ if($bed_name == ''){
 }
 $content .= "<p id=\"patient_info\">$p_info</p>";
 $content .= "<p id=\"patient_id\" hidden>$patient_id</p>";
-$content .= '</div>';
+$content .= '</div>'; // class="info" ends
+$content .= '</div>'; // class="menue" ends
 // $content .= "$pat_name, <b>type:</b> $p_type, <b>diet</b>: $p_diet,
 //  <b>nutrition:</b> $p_nutrition, <b>allergies:</b> $p_aller";
 $content .= '<form action="index.php" method="post"><fieldset>
@@ -269,7 +268,7 @@ while($row = $result2->fetch_assoc()) {
 }
 if($p_nutrition === 'nil'){
 	$content .= "Your currnet diet does not allowe you to have anything...";
-	$disabled ='disabled';
+	$disabled ='';
 }
 $content .= '<input type="submit" value="Confirm" name="order" '.$disabled.'>';
 $result2->free();

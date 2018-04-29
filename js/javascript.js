@@ -88,6 +88,7 @@ function aPatientInfo(){
   console.log(info);
   where = "servers/patient_info_get.php?p_id="+id;
   lo(where);
+  replace = false;
   setInterval(function() {
     $.ajax({
       url: where,
@@ -104,8 +105,10 @@ function aPatientInfo(){
           lo( 'new info' );
           lo( 'info '+info+' respon '+response);
           info = response;
+          replace = true;
           window.location.replace('');
         }else{
+          replace = false;
           lo( 'same info' );
           lo( 'info '+info+' respon '+response);
           if(response != '' && info != ''){
@@ -117,6 +120,20 @@ function aPatientInfo(){
         // lo('ajax error...'+text+xhr.status);
       }
     });
+    if(replace){
+      $.ajax({
+        url: "?is=ajax",
+        type: 'GET',
+        dataType: 'html',
+        success: function(response){
+          lo('ajax success '+'second call in patient info');
+          $("#menue").html(response);
+        },
+        error: function(xhr, error, text){
+          // lo('ajax error...'+text+xhr.status);
+        }
+      });
+    }
   }, 2000);
 }
 function ajax(whe = window.location.href){

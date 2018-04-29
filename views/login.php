@@ -1,14 +1,11 @@
 <?php
 	displayErroros(); // error output
 	// variable inicialisation
-	$b = '<br/>';
 	$tmp = array('','');
-	$l = new myLogin();
 	$user='';
 	$cookie='';
 	$checkLoginOut = array();
-	$db = new myDB();
-	$checkLoginOut = $l->checkLogin();
+	$checkLoginOut = $l->checkLogin($db);
 	$logged = $checkLoginOut[0];
 	$dev .= $checkLoginOut[1];
 	// if user logs in
@@ -18,7 +15,7 @@
 			$logged = 'not';
 		}else{ // username provided
 			$dev .=' trying to Login '.$b;
-			$tmp = $l->login(); // trying to login
+			$tmp = $l->login($db); // trying to login
 			if($tmp[0] == 'loggedin'){ // if loggedin
 				$logged = 'logged';
 				$loginCheck = 'loggedIn';
@@ -31,7 +28,7 @@
 	}elseif(isset($_POST['l_logout'])){ // user logs out
 
 		$dev .= ' loging out '.$b;
-		$l->logout();
+		$l->logout($user_id, $db);
 		$logged = 'not';
 		$loginCheck = 'loggedOut';
 
@@ -40,8 +37,7 @@
 		$logged = 'reg';
 
 	}elseif(isset($_POST['l_registered'])){
-		$tmp = $l->register();   $dev .= $tmp[2];  // registering and collecting devout
-
+		$tmp = $l->register($db, $mt);   $dev .= $tmp[2];  // registering and collecting devout
 		if($tmp[0] == 'reg'){
 			$content .= "username already exists, try different one";
 			$logged = 'reg';
@@ -49,11 +45,8 @@
 		$dev .= ' registered '.$tmp[0].' '.$tmp[1].$b;
 	}elseif(isset($_POST['l_passRecovery'])){
 		$l->redirect('index.php?page=passrec');
-
 	}
-
 	if($logged == 'not'){ // if not logged in display login form
-
 		$content .= '<form enctype="multipart/form-data" action="index.php?page=login" method="post" role="form">';
 		$content .= '<fieldset>';
 		$content .= '<legend>Log in</legend>';
@@ -78,13 +71,11 @@
 				$user = $cookie['user'];
 			}
 		}
-
 		if($user == ''){
 			//Set our user and variable
 			$dev .= 'cookie empty'.$b;
 			$user = $tmp[2];
 		}
-
 		//Query the database for the selected user
 		$table = 'users'; //DB_TABLE_USERS;
 		$sql = "SELECT * FROM $table WHERE u_username = '" . $user . "'";
@@ -98,14 +89,14 @@
 		//Fetch our results into an associative array
 		$re = mysqli_fetch_assoc( $re );
 
-		$content .= '<div class="info"> id: '.$re['u_id'].$b;
+		$content .= '<div class="info">';
 		$content .= 'name: '.$re['u_name'].$b;
 		$content .= 'user: '.$re['u_username'].$b;
 		$content .= 'email: '.$re['u_email'].$b;
 		$content .= 'authLevel: '.$re['u_privileges'].$b.'</div>';
 		$authLevel = $re['u_privileges'];
 		if(isset($_POST['l_chngpass'])){
-			changePassword($re['u_id'],$re['u_username'],$_POST['l_newpass'],$re['u_regdate'],'l_newpass');
+			$l->changePassword($re['u_id'],$re['u_username'],$_POST['l_newpass'],$re['u_regdate'],'l_newpass', $db);
 		}
 		// chanege password form
 		$content .= '<form enctype="multipart/form-data" action="index.php?page=login" method="post">';

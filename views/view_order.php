@@ -3,13 +3,11 @@
 	$loc = getLocation();
 	$dev .= print_r($loc, true);
 	$locH = isset($loc['hospital_id']) ? $loc['hospital_id'] : false; // check for set catering cookie with location
-	$b = '<br/>'; // html output line breaker
 	if($locH === false){// check for presence of hospital location
 		$content .= 'Sorry the location has not been set. Pleas set it in "set location" page.';
 	}else{
 	$sql = '';
 	$msg = '';
-	$mt = new myTime();
 	$curDay = $mt->getCurDay();
 	$date_from = $curDay;
 	$date_to = $mt->getMyTime();
@@ -18,8 +16,6 @@
 	$curHur = $mt->curHur();
 	$nxtDay = '';
 	$currentMeal ='';
-
-	$db = new myDB();
 
 	if($curHur < TIME_BREAKFAST){
 		$menuday = date('l', strtotime('today'));
@@ -72,7 +68,7 @@
 				// echo $sql4;
 				$res4 = $db->myQuery($sql4);
 				while($r3 = $res4->fetch_assoc()){
-					$content .= ' .. .. '.$r3['i_name'].$b;
+					$content .= '- '.$r3['i_name'].$b;
 				}
 			}else $content .= ' <b>EMPTY</b>'.$b;
 			$content .= $b;
