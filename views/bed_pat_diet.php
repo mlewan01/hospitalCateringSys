@@ -108,7 +108,7 @@ if(isset($_POST['freebed'])){
 		$err = $lang['err_asgn'];
 	}
 }elseif(isset($_POST['save'])){
-	$dev .= print_r($_POST, true);
+	if(DEV) $dev .= print_r($_POST, true);
 	$dev .= '<br/> saving new dietary requirements...<br/>';
 	if(isset($_POST['pat2'])){
 
@@ -116,7 +116,7 @@ if(isset($_POST['freebed'])){
 
 		$clean = sanitiseInput($otherall, array('', 'other_allergies'), array(0));
 
-		if($clean[0] == false) {
+		if($clean[0] == false) { // checking for allowed characters in POST array
 			if(isset($_POST['tree_nuts'])) $_POST['tree nuts'] = 'tree nuts';
 			$pat2id = $_POST['pat2'];
 			unset($_POST['pat2']);
@@ -156,7 +156,7 @@ if(isset($_POST['freebed'])){
 
 			$sql13 = "UPDATE patients SET p_info = CONCAT(p_info, 'Your dietary requirements have changed. ') WHERE p_id = $pat2id";
 			$db->myQuery($sql13);
-		}else {
+		}else { // if found illegal characters in POST array
 			$err = $lang['err_input'];
 		}
 	}else{
@@ -203,7 +203,7 @@ if(isset($_POST['freebed'])){
 			$msg ='id '.$itm.' '.$lang['msg_itemcancelled'].$patient_id.' in patient-bed-diet';
 			$dev .=  ' msg cancel '.$msg.$b;
 
-			if(LOG_)$db->logDB($msg, $user_id, 5, $sql11); // logging cancellation of an order
+			if(LOG_)$db->logDB($msg, $user_id, 9, $sql11); // logging cancellation of an order
 			$dev .=  $sql11.$b;
 			$anyOrders = true;
 		}

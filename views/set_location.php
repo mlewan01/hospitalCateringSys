@@ -45,7 +45,7 @@ if(isset($_POST['selecthospital'])){
 	$ward_name = '';
 	$bed_id = '';
 	$bed_name = '';
-
+	header("Location: ".getURL('?page=set_location')['url']); // HACK: since the new value assigned to cookie is not immidiatly accessible
 }elseif(isset($_POST['selectward'])){
 	setcookie('catering[ward]', $_POST['ward'], $cookie_time, '', '', '', true);
 	$ward_id = explode(' ',$_POST['ward'],2)[0];
@@ -55,12 +55,13 @@ if(isset($_POST['selecthospital'])){
 	setcookie('catering[bed]', '', -3600, '', '', '', true);
 	$bed_id = '';
 	$bed_name = '';
-
+	header("Location: ".getURL('?page=set_location')['url']); // HACK: since the new value assigned to cookie is not immidiatly accessible
 }elseif(isset($_POST['selectbed'])){
 	setcookie('catering[bed]', $_POST['bed'], $cookie_time, '', '', '', true);
 	$bed_id = explode(' ',$_POST['bed'],2)[0];
 	$bed_name = explode(' ',$_POST['bed'],2)[1];
 	$dev .= 'bed</br>';
+	header("Location: ".getURL('?page=set_location')['url']);  // HACK: since the new value assigned to cookie is not immidiatly accessible
 }elseif(isset($_POST['resetloccookie'])){
 	setcookie('catering[hospital]', '', -3600, '', '', '', true);
 	setcookie('catering[ward]', '', -3600, '', '', '', true);
@@ -73,7 +74,7 @@ if(isset($_POST['selecthospital'])){
 	$ward_name = '';
 	$hospital_name = '';
 	$cookie = array();
-	// resetLocCookies();
+	header("Location: ".getURL('?page=set_location')['url']);  // HACK: since the new value assigned to cookie is not immidiatly accessible
 }
 $content .= '<div id="err"><h4>'.$err.'</h4></div>';
 $content .= '<div id="msg"><h4><font color="red">'.$msg2.'</font></h4></div>';
@@ -127,10 +128,6 @@ if(!empty($cookie) || $hospital_id != '' || $ward_id != '' || $bed_id != ''){
 
 	$content .= '<form enctype="multipart/form-data" action="index.php?page=set_location" method="post">
 								<fieldset><legend>Reset location</legend>';
-	$content .= "<b> your current location is:</b></br>";
-	$content .= " hospital: $hospital_name".'</br>';
-	$content .= " ward: $ward_name".'</br>';
-	$content .= " bed: $bed_name".'</br>';
 	$content .= '<label for="resetloccookie">Reset location: </label>
 							<input type="submit" value="reset" name="resetloccookie"></fieldset></form>';
 }

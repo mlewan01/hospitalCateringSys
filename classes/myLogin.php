@@ -1,8 +1,8 @@
 <?php
 class myLogin {
-/* registers user
+/** registers user
  * @param class myDB database object
-  * @param class myTime custom Time object
+ * @param class myTime custom Time object
  * @return array where 0 is message, 1 is username, 2 devout
  */
 	function register($db, $mt) {
@@ -11,7 +11,6 @@ class myLogin {
 		//Check to make sure the form submission is coming from our script
 		//The full URL of our registration page
 		$current = 'http://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
-
 		//The full URL of the page the form was submitted from
 		$referrer = $_SERVER['HTTP_REFERER'];
 		/*
@@ -22,7 +21,7 @@ class myLogin {
 			/*
 			 * Here we actually run the check to see if the form was submitted from our
 			 * site. Our registration from submits to itself, if
-			 * the form submission didn't come from the register.php page on our server,
+			 * the form submission didn't come from the index.php page on our server,
 			 * we don't allow the data through.
 			 */
 			if ( $referrer == $current ) {
@@ -166,7 +165,7 @@ class myLogin {
 				// logging successful login of a user
 				$ti = myTime::getMyTime(1);
 				$ms = "$subname logged <b>IN</b> on $ti";
-				if(LOG_)$db->logDB($ms, $results['u_id'], 6, $sql);
+				if(LOG_)$db->logDB($ms, $results['u_id'], 6, $sql); // user has logged in
 				return array('loggedin', $msg, $subname);
 			} else {
 				return array('invalid', $msg, '');
@@ -215,21 +214,17 @@ class myLogin {
 				$user = $cookie['user'];
 				$authID = $cookie['authID'];
 			}else {
-				// $_SESSION['auth'] = false;
 				$msg .= 'user not set in catering cookie<br>';
 				$out[0] = 'not';
 				$out[1] = $msg;
 				return $out;
 			}
 		}else {
-			// $_SESSION['auth'] = false;
 			$msg .= 'no catering cookie detected';
 			$out[0] = 'not';
 			$out[1] = $msg;
 			return $out;
 		}
-		//echo 'autentication.... '.$user.'  '.$authID;
-
 		/*
 		 * If the cookie values are empty, we stop carry on login check;
 		 * otherwise, we run the login check.
@@ -254,7 +249,7 @@ class myLogin {
 			$storeg = $results['u_regdate'];
 
 			//The hashed password of the stored matching user
-			$stopass = $results['u_password'];
+				$stopass = $results['u_password'];
 
 			//Rehash password to see if it matches the value stored in the cookie
 			$authnonce = md5('cookie-' . $user . $storeg . AUTH_SALT);
@@ -290,8 +285,6 @@ class myLogin {
 	 * CURRENTLY NOT IN USE !!!
 	 */
 	function loginEnforce($red){
-		// $l = new myLogin();
-		// $logged = $l->checkLogin();
 		$logged = self::checkLogin();
 		if($red){
 			if($logged[0] == 'not') self::redirect("index.php?page=login");
@@ -305,13 +298,12 @@ class myLogin {
 	* @param index for accociative array used to sanitiseInput
 	* @return array where 0 is status and 1 is message
 	*/
-	function changePassword($userId, $username, $newpass, $userreg,$index){
+	function changePassword($userId, $username, $newpass, $userreg,$index, $db){
 		$out = array();
 		$clean = array();
 		$clean[$index] = $newpass;
 		$clean = sanitiseInput($clean, array('',$index),array(0,1));
 		if($clean[0]==false){
-			$db = new myDB();
 			$nonce = md5('registration-'.$username.$userreg.NONCE_SALT);
 			$userpass = $db->hash_password($newpass, $nonce);
 			$sql3 = 'UPDATE users SET u_password = "'.$userpass.'" WHERE u_id = '.$userId;

@@ -37,12 +37,19 @@
 		$logged = 'reg';
 
 	}elseif(isset($_POST['l_registered'])){
-		$tmp = $l->register($db, $mt);   $dev .= $tmp[2];  // registering and collecting devout
-		if($tmp[0] == 'reg'){
-			$content .= "username already exists, try different one";
-			$logged = 'reg';
+		$fields = array('','name', 'username', 'password', 'email', 'phone', 'info', 'privileges', 'department', 'role');
+		$clean = sanitiseInput($_POST, $fields, array(0,1,1,0,0,0,1,1,1));	// sanitizing data
+		if($clean[0] == false){
+			$tmp = $l->register($db, $mt);   $dev .= $tmp[2];  // registering and collecting devout
+			if($tmp[0] == 'reg'){
+				$content .= "username already exists, try different one";
+				$logged = 'reg';
+			}
+			$dev .= ' registered '.$tmp[0].' '.$tmp[1].$b;
+		}else {
+			$content .= "Form contains illegal characters, pleas try again. Only alpha-numeric and this characters allowed: '@', ' ', '.', ',', '?', '!',':', '-', '&', '_'";
 		}
-		$dev .= ' registered '.$tmp[0].' '.$tmp[1].$b;
+		if(DEV)$dev .= $clean[1];
 	}elseif(isset($_POST['l_passRecovery'])){
 		$l->redirect('index.php?page=passrec');
 	}
@@ -91,7 +98,7 @@
 
 		$content .= '<div class="info">';
 		$content .= 'name: '.$re['u_name'].$b;
-		$content .= 'user: '.$re['u_username'].$b;
+		$content .= 'username: '.$re['u_username'].$b;
 		$content .= 'email: '.$re['u_email'].$b;
 		$content .= 'authLevel: '.$re['u_privileges'].$b.'</div>';
 		$authLevel = $re['u_privileges'];
@@ -102,7 +109,7 @@
 		$content .= '<form enctype="multipart/form-data" action="index.php?page=login" method="post">';
 		$content .= '<fieldset>';
 		$content .= '<legend>change password</legend>';
-		$content .= '<input type="text" id="l_newpass" name="l_newpass" />';
+		$content .= '<input type="password" id="l_newpass" name="l_newpass" pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}" placeholder="capital & normal letter + digit, min length 8"/>';
 		$content .= '<input type="submit" value="change password" name="l_chngpass">';
 		$content .= '</fieldset></form>';
 		// logout form

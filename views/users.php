@@ -67,7 +67,7 @@ if(isset($_POST['edit'])){
 $msg .= $out[0];
 $msge .= $out[1];
 
-$content .= $msg;
+// $content .= $msg;
 $arr_lang = arr_lang(array_merge($formFields, $formButtons, array($pr.'legend','msg')));
 $content .= tpl(3, $form, $arr_lang);
 

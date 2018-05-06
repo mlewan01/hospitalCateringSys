@@ -33,7 +33,6 @@ class myDB extends mysqli {
 			return $result;
 		}
 	}
-
 	/**
 	 * Cleans an array by array mapping mysql_real_escape_string
 	 * use before saving to database
@@ -44,7 +43,6 @@ class myDB extends mysqli {
 		global $link;
 		return array_map('mysqli_real_escape_string', $array);
 	}
-
 	/**
 	 * Creates a hash, secure copy of the user password for storage
 	 * in the database.
@@ -57,7 +55,6 @@ class myDB extends mysqli {
 
 	  return $secureHash;
 	}
-
 	/**
 	 * Insert data into the database
 	 * Does the actual insertion of data into the database.
@@ -78,7 +75,6 @@ class myDB extends mysqli {
 			return TRUE;
 		}
 	}
-
 	/**
 	 * Select data from the database
 	 * @param string $sql query for the select operation
@@ -87,7 +83,6 @@ class myDB extends mysqli {
 	function select($sql) {
 		return $this->myQuery($sql);
 	}
-
 	/**
 	 * Helps in formating INSERT queries
 	 * @param String $dbwhere The name of the database table where to insert data

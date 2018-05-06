@@ -1,7 +1,7 @@
 <?php
 	displayErroros(); // error output
 	$loc = getLocation();
-	$dev .= print_r($loc, true);
+	if(DEV)$dev .= print_r($loc, true);
 	$locH = isset($loc['hospital_id']) ? $loc['hospital_id'] : false; // check for set catering cookie with location
 	if($locH === false){// check for presence of hospital location
 		$content .= 'Sorry the location has not been set. Pleas set it in "set location" page.';

@@ -1,4 +1,16 @@
 <?php
+/** creates url based on curent location
+ * @param String $page page to add to the url
+ * @return String url
+ */
+function getURL($page){
+  $index = 'index.php';  $dev = '';
+  $pag = ''; //$page === '' ? '' : '?page=';
+  $domen = strstr($_SERVER['REQUEST_URI'],"index", TRUE);   if(DEV) $dev = "domen: ".$domen;
+  $domen = $domen == '' ? $_SERVER['REQUEST_URI'] : $domen;   if(DEV) $dev .= " domen: ".$domen. ' request uri: '.$_SERVER['REQUEST_URI'];
+  $s = ((!empty($_SERVER['HTTPS'])) ? "s" : "");
+  return array('url'=>"http".$s."://".$_SERVER['SERVER_NAME'].$domen.$index.$pag.$page, 'dev'=>$dev);//"index.php?page=login" );
+}
 /**
  * calculates current meal based on global variable set in comgig.php file
  * @param int t Unix timestamp
@@ -91,61 +103,68 @@ function footerLocation($logged, $pid){
 *  @param int $access access level from 0 to 10
 *  @return string html formated links acording to access level
 */
-function navigation($access){
-	$nav = '';
-	$nava = array(
-		'menu' => '<li><a href="index.php">[+m1+]</a></li>',
-		'items' => '<li><a href="index.php?page=items">[+m2+]</a></li>',
-		'menus' => '<li><a href="index.php?page=menus">[+m3+]</a></li>',
-		'menu_items' => '<li><a href="index.php?page=menu_items">[+m13+]</a></li>',
-		'menu_sets' => '<li><a href="index.php?page=menu_sets">[+m14+]</a></li>',
-		'orders' => '<li><a href="index.php?page=orders">[+m4+]</a></li>',
-		'hospitals' => '<li><a href="index.php?page=hospitals">[+m5+]</a></li>',
-		'wards' => '<li><a href="index.php?page=wards">[+m6+]</a></li>',
-		'beds' => '<li><a href="index.php?page=beds">[+m7+]</a></li>',
-		'patients' => '<li><a href="index.php?page=patients">[+m8+]</a></li>',
-		'users' => '<li><a href="index.php?page=users">[+m9+]</a></li>',
-		'pat_bed' => '<li><a href="index.php?page=pat_bed">[+m10+]</a></li>',
-		'pat_diet' => '<li><a href="index.php?page=pat_diet">[+m11+]</a></li>',
-		'set_location' => '<li><a href="index.php?page=set_location">[+m15+]</a></li>',
-		'bed_pat_diet' => '<li><a href="index.php?page=bed_pat_diet">[+m16+]</a></li>',
-		'view_order' => '<li><a href="index.php?page=view_order">[+m17+]</a></li>',
-		'logs' => '<li><a href="index.php?page=logs">[+m18+]</a></li>',
-		'login' => '<li><a href="index.php?page=login">[+m19+]</a></li>'
-	);
-	if($access >= 0){ // for not confirmed registred user
-		$nav = $nava['menu'];
-	}
-	if($access >= 1){ // for confiremd registred user with minimum access level like Ward Host
-		$nav .= $nava['set_location']; // $nav .= $nava['bed_pat_diet'];
-		$nav .= $nava['view_order'];
-	}
-	if($access >= 2){ // for confiremd registred user with minimum access level like Health Care Assistant
-		$nav .= $nava['bed_pat_diet']; // $nav .= $nava['users'];
-	}
-	if($access >= 3){
-		$nav .= $nava['items'];
-		$nav .= $nava['menus'];
-		$nav .= $nava['menu_sets'];
-		$nav .= $nava['menu_items'];
-	}
-	if($access >= 4){
-		$nav .= $nava['hospitals'];
-		$nav .= $nava['wards'];
-		$nav .= $nava['beds'];
-		$nav .= $nava['patients'];
-		$nav .= $nava['logs'];
-	}
-	if($access >= 5){
-		$nav .= $nava['users'];
-	}
-	if($access >= 6){
-		$nav .= $nava['orders'];
-		$nav .= $nava['pat_bed'];
-		$nav .= $nava['pat_diet'];
-	}
-	$nav .= $nava['login'];
-	return $nav;
+function navigation($access=0, $page=''){
+  $pages = 'menu'.'items'.'menus'.'menu_items'.'menu_sets'.'orders'.'hospitals'.
+'wards'.'beds'.'patients'.'users'.'pat_bed'.'pat_diet'.'set_location'.
+'bed_pat_diet'.'view_order'.'logs'.'login';
+  if($page == ''){
+  	$nav = '';
+  	$nava = array(
+  		'menu' => '<li><a href="index.php">[+m1+]</a></li>',
+  		'items' => '<li><a href="index.php?page=items">[+m2+]</a></li>',
+  		'menus' => '<li><a href="index.php?page=menus">[+m3+]</a></li>',
+  		'menu_items' => '<li><a href="index.php?page=menu_items">[+m13+]</a></li>',
+  		'menu_sets' => '<li><a href="index.php?page=menu_sets">[+m14+]</a></li>',
+  		'orders' => '<li><a href="index.php?page=orders">[+m4+]</a></li>',
+  		'hospitals' => '<li><a href="index.php?page=hospitals">[+m5+]</a></li>',
+  		'wards' => '<li><a href="index.php?page=wards">[+m6+]</a></li>',
+  		'beds' => '<li><a href="index.php?page=beds">[+m7+]</a></li>',
+  		'patients' => '<li><a href="index.php?page=patients">[+m8+]</a></li>',
+  		'users' => '<li><a href="index.php?page=users">[+m9+]</a></li>',
+  		'pat_bed' => '<li><a href="index.php?page=pat_bed">[+m10+]</a></li>',
+  		'pat_diet' => '<li><a href="index.php?page=pat_diet">[+m11+]</a></li>',
+  		'set_location' => '<li><a href="index.php?page=set_location">[+m15+]</a></li>',
+  		'bed_pat_diet' => '<li><a href="index.php?page=bed_pat_diet">[+m16+]</a></li>',
+  		'view_order' => '<li><a href="index.php?page=view_order">[+m17+]</a></li>',
+  		'logs' => '<li><a href="index.php?page=logs">[+m18+]</a></li>',
+  		'login' => '<li><a href="index.php?page=login">[+m19+]</a></li>'
+  	);
+  	if($access >= 0){ // for not confirmed registred user
+  		$nav = $nava['menu'];
+  	}
+  	if($access >= 1){ // for confiremd registred user with minimum access level like Ward Host
+  		$nav .= $nava['set_location']; // $nav .= $nava['bed_pat_diet'];
+  		$nav .= $nava['view_order'];
+  	}
+  	if($access >= 2){ // for confiremd registred user with minimum access level like Health Care Assistant
+  		$nav .= $nava['bed_pat_diet']; // $nav .= $nava['users'];
+  	}
+  	if($access >= 3){
+  		$nav .= $nava['items'];
+  		$nav .= $nava['menus'];
+  		$nav .= $nava['menu_sets'];
+  		$nav .= $nava['menu_items'];
+  	}
+  	if($access >= 4){
+  		$nav .= $nava['hospitals'];
+  		$nav .= $nava['wards'];
+  		$nav .= $nava['beds'];
+  		$nav .= $nava['patients'];
+  		$nav .= $nava['logs'];
+  	}
+  	if($access >= 5){
+  		$nav .= $nava['users'];
+  	}
+  	if($access >= 6){
+  		$nav .= $nava['orders'];
+  		$nav .= $nava['pat_bed'];
+  		$nav .= $nava['pat_diet'];
+  	}
+  	$nav .= $nava['login'];
+  	return $nav;
+  }else{
+    return strpos($pages, $page);
+  }
 }
 /**
 * displays php errors and wornings based on value of global PHP setup in config.php file
@@ -196,7 +215,7 @@ function getLocation(){
 /**
  * checks given string for allowed alpha-numeric and additional characters
  * @param string item to be checked for
- * @return boolean true if string contain allowed characters false otherwise
+ * @return boolean true if string contains only allowed characters false otherwise
  */
 function sanitise($in){
 	$repl = array('@', ' ', '.', ',', '?', '!',':', '-', '&', '_'); // allowed characters in sanitise functions

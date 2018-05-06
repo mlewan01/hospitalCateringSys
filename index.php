@@ -7,18 +7,18 @@ require_once 'includes/functions.php';
 require_once 'includes/pagination.php';
 displayErroros();
 autoloader();
-$mt = new myTime(); // setting the timezone
+$mt = new myTime(); // instantiation of myTime class
 $db = new myDB(); // connection with database
 $content = '';
 $b = '</br>';
 $navMain = '';
-$l = new myLogin();
+$l = new myLogin(); // instantiation of myLogin class
 $logged = $l->checkLogin($db);
 $loginCheck = '';
 $authLevel = 0;
 $dev = '';
 $user_id = 0;
-
+// authorization
 if (!isset($_GET['page'])) { //
 	$pageid = 'home'; // display home page
 } else {
@@ -31,12 +31,16 @@ if (!isset($_GET['page'])) { //
 				$pageid = 'login';
 			}// $l->redirect("index.php?page=login");
 		}else {
-			$user_id = $logged[3];
-			if(strpos(navigation($logged[2]), $_GET['page']) === false){
-				$content .= '<b>You have no rights to access '.$_GET['page'].' page.</b>';
-				$pageid = 'login';
-			}else {
-				$pageid = $_GET['page']; // else requested page,
+			if(navigation(0,$_GET['page'])){
+				$user_id = $logged[3];
+				if(strpos(navigation($logged[2]), $_GET['page']) === false){ // authorization
+					$content .= '<b>You have no rights to access '.$_GET['page'].' page.</b>';
+					$pageid = 'login';
+				}else {
+					$pageid = $_GET['page']; // else requested page,
+				}
+			}else{
+				$pageid = '404';
 			}
 		}
 	}else{
@@ -53,7 +57,7 @@ if(isset($_GET['is'])){
 }else { // if not ajax call then curry on as normal
 $heading1 = "h_".$pageid;
 
-$logged = $l->checkLogin($db);
+$logged = $l->checkLogin($db); // another check after executing/including the page script
 if($logged[0] == 'logged' || $loginCheck == 'loggedIn'){
 	if($logged[0] == 'logged'){
 		$navMain = navigation($logged[2]);
@@ -61,18 +65,17 @@ if($logged[0] == 'logged' || $loginCheck == 'loggedIn'){
 }
 //-----------------------------------------------------------------------------------------------
 // preparing the redirection link
-$domen = strstr($_SERVER['REQUEST_URI'],"index", TRUE);   $dev .= "domen: ".$domen;
-$domen = $domen == '' ? $_SERVER['REQUEST_URI'] : $domen;   $dev .= " domen: ".$domen. ' request uri: '.$_SERVER['REQUEST_URI'];
-$s = ((!empty($_SERVER['HTTPS'])) ? "s" : "");
 $l = $pageid == 'login' ? '' : '?page=login';
-$link = "http".$s."://".$_SERVER['SERVER_NAME'].$domen."index.php".$l;
+$link = getURL($l)['url'];    if(DEV) $dev .= getURL($l)['dev'];
+// $domen = strstr($_SERVER['REQUEST_URI'],"index", TRUE);
+// $domen = $domen == '' ? $_SERVER['REQUEST_URI'] : $domen;
 // footer location and navigation
 $lo = footerLocation($logged[0], $pageid);
-
 // footer navigations
 if(isset($_POST['h_foot'])) {
 	footerLinkUpdate(); // sets the location cookie for new selected bed
-	header("Location: http".$s."://".$_SERVER['SERVER_NAME'].$domen.'index.php'); // HACK: since the new value assigned to cookie is not immidiatly accessible
+	header("Location: ".getURL('')['url']);
+	// header("Location: http".$s."://".$_SERVER['SERVER_NAME'].$domen.'index.php'); // HACK: since the new value assigned to cookie is not immidiatly accessible
 }
 if($pageid != 'service'){
 // prepearing data for use with usage with site template
