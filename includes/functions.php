@@ -17,15 +17,10 @@ function getURL($page){
  * @param int d one day represented in seconds
  * @param int curDaay Unix timestamp of the begining of current day
  * @param int t1 current hour and minutes (where 60 == 100min) of the day
- * @return array where 0 is the meal, 1 date of the meal, 2 curret day for meal, 3 development output
+ * @return array where 'meal' is the meal, 'menuday' date of the meal, 'dev' development output
  */
  function getCurrentMeal($t, $d, $curDay, $t1){
 	 $b = '</br>';
-	 $mt = new myTime();
-	 $t =  $mt->getMyTime();
-   $d = $mt->d;
-	 $curDay = $mt->getCurDay();
-	 $t1 = $mt->curHur();
 	 $menuday = '';
 	 $meal = '';
 	 $dev = '';
@@ -45,7 +40,7 @@ function getURL($page){
 	 	$t += $d;
 	 	$curDay += $d;
 	 }
-	 return array($meal, $menuday, $curDay, $dev);
+	 return array('meal' => $meal, 'menuday' => $menuday, 'dev'=> $dev);
  }
 /**
  *sets qookie for the footer in index.php
@@ -57,7 +52,7 @@ function footerLinkUpdate(){
  * formats location info for footer
  * @param logged status output from myLogin->checkLogin() function
  * @param pid current page name
- * @return array where 0 is location string and 1 location test
+ * @return array where 'location' is location string and 'test' location test
  */
 function footerLocation($logged, $pid){
 	// footer location and navigation
@@ -96,7 +91,7 @@ function footerLocation($logged, $pid){
 		$lo .= '<input type="submit" name="h_foot" id="h_foot" value="Change"/>';
 		$lo .= '</select></form>';
 	}// else echo "footloc else $pid $logged ".$n.'<br>';
-	return array($lo, $n);
+	return array('location' => $lo, 'test' => $n);
 }
 /**
 * generates navigations based no users access rights

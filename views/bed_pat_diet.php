@@ -184,9 +184,9 @@ if(isset($_POST['freebed'])){
 	if(isset($_POST['pat2'])){
 		$anyOrders = false;
 		$patient_id = $_POST['pat2'];
-		$currentMealArray =  getCurrentMeal($mt->getMyTime(), $mt->d, $mt->getCurDay(), $mt->curHur());
+		$curDay = $mt->getCurDay();
+		$currentMealArray =  getCurrentMeal($mt->getMyTime(), $mt->d, $curDay, $mt->curHur());
 		$meal = $currentMealArray[0];
-		$curDay = $currentMealArray[2];
 		$msg = ' test, test, test.';
 		$sql10 = "select o_id_item from orders where o_date_meal=$curDay and o_id_patient=$patient_id";
 		$result3 = $db->myQuery($sql10); // retrivig already ordered items to detect changes in order
