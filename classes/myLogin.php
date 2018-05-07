@@ -91,7 +91,7 @@ class myLogin {
 					return array('Registration successful.',$username, $dev);
 				}
 			} else {
-				die('Submission from wrong page. Please contact administrator.');
+				die('Submission from wrong page. Please contact administrator. </br>current:'.$current." referer:$referrer");
 			}
 		}
 	}
