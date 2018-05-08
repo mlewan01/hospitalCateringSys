@@ -17,8 +17,8 @@ if($_SERVER['SERVER_NAME'] != 'artemlux.com'){
   define('DB_NAME', 'nelhae01_nhs2');
 }
 // Language settings, commet out the right settings for you
-define('LANGUAGE', 'en');
-//define('LANGUAGE', 'pl');
+// define('LANGUAGE', 'en');
+define('LANGUAGE', 'pl');
 
 /**
  * Absolute path to application root directory (one level above current dir)
