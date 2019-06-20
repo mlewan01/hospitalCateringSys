@@ -23,6 +23,7 @@ $lang['f_u_legend'] = "Edytuj informacje o urzytkownikach:";
 $lang['f_w_legend'] = "Edytuj informacje o ward:";
 $lang['f_msg'] = 'Podaj "id" żeby edytowac lub usunąć danie. Kiedy dodajemy nowe "id" jest wymagane';
 
+
 $lang['f_active'] = "Aktywny:";
 $lang['f_address'] = "Adres:";
 $lang['f_allergens'] = "Alergeny:";
